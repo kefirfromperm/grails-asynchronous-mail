@@ -3,7 +3,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
-    def version = "0.1"
+    def version = "0.1.1"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1.2"
     // the other plugins this plugin depends on
@@ -22,7 +22,7 @@ This plugin realise asynchronous mail sent.
 '''
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/AsynchronousMail+Plugin"
+    def documentation = "http://www.grails.org/plugin/asynchronous-mail"
 
     def doWithSpring = {
         def config = ConfigurationHolder.config
