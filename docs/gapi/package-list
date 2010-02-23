@@ -6,11 +6,3 @@ grails-app.services.ru.perm.kefir.asynchronousmail
 scripts
 src.groovy.ru.perm.kefir.asynchronousmail
 src.templates.controllers
-unzipped
-unzipped.grails-app.conf
-unzipped.grails-app.domain.ru.perm.kefir.asynchronousmail
-unzipped.grails-app.jobs.ru.perm.kefir.asynchronousmail
-unzipped.grails-app.services.ru.perm.kefir.asynchronousmail
-unzipped.scripts
-unzipped.src.groovy.ru.perm.kefir.asynchronousmail
-unzipped.src.templates.controllers
