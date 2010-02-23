@@ -24,15 +24,19 @@ class AsynchronousMailMessage {
     List<AsynchronousMailAttachment> attachments;
 
     // !!! Additional status fields !!!
-    // Message status
+    /** Message status*/
     MessageStatus status = MessageStatus.CREATED;
 
-    // Date when message is created
+    /** Date when message is created*/
     Date createDate = new Date();
+
+    /** Date when message sent*/
     Date sentDate;
 
-    // Send interval
+    /** Send interval*/
     Date beginDate = new Date();
+
+    /** Send interval*/
     Date endDate = MAX_DATE;
 
     // Attempts
@@ -43,7 +47,7 @@ class AsynchronousMailMessage {
     // Minimal interval between attempts in milliseconds
     long attemptInterval = 300000l;
 
-    static hasMany = [to:String, bcc:String, cc:String, attachments:AsynchronousMailAttachment];
+    static hasMany = [to: String, bcc: String, cc: String, attachments: AsynchronousMailAttachment];
 
     static mapping = {
         text type: 'text'
@@ -52,28 +56,28 @@ class AsynchronousMailMessage {
 
     static constraints = {
         // message fields
-        to(nullable:false, validator: {List<String> val -> !val.isEmpty();})
+        to(nullable: false, validator: {List<String> val -> !val.isEmpty();})
         subject(nullable: false, blank: false);
-        headers(nullable:true);
+        headers(nullable: true);
         text(nullable: false, blank: false);
-        bcc(nullable:true);
-        cc(nullable:true);
-        replyTo(nullable:true);
-        from(nullable:true);
+        bcc(nullable: true);
+        cc(nullable: true);
+        replyTo(nullable: true);
+        from(nullable: true);
 
         // Status fields
         status(nullable: false);
         createDate(nullable: false);
         sentDate(nullable: true);
         beginDate(nullable: false);
-        endDate(nullable: false);
+        endDate(
+                nullable: false,
+                validator: {Date val, AsynchronousMailMessage mess -> val.after(mess.beginDate);}
+        );
         attemptsCount(min: 0);
         maxAttemptsCount(min: 0);
         lastAttemptDate(nullable: true);
         attemptInterval(min: 0l);
-    }
-
-    def AsynchronousMailMessage() {
     }
 
     def String toString() {

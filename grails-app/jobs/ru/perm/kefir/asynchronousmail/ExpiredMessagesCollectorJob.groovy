@@ -7,15 +7,13 @@ class ExpiredMessagesCollectorJob {
 
     def execute() {
         log.trace('Enter to execute method');
-        AsynchronousMailMessage.withCriteria {
-            lt('endDate', new Date());
-            or {
-                eq('status', MessageStatus.CREATED);
-                eq('status', MessageStatus.ATTEMPTED);
-            }
-        }.each {AsynchronousMailMessage message ->
-            message.status = MessageStatus.EXPIRED;
-            message.save(flush: true);
+        int count;
+        AsynchronousMailMessage.withTransaction {
+            count = AsynchronousMailMessage.executeUpdate(
+                    "update AsynchronousMailMessage amm set amm.status=:es where amm.endDate<:date and (amm.status=:cs or amm.status=:as)",
+                    ["es": MessageStatus.EXPIRED, "date": new Date(), "cs": MessageStatus.CREATED, "as": MessageStatus.ATTEMPTED]
+            );
         }
+        log.trace("${count} expired messages was updated.");
     }
 }

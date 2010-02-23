@@ -7,7 +7,7 @@ class AsynchronousMailController {
     static allowedMethods = [delete: 'POST', save: 'POST', update: 'POST']
 
     def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
+        params.max = Math.min(params.max ? params.max.toInteger() : 100, 100)
         if (!params.sort) {
             params.sort = 'createDate';
         }

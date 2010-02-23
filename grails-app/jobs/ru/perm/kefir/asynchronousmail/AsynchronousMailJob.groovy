@@ -58,7 +58,7 @@ class AsynchronousMailJob {
                             sendMessage(message);
                             message.status = MessageStatus.SENT;
                         } catch (MailException e) {
-                            log.warn("Attempt to send message with id=${message.id}", e);
+                            log.warn("Attempt to send message with id=${message.id}.", e);
                             if (e instanceof MailParseException || e instanceof MailPreparationException) {
                                 message.status = MessageStatus.ERROR;
                             } else if (e instanceof MailAuthenticationException) {
@@ -71,7 +71,7 @@ class AsynchronousMailJob {
                 }
             }
         } catch (Exception e) {
-            log.warn('Abort mail sent', e);
+            log.warn('Abort mail sent.', e);
         }
     }
 
