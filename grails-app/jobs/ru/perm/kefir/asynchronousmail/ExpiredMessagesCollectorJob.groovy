@@ -4,6 +4,7 @@ package ru.perm.kefir.asynchronousmail
 class ExpiredMessagesCollectorJob {
     static triggers = {}
     def concurrent = false;
+    def group = "AsynchronousMail";
 
     def execute() {
         log.trace('Enter to execute method');

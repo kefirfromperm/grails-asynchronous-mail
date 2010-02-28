@@ -7,10 +7,11 @@ import org.springframework.mail.MailMessage
 import org.springframework.mail.MailPreparationException
 import org.springframework.mail.MailAuthenticationException
 
-/** Sent asynchronous messages       */
+/** Sent asynchronous messages        */
 class AsynchronousMailJob {
     static triggers = {}
     def concurrent = false;
+    def group = "AsynchronousMail";
 
     // Dependency injection
     MailService mailService;
@@ -44,26 +45,28 @@ class AsynchronousMailJob {
                     message.status == MessageStatus.CREATED
                             || (message.status == MessageStatus.ATTEMPTED && message.lastAttemptDate.before(attemptDate))
                 ) {
+                    message.lastAttemptDate = now;
+                    message.attemptsCount++;
+
+                    // It guarantee that e-mail can't be sent more than 1 time
+                    message.status = MessageStatus.ERROR;
+                    message.save(flush: true);
+
+                    // Attempt to send
                     try {
+                        sendMessage(message);
                         message.sentDate = now;
-                        message.lastAttemptDate = now;
-                        message.attemptsCount++;
-                        if (message.attemptsCount < message.maxAttemptsCount || message.maxAttemptsCount==0) {
+                        message.status = MessageStatus.SENT;
+                    } catch (MailException e) {
+                        log.warn("Attempt to send message with id=${message.id} is fail.", e);
+                        if (message.attemptsCount < message.maxAttemptsCount &&
+                                !(e instanceof MailParseException || e instanceof MailPreparationException)
+                        ) {
                             message.status = MessageStatus.ATTEMPTED;
-                        } else {
-                            message.status = MessageStatus.ERROR;
                         }
 
-                        try {
-                            sendMessage(message);
-                            message.status = MessageStatus.SENT;
-                        } catch (MailException e) {
-                            log.warn("Attempt to send message with id=${message.id}.", e);
-                            if (e instanceof MailParseException || e instanceof MailPreparationException) {
-                                message.status = MessageStatus.ERROR;
-                            } else if (e instanceof MailAuthenticationException) {
-                                throw e;
-                            }
+                        if (e instanceof MailAuthenticationException) {
+                            throw e;
                         }
                     } finally {
                         message.save(flush: true);
@@ -75,10 +78,10 @@ class AsynchronousMailJob {
         }
     }
 
-    /** Send message by SMTP  */
+    /** Send message by SMTP   */
     private MailMessage sendMessage(AsynchronousMailMessage message) {
         return mailService.sendMail {
-            if(message.attachments){
+            if (message.attachments) {
                 multipart true;
             }
             to message.to;
@@ -103,8 +106,8 @@ class AsynchronousMailJob {
             if (message.from) {
                 from message.from;
             }
-            message.attachments.each {AsynchronousMailAttachment attachment->
-                attachBytes attachment.attachmentName, attachment.mimeType, attachment.content                
+            message.attachments.each {AsynchronousMailAttachment attachment ->
+                attachBytes attachment.attachmentName, attachment.mimeType, attachment.content
             }
         }
     }
