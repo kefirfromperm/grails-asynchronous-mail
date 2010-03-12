@@ -4,7 +4,8 @@ import org.springframework.validation.ObjectError
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class AsynchronousMailService {
-    boolean transactional = true
+    boolean transactional = true;
+    def groovyPagesTemplateEngine;
 
     /**
      * Create synchronous message and save it to DB.
@@ -13,7 +14,7 @@ class AsynchronousMailService {
      * then this method start send job after create message
      */
     def sendAsynchronousMail(Closure callable) {
-        def messageBuilder = new AsynchronousMailMessageBuilder();
+        def messageBuilder = new AsynchronousMailMessageBuilder(groovyPagesTemplateEngine);
         messageBuilder.init();
         callable.delegate = messageBuilder;
         callable.resolveStrategy = Closure.DELEGATE_FIRST
