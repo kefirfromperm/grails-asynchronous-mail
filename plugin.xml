@@ -1,4 +1,4 @@
-<plugin name='asynchronous-mail' version='0.1.2' grailsVersion='1.1.2 &gt; *'>
+<plugin name='asynchronous-mail' version='0.1.3-SNAPSHOT' grailsVersion='1.1.2 &gt; *'>
   <author>Vitaliy Samolovskih aka Kefir</author>
   <authorEmail>kefir@perm.ru</authorEmail>
   <title>Asynchronous mail grails plugin</title>
