@@ -3,7 +3,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
-    def version = "0.1.3"
+    def version = "0.1.3-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1.2 > *"
     // the other plugins this plugin depends on
