@@ -24,19 +24,19 @@ class AsynchronousMailMessage {
     List<AsynchronousMailAttachment> attachments;
 
     // !!! Additional status fields !!!
-    /** Message status*/
+    /** Message status */
     MessageStatus status = MessageStatus.CREATED;
 
-    /** Date when message is created*/
+    /** Date when message is created */
     Date createDate = new Date();
 
-    /** Date when message sent*/
+    /** Date when message sent */
     Date sentDate;
 
-    /** Send interval*/
+    /** Send interval */
     Date beginDate = new Date();
 
-    /** Send interval*/
+    /** Send interval */
     Date endDate = MAX_DATE;
 
     // Attempts
@@ -72,7 +72,9 @@ class AsynchronousMailMessage {
         beginDate(nullable: false);
         endDate(
                 nullable: false,
-                validator: {Date val, AsynchronousMailMessage mess -> val.after(mess.beginDate);}
+                validator: {Date val, AsynchronousMailMessage mess ->
+                    val && mess.beginDate && val.after(mess.beginDate);
+                }
         );
         attemptsCount(min: 0);
         maxAttemptsCount(min: 0);

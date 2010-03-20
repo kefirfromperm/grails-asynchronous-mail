@@ -1,4 +1,4 @@
-<plugin name='asynchronous-mail' version='0.1.3-SNAPSHOT' grailsVersion='1.1.2 &gt; *'>
+<plugin name='asynchronous-mail' version='0.1.3' grailsVersion='1.1.2 &gt; *'>
   <author>Vitaliy Samolovskih aka Kefir</author>
   <authorEmail>kefir@perm.ru</authorEmail>
   <title>Asynchronous mail grails plugin</title>
@@ -8,6 +8,7 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
   <documentation>http://www.grails.org/plugin/asynchronous-mail</documentation>
   <resources>
     <resource>AsynchronousMailBootStrap</resource>
+    <resource>BuildConfig</resource>
     <resource>DefaultAsynchronousMailConfig</resource>
     <resource>ru.perm.kefir.asynchronousmail.AsynchronousMailAttachment</resource>
     <resource>ru.perm.kefir.asynchronousmail.AsynchronousMailMessage</resource>

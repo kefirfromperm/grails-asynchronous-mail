@@ -17,6 +17,9 @@ import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
  */
 class AsynchronousMailMessageBuilder {
     AsynchronousMailMessage message;
+    boolean immediately = false;
+    boolean immediatelySetted = false;
+
     def groovyPagesTemplateEngine;
 
     def AsynchronousMailMessageBuilder(groovyPagesTemplateEngine) {
@@ -240,5 +243,10 @@ class AsynchronousMailMessageBuilder {
            buf << "${grailsAttributes.getControllerUri(request)}/${viewName}"
         }
         return buf.append(".gsp").toString()
+    }
+
+    void immediate(boolean value){
+        immediately = value;
+        immediatelySetted = true;
     }
 }

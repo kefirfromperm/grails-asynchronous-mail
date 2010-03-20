@@ -20,12 +20,19 @@ class AsynchronousMailService {
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.call()
 
+        // Mail message
+        AsynchronousMailMessage message = messageBuilder.message;
+
         // Get immediately behavior configuration
-        boolean immediately = ConfigurationHolder.config.asynchronous.mail.send.immediately
+        boolean immediately;
+        if (messageBuilder.immediatelySetted) {
+            immediately = messageBuilder.immediately;
+        } else {
+            immediately = ConfigurationHolder.config.asynchronous.mail.send.immediately
+        }
+        immediately = immediately && message.beginDate.time <= System.currentTimeMillis();
 
         // Save message to DB
-        AsynchronousMailMessage message = messageBuilder.message;
-        immediately = immediately && message.beginDate.time <= System.currentTimeMillis();
         if (!message.save(flush: immediately)) {
             StringBuilder errorMessage = new StringBuilder();
             message.errors?.allErrors?.each {ObjectError error ->
