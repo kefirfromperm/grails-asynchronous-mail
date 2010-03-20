@@ -8,16 +8,16 @@ import grails.test.GrailsUnitTestCase
 class AsynchronousMailMessageTests extends GrailsUnitTestCase {
     void testDefault() {
         def message = new AsynchronousMailMessage();
-        assertNull message.to
-        assertNull message.subject
-        assertNull message.headers
-        assertNull message.text
-        assertFalse message.html
-        assertNull message.bcc
-        assertNull message.cc
-        assertNull message.replyTo
-        assertNull message.from
-        assertNull message.attachments
+        assertNull message.to;
+        assertNull message.subject;
+        assertNull message.headers;
+        assertNull message.text;
+        assertFalse message.html;
+        assertNull message.bcc;
+        assertNull message.cc;
+        assertNull message.replyTo;
+        assertNull message.from;
+        assertNull message.attachments;
         assertEquals MessageStatus.CREATED, message.status;
         assertNotNull message.createDate;
         assertNull message.sentDate;
