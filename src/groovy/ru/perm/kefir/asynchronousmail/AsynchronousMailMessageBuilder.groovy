@@ -28,8 +28,8 @@ class AsynchronousMailMessageBuilder {
 
     def init() {
         message = new AsynchronousMailMessage(); 
-        message.attemptInterval = ConfigurationHolder.config.asynchronous.mail.default.attempt.interval;
-        message.maxAttemptsCount = ConfigurationHolder.config.asynchronous.mail.default.max.attempts.count;
+        message.attemptInterval = ConfigurationHolder.config?.asynchronous?.mail?.default?.attempt?.interval?:300000l;
+        message.maxAttemptsCount = ConfigurationHolder.config?.asynchronous?.mail?.default?.max?.attempts?.count?:1;
     }
 
     // Specified fields for asynchronous message
