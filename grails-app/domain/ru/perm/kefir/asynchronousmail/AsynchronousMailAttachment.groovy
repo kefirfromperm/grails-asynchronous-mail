@@ -1,8 +1,10 @@
 package ru.perm.kefir.asynchronousmail
 
 class AsynchronousMailAttachment {
+    public static final DEFAULT_MIME_TYPE = 'application/octet-stream';
+
     String attachmentName;
-    String mimeType = 'application/octet-stream';
+    String mimeType = DEFAULT_MIME_TYPE;
     byte[] content;
 
     static belongsTo = [message:AsynchronousMailMessage];
