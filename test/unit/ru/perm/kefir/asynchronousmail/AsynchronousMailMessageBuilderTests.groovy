@@ -6,7 +6,7 @@ import grails.test.GrailsUnitTestCase
  * Unit tests for AsynchronousMailMessageBuilder
  */
 class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase  {
-    void test(){
+    void testBuilder(){
         def c = {
             to 'kefir@perm.ru';
             subject 'Subject';
