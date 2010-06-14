@@ -1,6 +1,6 @@
 package ru.perm.kefir.asynchronousmail
 
-class AsynchronousMailAttachment {
+class AsynchronousMailAttachment implements Serializable{
     public static final DEFAULT_MIME_TYPE = 'application/octet-stream';
 
     String attachmentName;

@@ -1,6 +1,6 @@
 package ru.perm.kefir.asynchronousmail
 
-class AsynchronousMailMessage {
+class AsynchronousMailMessage implements Serializable {
     private static final MAX_DATE;
     static {
         Calendar c = Calendar.getInstance();
