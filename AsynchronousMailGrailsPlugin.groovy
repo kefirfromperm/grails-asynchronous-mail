@@ -1,13 +1,15 @@
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import org.grails.mail.MailService
+import ru.perm.kefir.asynchronousmail.AsynchronousMailService
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
-    def version = "0.1.5"
+    def version = "0.2.0-snapshot"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.2.3 > *"
     // the other plugins this plugin depends on
-    def dependsOn = ['mail':'0.9 > *','quartz':'0.4.2 > *','hibernate':'1.2.3 > *']
+    def dependsOn = ['mail': '0.9 > *', 'quartz': '0.4.2 > *', 'hibernate': '1.2.3 > *']
     def loadAfter = ['mail', 'quartz', 'hibernate'];
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
@@ -36,6 +38,27 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
             config.merge(new ConfigSlurper(GrailsUtil.environment).parse(classLoader.loadClass('AsynchronousMailConfig')))
         } catch (Exception ignored) {
             // ignore, just use the defaults
+        }
+
+        nonAsynchronousMailService(MailService) {
+            mailSender = ref("mailSender")
+        }
+    }
+
+    def doWithApplicationContext = { applicationContext ->
+        configureSendMail(application, applicationContext)
+    }
+
+    def onChange = {event ->
+        configureSendMail(event.application, event.ctx)
+    }
+
+    def configureSendMail(application, applicationContext) {
+        // Override mailService
+        if (ConfigurationHolder.config.asynchronous.mail.override) {
+            applicationContext.mailService.metaClass*.sendMail = {Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ class AsynchronousMailJob {
     def group = "AsynchronousMail";
 
     // Dependency injection
-    MailService mailService;
+    MailService nonAsynchronousMailService;
 
     def execute(context) {
         log.trace('Enter to execute method');
@@ -80,7 +80,7 @@ class AsynchronousMailJob {
 
     /** Send message by SMTP   */
     private MailMessage sendMessage(AsynchronousMailMessage message) {
-        return mailService.sendMail {
+        return nonAsynchronousMailService.sendMail {
             if (message.attachments) {
                 multipart true;
             }
