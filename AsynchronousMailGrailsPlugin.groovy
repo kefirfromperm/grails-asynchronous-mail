@@ -1,7 +1,6 @@
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.grails.mail.MailService
-import ru.perm.kefir.asynchronousmail.AsynchronousMailService
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
