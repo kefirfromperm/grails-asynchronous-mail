@@ -7,7 +7,7 @@ import org.springframework.mail.MailMessage
 import org.springframework.mail.MailPreparationException
 import org.springframework.mail.MailAuthenticationException
 
-/** Sent asynchronous messages        */
+/** Sent asynchronous messages         */
 class AsynchronousMailJob {
     static triggers = {}
     def concurrent = false;
@@ -71,6 +71,11 @@ class AsynchronousMailJob {
                     } finally {
                         message.save(flush: true);
                     }
+
+                    // Delete message if it sent successfully and can be deleted
+                    if (message.status == MessageStatus.SENT && message.markDelete) {
+                        message.delete();
+                    }
                 }
             }
         } catch (Exception e) {
@@ -78,7 +83,7 @@ class AsynchronousMailJob {
         }
     }
 
-    /** Send message by SMTP   */
+    /** Send message by SMTP    */
     private MailMessage sendMessage(AsynchronousMailMessage message) {
         return nonAsynchronousMailService.sendMail {
             if (message.attachments) {

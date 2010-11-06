@@ -47,6 +47,9 @@ class AsynchronousMailMessage implements Serializable {
     // Minimal interval between attempts in milliseconds
     long attemptInterval = 300000l;
 
+    // Mark this message for delete after sent
+    boolean markDelete = false;
+
     static hasMany = [to: String, bcc: String, cc: String, attachments: AsynchronousMailAttachment];
 
     static mapping = {

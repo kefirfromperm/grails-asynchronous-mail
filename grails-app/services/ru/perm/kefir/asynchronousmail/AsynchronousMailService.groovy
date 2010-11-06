@@ -46,6 +46,9 @@ class AsynchronousMailService {
             log.trace("Start send job immediately.");
             sendImmediately();
         }
+
+        // Return message object 
+        return message;
     }
 
     /**
@@ -59,6 +62,8 @@ class AsynchronousMailService {
      * asynchronousMailService.sendImmediately()</code>
      */
     def sendImmediately() {
-        AsynchronousMailJob.triggerNow(['messagesAtOnce': ConfigurationHolder.config.asynchronous.mail.messages.at.once])
+        AsynchronousMailJob.triggerNow(
+                ['messagesAtOnce': ConfigurationHolder.config.asynchronous.mail.messages.at.once]
+        );
     }
 }

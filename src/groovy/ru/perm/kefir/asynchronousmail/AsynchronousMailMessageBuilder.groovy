@@ -27,9 +27,10 @@ class AsynchronousMailMessageBuilder {
     }
 
     def init() {
-        message = new AsynchronousMailMessage(); 
+        message = new AsynchronousMailMessage();
         message.attemptInterval = ConfigurationHolder.config?.asynchronous?.mail?.default?.attempt?.interval?:300000l;
         message.maxAttemptsCount = ConfigurationHolder.config?.asynchronous?.mail?.default?.max?.attempts?.count?:1;
+        message.markDelete = ConfigurationHolder.config?.asynchronous?.mail?.clear?.after?.sent?:false;
     }
 
     // Specified fields for asynchronous message
@@ -149,6 +150,17 @@ class AsynchronousMailMessageBuilder {
         );
     }
 
+    // Mark that the message must be sent immediately
+    void immediate(boolean value) {
+        immediately = value;
+        immediatelySetted = true;
+    }
+
+    // Mark message must be deleted after sent
+    void delete(boolean value){
+        message.markDelete = true;
+    }
+
     protected renderMailView(templateName, model, pluginName = null) {
         if(!groovyPagesTemplateEngine) throw new IllegalStateException("Property [groovyPagesTemplateEngine] must be set!")
         assert templateName
@@ -243,10 +255,5 @@ class AsynchronousMailMessageBuilder {
            buf << "${grailsAttributes.getControllerUri(request)}/${viewName}"
         }
         return buf.append(".gsp").toString()
-    }
-
-    void immediate(boolean value){
-        immediately = value;
-        immediatelySetted = true;
     }
 }
