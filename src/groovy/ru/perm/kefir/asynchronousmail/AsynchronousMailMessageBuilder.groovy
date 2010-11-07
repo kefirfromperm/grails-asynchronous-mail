@@ -158,7 +158,7 @@ class AsynchronousMailMessageBuilder {
 
     // Mark message must be deleted after sent
     void delete(boolean value){
-        message.markDelete = true;
+        message.markDelete = value;
     }
 
     protected renderMailView(templateName, model, pluginName = null) {
