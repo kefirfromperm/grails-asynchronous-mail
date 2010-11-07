@@ -12,6 +12,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase  {
             subject 'Subject';
             text 'Text';
             immediate false;
+            delete true;
         }
 
         def builder = new AsynchronousMailMessageBuilder(null);
@@ -25,6 +26,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase  {
         assertEquals('Subject', message.subject);
         assertEquals('Text', message.text);
         assertEquals MessageStatus.CREATED, message.status;
+        assertTrue message.markDelete
 
         // Immediately
         assertTrue builder.immediatelySetted;
