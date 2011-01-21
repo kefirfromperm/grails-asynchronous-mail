@@ -2,10 +2,11 @@ package ru.perm.kefir.asynchronousmail
 
 import org.springframework.validation.ObjectError
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import grails.plugin.mail.MailMessageContentRenderer
 
 class AsynchronousMailService {
     boolean transactional = true;
-    def groovyPagesTemplateEngine;
+    MailMessageContentRenderer mailMessageContentRenderer;
 
     /**
      * Create synchronous message and save it to DB.
@@ -14,7 +15,7 @@ class AsynchronousMailService {
      * then this method start send job after create message
      */
     def sendAsynchronousMail(Closure callable) {
-        def messageBuilder = new AsynchronousMailMessageBuilder(groovyPagesTemplateEngine);
+        def messageBuilder = new AsynchronousMailMessageBuilder(mailMessageContentRenderer);
         messageBuilder.init();
         callable.delegate = messageBuilder;
         callable.resolveStrategy = Closure.DELEGATE_FIRST

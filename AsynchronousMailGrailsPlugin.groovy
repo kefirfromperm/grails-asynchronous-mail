@@ -1,18 +1,19 @@
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import org.grails.mail.MailService
+import grails.plugin.mail.MailService
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
-    def version = "0.2.0"
+    def version = "0.2.1-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.2.3 > *"
     // the other plugins this plugin depends on
-    def dependsOn = ['mail': '0.9 > *', 'quartz': '0.4.2 > *', 'hibernate': '1.2.3 > *']
+    def dependsOn = ['mail': '1.0-SNAPSHOT > *', 'quartz': '0.4.2 > *', 'hibernate': '1.2.3 > *']
     def loadAfter = ['mail', 'quartz', 'hibernate'];
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            "grails-app/views/error.gsp"
+            "grails-app/views/error.gsp",
+            "lib/mail-1.4.1.jar"
     ]
 
     def author = "Vitaliy Samolovskih aka Kefir"
@@ -40,7 +41,7 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
         }
 
         nonAsynchronousMailService(MailService) {
-            mailSender = ref("mailSender")
+            mailMessageBuilderFactory = ref("mailMessageBuilderFactory");
         }
     }
 

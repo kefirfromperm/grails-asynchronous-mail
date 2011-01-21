@@ -2,7 +2,7 @@ package ru.perm.kefir.asynchronousmail
 
 import org.springframework.mail.MailException
 import org.springframework.mail.MailParseException
-import org.grails.mail.MailService
+import grails.plugin.mail.MailService
 import org.springframework.mail.MailMessage
 import org.springframework.mail.MailPreparationException
 import org.springframework.mail.MailAuthenticationException
