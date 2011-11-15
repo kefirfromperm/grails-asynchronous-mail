@@ -1,4 +1,4 @@
-package ru.perm.kefir.asynchronousmail
+package grails.plugin.asyncmail
 
 class AsynchronousMailMessage implements Serializable {
     private static final MAX_DATE;

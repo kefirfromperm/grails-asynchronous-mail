@@ -1,4 +1,4 @@
-<%@ page import="ru.perm.kefir.asynchronousmail.MessageStatus; ru.perm.kefir.asynchronousmail.AsynchronousMailMessage" %>
+<%@ page import="grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; ru.perm.kefir.asynchronousmail.MessageStatus; grails.plugin.asyncmail.AsynchronousMailMessage" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -39,7 +39,7 @@
                                     <label for="status">Status:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:message,field:'status','errors')}">
-                                    <g:select from="${[MessageStatus.CREATED, MessageStatus.ABORT]}" value="${message.status}" name="status"/>
+                                    <g:select from="${[grails.plugin.asyncmail.MessageStatus.CREATED, grails.plugin.asyncmail.MessageStatus.ABORT]}" value="${message.status}" name="status"/>
                                 </td>
                             </tr> 
 
@@ -83,7 +83,7 @@
                 </div>
                 <div class="buttons">
                     <span class="button"><g:actionSubmit class="save" action="update" value="Update" /></span>
-                    <g:if test="${message.status == MessageStatus.CREATED || message.status == MessageStatus.ATTEMPTED}">
+                    <g:if test="${message.status == grails.plugin.asyncmail.MessageStatus.CREATED || message.status == grails.plugin.asyncmail.MessageStatus.ATTEMPTED}">
                     <span class="button"><g:actionSubmit class="delete" action="abort" onclick="return confirm('Are you sure?');" value="Abort" /></span>
                     </g:if>
                 </div>

@@ -1,6 +1,8 @@
-package ru.perm.kefir.asynchronousmail
+package grails.plugin.asyncmail
 
 import grails.test.GrailsUnitTestCase
+import grails.plugin.asyncmail.AsynchronousMailAttachment
+import grails.plugin.asyncmail.AsynchronousMailMessage
 
 /**
  * Attachment unit tests

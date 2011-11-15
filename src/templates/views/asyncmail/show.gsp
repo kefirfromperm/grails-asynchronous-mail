@@ -1,4 +1,4 @@
-<%@ page import="ru.perm.kefir.asynchronousmail.MessageStatus; ru.perm.kefir.asynchronousmail.AsynchronousMailMessage" %>
+<%@ page import="grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; ru.perm.kefir.asynchronousmail.MessageStatus; grails.plugin.asyncmail.AsynchronousMailMessage" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -77,14 +77,14 @@
                 <td valign="top" class="value"><g:formatDate date="${message.createDate}"/></td>
             </tr>
 
-            <g:if test="${message.status==MessageStatus.ATTEMPTED && message.lastAttemptDate}">
+            <g:if test="${message.status==grails.plugin.asyncmail.MessageStatus.ATTEMPTED && message.lastAttemptDate}">
                 <tr class="prop">
                     <td valign="top" class="name">Last attempt date:</td>
                     <td valign="top" class="value"><g:formatDate date="${message.lastAttemptDate}"/></td>
                 </tr>
             </g:if>
 
-            <g:if test="${(message.status==MessageStatus.SENT || message.status==MessageStatus.ERROR) && message.sentDate}">
+            <g:if test="${(message.status==grails.plugin.asyncmail.MessageStatus.SENT || message.status==grails.plugin.asyncmail.MessageStatus.ERROR) && message.sentDate}">
                 <tr class="prop">
                     <td valign="top" class="name">Sent date:</td>
                     <td valign="top" class="value"><g:formatDate date="${message.sentDate}"/></td>
@@ -146,7 +146,7 @@
         <g:form>
             <input type="hidden" name="id" value="${message?.id}"/>
             <span class="button"><g:actionSubmit class="edit" action="edit" value="Edit"/></span>
-            <g:if test="${message.status == MessageStatus.CREATED || message.status == MessageStatus.ATTEMPTED}">
+            <g:if test="${message.status == grails.plugin.asyncmail.MessageStatus.CREATED || message.status == grails.plugin.asyncmail.MessageStatus.ATTEMPTED}">
                 <span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Abort"/></span>
             </g:if>
         </g:form>

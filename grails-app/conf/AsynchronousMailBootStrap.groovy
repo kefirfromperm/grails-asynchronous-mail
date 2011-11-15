@@ -2,8 +2,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 import org.quartz.SimpleTrigger
 
-import ru.perm.kefir.asynchronousmail.AsynchronousMailJob
-import ru.perm.kefir.asynchronousmail.ExpiredMessagesCollectorJob
+import grails.plugin.asyncmail.AsynchronousMailJob
+import grails.plugin.asyncmail.ExpiredMessagesCollectorJob
 
 /** Start the jobs  */
 class AsynchronousMailBootStrap {

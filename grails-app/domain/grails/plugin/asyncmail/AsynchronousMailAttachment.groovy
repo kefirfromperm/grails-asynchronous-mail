@@ -1,4 +1,4 @@
-package ru.perm.kefir.asynchronousmail
+package grails.plugin.asyncmail
 
 class AsynchronousMailAttachment implements Serializable{
     public static final DEFAULT_MIME_TYPE = 'application/octet-stream';

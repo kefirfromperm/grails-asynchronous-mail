@@ -4,7 +4,7 @@ import grails.plugin.mail.MailService
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
-    def version = "0.2.1-SNAPSHOT"
+    def version = "0.3"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.2.3 > *"
     // the other plugins this plugin depends on

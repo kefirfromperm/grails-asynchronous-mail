@@ -11,11 +11,11 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
     <resource>BuildConfig</resource>
     <resource>DefaultAsynchronousMailConfig</resource>
     <resource>UrlMappings</resource>
-    <resource>ru.perm.kefir.asynchronousmail.AsynchronousMailAttachment</resource>
-    <resource>ru.perm.kefir.asynchronousmail.AsynchronousMailMessage</resource>
-    <resource>ru.perm.kefir.asynchronousmail.AsynchronousMailJob</resource>
-    <resource>ru.perm.kefir.asynchronousmail.ExpiredMessagesCollectorJob</resource>
-    <resource>ru.perm.kefir.asynchronousmail.AsynchronousMailService</resource>
+    <resource>grails.plugin.asyncmail.AsynchronousMailAttachment</resource>
+    <resource>grails.plugin.asyncmail.AsynchronousMailMessage</resource>
+    <resource>grails.plugin.asyncmail.AsynchronousMailJob</resource>
+    <resource>grails.plugin.asyncmail.ExpiredMessagesCollectorJob</resource>
+    <resource>grails.plugin.asyncmail.AsynchronousMailService</resource>
   </resources>
   <dependencies>
     <plugin name='mail' version='1.0-SNAPSHOT &gt; *' />

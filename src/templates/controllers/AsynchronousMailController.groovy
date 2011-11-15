@@ -1,4 +1,6 @@
 import ru.perm.kefir.asynchronousmail.*
+import grails.plugin.asyncmail.AsynchronousMailMessage
+import grails.plugin.asyncmail.MessageStatus
 
 class AsynchronousMailController {
     static defaultAction = 'list';
