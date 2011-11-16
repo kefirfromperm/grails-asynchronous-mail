@@ -10,6 +10,10 @@ class AsynchronousMailAttachment implements Serializable{
 
     static belongsTo = [message:AsynchronousMailMessage];
 
+    static mapping = {
+        table 'async_mail_attachment';
+    }
+
     static constraints = {
         attachmentName(nullable:false, blank:false);
         mimeType(nullable:false);

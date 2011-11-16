@@ -10,33 +10,38 @@ class AsynchronousMailMessage implements Serializable {
     }
 
     // !!! Message fields !!!
+    // Sender attributes
+    String from;
+    String replyTo;
+
+    // Receivers attributes
     List<String> to;
-    String subject;
+    List<String> cc;
+    List<String> bcc;
+
+    // Additional headers
     Map<String, String> headers;
+
+    // Subject and text
+    String subject;
     String text;
     boolean html = false;
-    List<String> bcc;
-    List<String> cc;
-    String replyTo;
-    String from;
 
     // Attachments
     List<AsynchronousMailAttachment> attachments;
 
     // !!! Additional status fields !!!
-    /** Message status */
+    // Message status
     MessageStatus status = MessageStatus.CREATED;
 
-    /** Date when message is created */
+    //Date when message was created
     Date createDate = new Date();
 
-    /** Date when message sent */
+    // Date when message was sent
     Date sentDate;
 
-    /** Send interval */
+    //Send interval
     Date beginDate = new Date();
-
-    /** Send interval */
     Date endDate = MAX_DATE;
 
     // Attempts
@@ -50,23 +55,65 @@ class AsynchronousMailMessage implements Serializable {
     // Mark this message for delete after sent
     boolean markDelete = false;
 
-    static hasMany = [to: String, bcc: String, cc: String, attachments: AsynchronousMailAttachment];
+    static hasMany = [attachments: AsynchronousMailAttachment];
 
     static mapping = {
-        text type: 'text'
-        from column: 'from_column'
+        table 'async_mail_mess';
+
+        from column: 'from_column';
+
+        to(
+                indexColumn: 'to_idx',
+                joinTable: [
+                        name: 'async_mail_mess_to',
+                        key: 'message_id',
+                        column: [name: 'to_string', length: 320]
+                ]
+        );
+
+        cc(
+                indexColumn: 'cc_idx',
+                joinTable: [
+                        name: 'async_mail_mess_cc',
+                        key: 'message_id',
+                        column: [name: 'cc_string', length: 320]
+                ]
+        );
+
+        bcc(
+                indexColumn: 'bcc_idx',
+                joinTable: [
+                        name: 'async_mail_mess_bcc',
+                        key: 'message_id',
+                        column: [name: 'bcc_string', length: 320]
+                ]
+        );
+
+        headers(
+                indexColumn: 'headers_idx',
+                joinTable: [
+                        name: 'async_mail_mess_headers',
+                        key: 'message_id',
+                        column: [name: 'headers_elt', length: 320]
+                ]
+        );
+
+        text type: 'text';
     }
 
     static constraints = {
         // message fields
+        from(nullable: true, maxSize: 320);
+        replyTo(nullable: true, maxSize: 320);
+
         to(nullable: false, validator: {List<String> val -> !val.isEmpty();})
-        subject(nullable: false, blank: false);
-        headers(nullable: true);
-        text(nullable: false, blank: false);
-        bcc(nullable: true);
         cc(nullable: true);
-        replyTo(nullable: true);
-        from(nullable: true);
+        bcc(nullable: true);
+
+        headers(nullable: true);
+
+        subject(nullable: false, blank: false, maxSize: 988);
+        text(nullable: false, blank: false);
 
         // Status fields
         status(nullable: false);
