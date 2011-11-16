@@ -12,6 +12,7 @@ class AsynchronousMailAttachment implements Serializable{
 
     static mapping = {
         table 'async_mail_attachment';
+        version false;
     }
 
     static constraints = {
