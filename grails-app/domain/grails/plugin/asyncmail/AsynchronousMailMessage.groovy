@@ -29,6 +29,7 @@ class AsynchronousMailMessage implements Serializable {
 
     // Attachments
     List<AsynchronousMailAttachment> attachments;
+    static hasMany = [attachments: AsynchronousMailAttachment];
 
     // !!! Additional status fields !!!
     // Message status
@@ -54,8 +55,6 @@ class AsynchronousMailMessage implements Serializable {
 
     // Mark this message for delete after sent
     boolean markDelete = false;
-
-    static hasMany = [attachments: AsynchronousMailAttachment];
 
     static mapping = {
         table 'async_mail_mess';
@@ -126,12 +125,15 @@ class AsynchronousMailMessage implements Serializable {
                     val && mess.beginDate && val.after(mess.beginDate);
                 }
         );
+
+        // Attempt fields
         attemptsCount(min: 0);
-        maxAttemptsCount(min: 0);
+        maxAttemptsCount(min: 1);
         lastAttemptDate(nullable: true);
         attemptInterval(min: 0l);
     }
 
+    @Override
     def String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Asynchronous mail message: ");
