@@ -29,7 +29,7 @@ class AsynchronousMailMessage implements Serializable {
 
     // Attachments
     List<AsynchronousMailAttachment> attachments;
-    static hasMany = [attachments: AsynchronousMailAttachment];
+    static hasMany = [to: String, cc: String, bcc: String, attachments: AsynchronousMailAttachment];
 
     // !!! Additional status fields !!!
     // Message status
@@ -65,8 +65,9 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'to_idx',
                 joinTable: [
                         name: 'async_mail_mess_to',
+                        length: 320,
                         key: 'message_id',
-                        column: [name: 'to_string', length: 320]
+                        column: 'to_string'
                 ]
         );
 
@@ -74,8 +75,9 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'cc_idx',
                 joinTable: [
                         name: 'async_mail_mess_cc',
+                        length: 320,
                         key: 'message_id',
-                        column: [name: 'cc_string', length: 320]
+                        column: 'cc_string'
                 ]
         );
 
@@ -83,17 +85,18 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'bcc_idx',
                 joinTable: [
                         name: 'async_mail_mess_bcc',
+                        length: 320,
                         key: 'message_id',
-                        column: [name: 'bcc_string', length: 320]
+                        column: 'bcc_string'
                 ]
         );
 
         headers(
-                indexColumn: 'headers_idx',
+                indexColumn: [name: 'header_name', length: 255],
                 joinTable: [
-                        name: 'async_mail_mess_headers',
+                        name: 'async_mail_mess_header',
                         key: 'message_id',
-                        column: [name: 'headers_elt', length: 320]
+                        column: 'header_value'
                 ]
         );
 
