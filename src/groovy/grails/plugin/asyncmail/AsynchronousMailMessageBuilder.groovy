@@ -58,6 +58,16 @@ class AsynchronousMailMessageBuilder {
         // Added analogous to mail plugin
     }
 
+    void multipart(int multipartMode) {
+        // nothing
+        // Added analogous to mail plugin
+    }
+
+    // Mail message headers
+    void headers(Map headers) {
+        message.headers = headers;
+    }
+
     // Field "to"
     void to(String recipient) {
         message.to = [recipient];
@@ -71,18 +81,49 @@ class AsynchronousMailMessageBuilder {
         message.to = recipients;
     }
 
+    // Field "bcc"
+    void bcc(String val) {
+        message.bcc = [val];
+    }
+
+    void bcc(String[] recipients) {
+        message.bcc = Arrays.asList(recipients);
+    }
+
+    void bcc(List<String> recipients) {
+        message.bcc = recipients;
+    }
+
+    // Field "cc"
+    void cc(String val) {
+        message.cc = [val];
+    }
+
+    void cc(String[] recipients) {
+        message.cc = Arrays.asList(recipients);
+    }
+
+    void cc(List<String> recipients) {
+        message.cc = recipients;
+    }
+
+    // Field "replyTo"
+    void replyTo(CharSequence val) {
+        message.replyTo = val.toString();
+    }
+
+    // Field "from"
+    void from(CharSequence sender) {
+        message.from = sender.toString();
+    }
+
     // Field "subject"
-    void title(String subject1) {
+    void title(CharSequence subject1) {
         subject(subject1);
     }
 
-    void subject(String subject) {
-        message.subject = subject;
-    }
-
-    // Headers
-    void headers(Map headers) {
-        message.headers = headers;
+    void subject(CharSequence subject) {
+        message.subject = subject.toString();
     }
 
     // Body
@@ -122,42 +163,6 @@ class AsynchronousMailMessageBuilder {
     void html(CharSequence seq) {
         message.html = true;
         message.text = seq.toString();
-    }
-
-    // Field "bcc"
-    void bcc(String val) {
-        message.bcc = [val];
-    }
-
-    void bcc(String[] recipients) {
-        message.bcc = Arrays.asList(recipients);
-    }
-
-    void bcc(List<String> recipients) {
-        message.bcc = recipients;
-    }
-
-    // Field "cc"
-    void cc(String val) {
-        message.cc = [val];
-    }
-
-    void cc(String[] recipients) {
-        message.cc = Arrays.asList(recipients);
-    }
-
-    void cc(List<String> recipients) {
-        message.cc = recipients;
-    }
-
-    // Field "replyTo"
-    void replyTo(String val) {
-        message.replyTo = val;
-    }
-
-    // Field "from"
-    void from(String sender) {
-        message.from = sender;
     }
 
     // Attachments

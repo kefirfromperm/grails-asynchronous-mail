@@ -30,6 +30,7 @@ class AsynchronousMailMessageTests extends GrailsUnitTestCase {
         assertNull message.lastAttemptDate;
         assertEquals 300000l, message.attemptInterval;
         assertFalse message.markDelete;
+        assertEquals 0, message.priority;
     }
 
     void testConstraints() {
