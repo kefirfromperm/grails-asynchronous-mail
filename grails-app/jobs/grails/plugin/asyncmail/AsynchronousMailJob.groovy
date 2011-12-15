@@ -31,6 +31,7 @@ class AsynchronousMailJob {
                 eq('status', MessageStatus.CREATED);
                 eq('status', MessageStatus.ATTEMPTED);
             }
+            order('priority', 'desc');
             order('endDate', 'asc');
             order('attemptsCount', 'asc');
             order('beginDate', 'asc');

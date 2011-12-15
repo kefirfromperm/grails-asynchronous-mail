@@ -45,6 +45,9 @@ class AsynchronousMailMessage implements Serializable {
     Date beginDate = new Date();
     Date endDate = MAX_DATE;
 
+    // Priority. The greater is first.
+    int priority = 0;
+    
     // Attempts
     int attemptsCount = 0;
     int maxAttemptsCount = 1;
@@ -128,7 +131,7 @@ class AsynchronousMailMessage implements Serializable {
                     val && mess.beginDate && val.after(mess.beginDate);
                 }
         );
-
+        
         // Attempt fields
         attemptsCount(min: 0);
         maxAttemptsCount(min: 1);

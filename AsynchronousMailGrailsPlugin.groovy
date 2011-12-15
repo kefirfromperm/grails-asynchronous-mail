@@ -6,14 +6,13 @@ class AsynchronousMailGrailsPlugin {
     // the plugin version
     def version = "0.3"
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "1.2.3 > *"
+    def grailsVersion = "2.0.0.RC3 > *"
     // the other plugins this plugin depends on
-    def dependsOn = ['mail': '1.0-SNAPSHOT > *', 'quartz': '0.4.2 > *', 'hibernate': '1.2.3 > *']
+    def dependsOn = ['mail': '1.0-SNAPSHOT > *', 'quartz': '0.4.2 > *', 'hibernate': '2.0.0.RC3 > *']
     def loadAfter = ['mail', 'quartz', 'hibernate'];
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            "grails-app/views/error.gsp",
-            "lib/mail-1.4.1.jar"
+            "grails-app/views/error.gsp"
     ]
 
     def author = "Vitaliy Samolovskih aka Kefir"

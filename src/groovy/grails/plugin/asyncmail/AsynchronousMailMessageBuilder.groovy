@@ -5,8 +5,6 @@ import grails.plugin.mail.MailMessageContentRender
 import grails.plugin.mail.MailMessageContentRenderer
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.springframework.util.Assert
-import grails.plugin.asyncmail.AsynchronousMailMessage
-import grails.plugin.asyncmail.AsynchronousMailAttachment
 
 /**
  * Build new synchronous message
@@ -40,11 +38,17 @@ class AsynchronousMailMessageBuilder {
         message.endDate = end;
     }
 
-    void maxAttemptsCount(Integer max){
+    // Priority
+    void priority(int priority){
+        message.priority = priority;
+    }
+    
+    // Attempts
+    void maxAttemptsCount(int max){
         message.maxAttemptsCount = max;
     }
 
-    void attemptInterval(Long interval){
+    void attemptInterval(long interval){
         message.attemptInterval = interval;
     }
 

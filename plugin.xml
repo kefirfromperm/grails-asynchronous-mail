@@ -1,4 +1,4 @@
-<plugin name='asynchronous-mail' version='0.2.1-SNAPSHOT' grailsVersion='1.2.3 &gt; *'>
+<plugin name='asynchronous-mail' version='0.3' grailsVersion='1.2.3 &gt; *'>
   <author>Vitaliy Samolovskih aka Kefir</author>
   <authorEmail>kefir@perm.ru</authorEmail>
   <title>Asynchronous mail grails plugin</title>
@@ -6,21 +6,29 @@
 This plugin realise asynchronous mail sent. It place messages to DB and sent them by quartz job asynchronously.
 </description>
   <documentation>http://www.grails.org/plugin/asynchronous-mail</documentation>
+  <type>AsynchronousMailGrailsPlugin</type>
   <resources>
     <resource>AsynchronousMailBootStrap</resource>
-    <resource>BuildConfig</resource>
     <resource>DefaultAsynchronousMailConfig</resource>
-    <resource>UrlMappings</resource>
     <resource>grails.plugin.asyncmail.AsynchronousMailAttachment</resource>
     <resource>grails.plugin.asyncmail.AsynchronousMailMessage</resource>
     <resource>grails.plugin.asyncmail.AsynchronousMailJob</resource>
     <resource>grails.plugin.asyncmail.ExpiredMessagesCollectorJob</resource>
     <resource>grails.plugin.asyncmail.AsynchronousMailService</resource>
   </resources>
-  <dependencies>
+  <repositories>
+    <repository name='grailsCentral' url='http://plugins.grails.org' />
+    <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
+    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
+    <repository name='grailsCore' url='http://svn.codehaus.org/grails/trunk/grails-plugins' />
+    <repository name='http://download.java.net/maven/2/' url='http://download.java.net/maven/2/' />
+  </repositories>
+  <dependencies />
+  <plugins />
+  <runtimePluginRequirements>
     <plugin name='mail' version='1.0-SNAPSHOT &gt; *' />
     <plugin name='quartz' version='0.4.2 &gt; *' />
     <plugin name='hibernate' version='1.2.3 &gt; *' />
-  </dependencies>
+  </runtimePluginRequirements>
   <behavior />
 </plugin>
