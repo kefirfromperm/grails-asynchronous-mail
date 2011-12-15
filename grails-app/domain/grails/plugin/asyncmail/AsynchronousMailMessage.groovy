@@ -1,6 +1,12 @@
 package grails.plugin.asyncmail
 
 class AsynchronousMailMessage implements Serializable {
+    /**
+     * This date is accepted as max date because different DBMSs store date in
+     * different formats. So we can't use date which is maximum in Java.
+     * I want to believe that my plugin will work 1000 years. If asynchronous mail plugin
+     * works 1000 years then I or somebody else will change this value.
+     */
     private static final MAX_DATE;
     static {
         Calendar c = Calendar.getInstance();
@@ -8,6 +14,9 @@ class AsynchronousMailMessage implements Serializable {
         c.set(Calendar.MILLISECOND, 0);
         MAX_DATE = c.getTime();
     }
+
+    // Max length of email address
+    private static final int MAX_EMAIL_ADDR_SIZE = 320;
 
     // !!! Message fields !!!
     // Sender attributes
@@ -47,7 +56,7 @@ class AsynchronousMailMessage implements Serializable {
 
     // Priority. The greater is first.
     int priority = 0;
-    
+
     // Attempts
     int attemptsCount = 0;
     int maxAttemptsCount = 1;
@@ -68,7 +77,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'to_idx',
                 joinTable: [
                         name: 'async_mail_mess_to',
-                        length: 320,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'to_string'
                 ]
@@ -78,7 +87,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'cc_idx',
                 joinTable: [
                         name: 'async_mail_mess_cc',
-                        length: 320,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'cc_string'
                 ]
@@ -88,7 +97,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'bcc_idx',
                 joinTable: [
                         name: 'async_mail_mess_bcc',
-                        length: 320,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'bcc_string'
                 ]
@@ -108,8 +117,8 @@ class AsynchronousMailMessage implements Serializable {
 
     static constraints = {
         // message fields
-        from(nullable: true, maxSize: 320);
-        replyTo(nullable: true, maxSize: 320);
+        from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE);
+        replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE);
 
         to(nullable: false, validator: {List<String> val -> !val.isEmpty();})
         cc(nullable: true);
@@ -131,7 +140,7 @@ class AsynchronousMailMessage implements Serializable {
                     val && mess.beginDate && val.after(mess.beginDate);
                 }
         );
-        
+
         // Attempt fields
         attemptsCount(min: 0);
         maxAttemptsCount(min: 1);
@@ -142,14 +151,14 @@ class AsynchronousMailMessage implements Serializable {
     @Override
     def String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Asynchronous mail message: ");
-        builder.append("subject: ").append(subject);
-        builder.append("; to: ");
+        builder.append("Asynchronous mail message{");
+        builder.append("subject: $subject;");
+        builder.append("to: ");
         to.each {String addr ->
             builder.append(addr);
             builder.append(',');
         }
-        builder.append("status: ").append(status);
+        builder.append(";status: $status}");
         return builder.toString();
     }
 }
