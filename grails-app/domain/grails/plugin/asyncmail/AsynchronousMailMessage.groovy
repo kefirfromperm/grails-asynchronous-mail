@@ -77,7 +77,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'to_idx',
                 joinTable: [
                         name: 'async_mail_mess_to',
-                        length: MAX_EMAIL_ADDR_SIZE,
+                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'to_string'
                 ]
@@ -87,7 +87,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'cc_idx',
                 joinTable: [
                         name: 'async_mail_mess_cc',
-                        length: MAX_EMAIL_ADDR_SIZE,
+                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'cc_string'
                 ]
@@ -97,7 +97,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'bcc_idx',
                 joinTable: [
                         name: 'async_mail_mess_bcc',
-                        length: MAX_EMAIL_ADDR_SIZE,
+                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'bcc_string'
                 ]
@@ -117,8 +117,8 @@ class AsynchronousMailMessage implements Serializable {
 
     static constraints = {
         // message fields
-        from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE);
-        replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE);
+        from(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
+        replyTo(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
 
         to(nullable: false, validator: {List<String> val -> !val.isEmpty();})
         cc(nullable: true);
