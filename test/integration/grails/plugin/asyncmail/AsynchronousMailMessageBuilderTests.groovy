@@ -182,6 +182,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertEquals(['kefir@perm.ru'], message.to);
         assertEquals('Subject', message.subject);
         assertFalse(message.html);
+        assertNotNull(message.text);
     }
 
     void testBodyHtmlRender(){
@@ -205,5 +206,56 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertEquals(['kefir@perm.ru'], message.to);
         assertEquals('Subject', message.subject);
         assertTrue(message.html);
+        assertNotNull(message.text);
+    }
+
+    void testTextRender(){
+        def c = {
+            to 'kefir@perm.ru';
+            subject 'Subject';
+            locale 'en_us';
+            text view:'/test/plain';
+        }
+
+        def builder = asynchronousMailMessageBuilderFactory.createBuilder();
+        c.delegate = builder;
+        c.call();
+
+        // Message
+        AsynchronousMailMessage message = builder.message;
+
+        // Validate message
+        assertTrue(message.validate());
+
+        // Assert data
+        assertEquals(['kefir@perm.ru'], message.to);
+        assertEquals('Subject', message.subject);
+        assertFalse(message.html);
+        assertNotNull(message.text);
+    }
+
+    void testHtmlRender(){
+        def c = {
+            to 'kefir@perm.ru';
+            subject 'Subject';
+            locale Locale.ENGLISH;
+            html view:'/test/html';
+        }
+
+        def builder = asynchronousMailMessageBuilderFactory.createBuilder();
+        c.delegate = builder;
+        c.call();
+
+        // Message
+        AsynchronousMailMessage message = builder.message;
+
+        // Validate message
+        assertTrue(message.validate());
+
+        // Assert data
+        assertEquals(['kefir@perm.ru'], message.to);
+        assertEquals('Subject', message.subject);
+        assertTrue(message.html);
+        assertNotNull(message.text);
     }
 }

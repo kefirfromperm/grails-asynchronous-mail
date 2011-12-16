@@ -3,8 +3,10 @@ package grails.plugin.asyncmail
 import grails.plugin.mail.GrailsMailException
 import grails.plugin.mail.MailMessageContentRender
 import grails.plugin.mail.MailMessageContentRenderer
-
+import org.springframework.core.io.FileSystemResource
+import org.springframework.core.io.InputStreamSource
 import org.springframework.util.Assert
+import javax.activation.FileTypeMap
 
 /**
  * Build new synchronous message
@@ -14,12 +16,12 @@ class AsynchronousMailMessageBuilder {
     boolean immediately = false;
     boolean immediatelySetted = false;
 
-    private Locale locale
+    private Locale locale;
 
-    final MailMessageContentRenderer mailMessageContentRenderer;
+    MailMessageContentRenderer mailMessageContentRenderer;
+    FileTypeMap fileTypeMap;
 
-    def AsynchronousMailMessageBuilder(MailMessageContentRenderer mailMessageContentRenderer = null) {
-        this.mailMessageContentRenderer = mailMessageContentRenderer;
+    def AsynchronousMailMessageBuilder() {
     }
 
     def init(def config) {
@@ -186,6 +188,18 @@ class AsynchronousMailMessageBuilder {
         return mailMessageContentRenderer.render(new StringWriter(), params.view, params.model, locale, params.plugin);
     }
 
+    void locale(String localeStr) {
+        Assert.hasText(localeStr, "locale cannot be null or empty")
+
+        locale(new Locale(* localeStr.split('_', 3)));
+    }
+
+    void locale(Locale locale) {
+        Assert.notNull(locale, "locale cannot be null")
+
+        this.locale = locale;
+    }
+
     // Attachments
     void attachBytes(String name, String mimeType, byte[] content) {
         message.addToAttachments(
@@ -193,5 +207,34 @@ class AsynchronousMailMessageBuilder {
                         attachmentName: name, mimeType: mimeType, content: content
                 )
         );
+    }
+
+    void attach(String fileName, String contentType, byte[] bytes) {
+        attachBytes(fileName, contentType, bytes);
+    }
+
+    void attach(File file) {
+        attach(file.name, file);
+    }
+
+    void attach(String fileName, File file) {
+        attach(fileName, fileTypeMap.getContentType(file), file);
+    }
+
+    void attach(String fileName, String contentType, File file) {
+        if (!file.exists()) {
+            throw new FileNotFoundException("cannot use $file as an attachment as it does not exist")
+        }
+
+        attach(fileName, contentType, new FileSystemResource(file));
+    }
+
+    void attach(String fileName, String contentType, InputStreamSource source) {
+        InputStream stream = source.inputStream;
+        try {
+            attachBytes(fileName, contentType, stream.bytes);
+        } finally {
+            stream.close();
+        }
     }
 }
