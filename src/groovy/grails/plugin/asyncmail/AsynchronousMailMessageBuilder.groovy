@@ -3,7 +3,7 @@ package grails.plugin.asyncmail
 import grails.plugin.mail.GrailsMailException
 import grails.plugin.mail.MailMessageContentRender
 import grails.plugin.mail.MailMessageContentRenderer
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 import org.springframework.util.Assert
 
 /**
@@ -22,34 +22,45 @@ class AsynchronousMailMessageBuilder {
         this.mailMessageContentRenderer = mailMessageContentRenderer;
     }
 
-    def init() {
+    def init(def config) {
         message = new AsynchronousMailMessage();
-        message.attemptInterval = ConfigurationHolder.config?.asynchronous?.mail?.default?.attempt?.interval?:300000l;
-        message.maxAttemptsCount = ConfigurationHolder.config?.asynchronous?.mail?.default?.max?.attempts?.count?:1;
-        message.markDelete = ConfigurationHolder.config?.asynchronous?.mail?.clear?.after?.sent?:false;
+        message.attemptInterval = config?.asynchronous?.mail?.default?.attempt?.interval ?: 300000l;
+        message.maxAttemptsCount = config?.asynchronous?.mail?.default?.max?.attempts?.count ?: 1;
+        message.markDelete = config?.asynchronous?.mail?.clear?.after?.sent ?: false;
     }
 
     // Specified fields for asynchronous message
-    void beginDate(Date begin){
+    void beginDate(Date begin) {
         message.beginDate = begin;
     }
 
-    void endDate(Date end){
+    void endDate(Date end) {
         message.endDate = end;
     }
 
     // Priority
-    void priority(int priority){
+    void priority(int priority) {
         message.priority = priority;
     }
-    
+
     // Attempts
-    void maxAttemptsCount(int max){
+    void maxAttemptsCount(int max) {
         message.maxAttemptsCount = max;
     }
 
-    void attemptInterval(long interval){
+    void attemptInterval(long interval) {
         message.attemptInterval = interval;
+    }
+
+    // Mark that the message must be sent immediately
+    void immediate(boolean value) {
+        immediately = value;
+        immediatelySetted = true;
+    }
+
+    // Mark message must be deleted after sent
+    void delete(boolean value) {
+        message.markDelete = value;
     }
 
     // Multipart field do nothing
@@ -143,21 +154,13 @@ class AsynchronousMailMessageBuilder {
         }
     }
 
-    protected MailMessageContentRender doRender(Map params) {
-        if (mailMessageContentRenderer == null) {
-            throw new GrailsMailException("mail message builder was constructed without a message content render so cannot render views")
-        }
-
-        if (!params.view) {
-            throw new GrailsMailException("no view specified")
-        }
-
-        mailMessageContentRenderer.render(new StringWriter(), params.view, params.model, locale, params.plugin)
-    }
-
     void text(CharSequence seq) {
         message.html = false;
         message.text = seq.toString();
+    }
+
+    void text(Map params) {
+        text(doRender(params).out.toString());
     }
 
     void html(CharSequence seq) {
@@ -165,23 +168,30 @@ class AsynchronousMailMessageBuilder {
         message.text = seq.toString();
     }
 
+    void html(Map params) {
+        html(doRender(params).out.toString());
+    }
+
+    protected MailMessageContentRender doRender(Map params) {
+        if (mailMessageContentRenderer == null) {
+            throw new GrailsMailException(
+                    "mail message builder was constructed without a message content render so cannot render views"
+            );
+        }
+
+        if (!params.view) {
+            throw new GrailsMailException("no view specified");
+        }
+
+        return mailMessageContentRenderer.render(new StringWriter(), params.view, params.model, locale, params.plugin);
+    }
+
     // Attachments
-    void attachBytes(String name, String mimeType, byte[] content){
+    void attachBytes(String name, String mimeType, byte[] content) {
         message.addToAttachments(
                 new AsynchronousMailAttachment(
-                        attachmentName:name, mimeType:mimeType, content:content
+                        attachmentName: name, mimeType: mimeType, content: content
                 )
         );
-    }
-
-    // Mark that the message must be sent immediately
-    void immediate(boolean value) {
-        immediately = value;
-        immediatelySetted = true;
-    }
-
-    // Mark message must be deleted after sent
-    void delete(boolean value){
-        message.markDelete = value;
     }
 }

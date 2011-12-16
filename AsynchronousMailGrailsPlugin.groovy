@@ -1,18 +1,19 @@
-import grails.util.GrailsUtil
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import grails.plugin.mail.MailService
+import grails.util.GrailsUtil
+import grails.plugin.asyncmail.AsynchronousMailMessageBuilderFactory
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
     def version = "0.3"
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "2.0.0.RC3 > *"
+    def grailsVersion = "2.0.0 > *"
     // the other plugins this plugin depends on
-    def dependsOn = ['mail': '1.0-SNAPSHOT > *', 'quartz': '0.4.2 > *', 'hibernate': '2.0.0.RC3 > *']
+    def dependsOn = ['mail': '1.0-SNAPSHOT > *', 'quartz': '0.4.2 > *', 'hibernate': '2.0.0 > *']
     def loadAfter = ['mail', 'quartz', 'hibernate'];
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            "grails-app/views/error.gsp"
+            "grails-app/views/test/html.gsp",
+            "grails-app/views/test/plain.gsp"
     ]
 
     def author = "Vitaliy Samolovskih aka Kefir"
@@ -26,7 +27,7 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
     def documentation = "http://www.grails.org/plugin/asynchronous-mail"
 
     def doWithSpring = {
-        def config = ConfigurationHolder.config
+        def config = application.config
         GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
 
         // merging default config into main application config
@@ -42,6 +43,10 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
         nonAsynchronousMailService(MailService) {
             mailMessageBuilderFactory = ref("mailMessageBuilderFactory");
         }
+
+        asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory){
+            it.autowire = true
+        }
     }
 
     def doWithApplicationContext = { applicationContext ->
@@ -54,7 +59,7 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
 
     def configureSendMail(application, applicationContext) {
         // Override mailService
-        if (ConfigurationHolder.config.asynchronous.mail.override) {
+        if (application.config.asynchronous.mail.override) {
             applicationContext.mailService.metaClass*.sendMail = {Closure callable ->
                 applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
             }
