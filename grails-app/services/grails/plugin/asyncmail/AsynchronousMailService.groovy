@@ -1,12 +1,12 @@
 package grails.plugin.asyncmail
 
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.validation.ObjectError
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import grails.plugin.mail.MailMessageContentRenderer
 
 class AsynchronousMailService {
     boolean transactional = true;
-    MailMessageContentRenderer mailMessageContentRenderer;
+    AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory;
+    GrailsApplication grailsApplication;
 
     /**
      * Create synchronous message and save it to DB.
@@ -15,8 +15,7 @@ class AsynchronousMailService {
      * then this method start send job after create message
      */
     def sendAsynchronousMail(Closure callable) {
-        def messageBuilder = new AsynchronousMailMessageBuilder(mailMessageContentRenderer);
-        messageBuilder.init();
+        def messageBuilder = asynchronousMailMessageBuilderFactory.createBuilder();
         callable.delegate = messageBuilder;
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.call()
@@ -29,7 +28,7 @@ class AsynchronousMailService {
         if (messageBuilder.immediatelySetted) {
             immediately = messageBuilder.immediately;
         } else {
-            immediately = ConfigurationHolder.config.asynchronous.mail.send.immediately
+            immediately = grailsApplication.config.asynchronous.mail.send.immediately
         }
         immediately = immediately && message.beginDate.time <= System.currentTimeMillis();
 
@@ -64,7 +63,7 @@ class AsynchronousMailService {
      */
     def sendImmediately() {
         AsynchronousMailJob.triggerNow(
-                ['messagesAtOnce': ConfigurationHolder.config.asynchronous.mail.messages.at.once]
+                ['messagesAtOnce': grailsApplication.config.asynchronous.mail.messages.at.once]
         );
     }
 }
