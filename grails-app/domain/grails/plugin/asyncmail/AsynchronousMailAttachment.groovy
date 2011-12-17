@@ -7,6 +7,7 @@ class AsynchronousMailAttachment implements Serializable{
     String attachmentName;
     String mimeType = DEFAULT_MIME_TYPE;
     byte[] content;
+    boolean inline = false;
 
     static belongsTo = [message:AsynchronousMailMessage];
 

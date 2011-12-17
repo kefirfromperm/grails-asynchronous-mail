@@ -1,14 +1,7 @@
 package grails.plugin.asyncmail
 
-import org.springframework.mail.MailException
-import org.springframework.mail.MailParseException
 import grails.plugin.mail.MailService
-import org.springframework.mail.MailMessage
-import org.springframework.mail.MailPreparationException
-import org.springframework.mail.MailAuthenticationException
-import grails.plugin.asyncmail.AsynchronousMailAttachment
-import grails.plugin.asyncmail.AsynchronousMailMessage
-import grails.plugin.asyncmail.MessageStatus
+import org.springframework.mail.*
 
 /** Sent asynchronous messages         */
 class AsynchronousMailJob {
@@ -35,7 +28,7 @@ class AsynchronousMailJob {
             order('endDate', 'asc');
             order('attemptsCount', 'asc');
             order('beginDate', 'asc');
-            maxResults((int)context.mergedJobDataMap.get('messagesAtOnce'));
+            maxResults((int) context.mergedJobDataMap.get('messagesAtOnce'));
         }
 
         // Send each message and save new status
@@ -46,8 +39,8 @@ class AsynchronousMailJob {
                 Date now = new Date();
                 Date attemptDate = new Date(now.getTime() - message.attemptInterval);
                 if (
-                    message.status == MessageStatus.CREATED
-                            || (message.status == MessageStatus.ATTEMPTED && message.lastAttemptDate.before(attemptDate))
+                        message.status == MessageStatus.CREATED
+                                || (message.status == MessageStatus.ATTEMPTED && message.lastAttemptDate.before(attemptDate))
                 ) {
                     message.lastAttemptDate = now;
                     message.attemptsCount++;
@@ -116,7 +109,11 @@ class AsynchronousMailJob {
                 from message.from;
             }
             message.attachments.each {AsynchronousMailAttachment attachment ->
-                attachBytes attachment.attachmentName, attachment.mimeType, attachment.content
+                if (!attachment.inline) {
+                    attachBytes attachment.attachmentName, attachment.mimeType, attachment.content;
+                } else {
+                    inline attachment.attachmentName, attachment.mimeType, attachment.content;
+                }
             }
         }
     }

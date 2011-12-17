@@ -237,4 +237,37 @@ class AsynchronousMailMessageBuilder {
             stream.close();
         }
     }
+    
+    void inline(String name, String mimeType, byte[] content) {
+        message.addToAttachments(
+                new AsynchronousMailAttachment(
+                        attachmentName: name, mimeType: mimeType, content: content, inline: true
+                )
+        );
+    }
+
+    void inline(File file) {
+        inline(file.name, file);
+    }
+    
+    void inline(String fileName, File file) {
+        inline(fileName, fileTypeMap.getContentType(file), file);
+    }
+
+    void inline(String contentId, String contentType, File file) {
+        if (!file.exists()) {
+            throw new FileNotFoundException("cannot use $file as an attachment as it does not exist")
+        }
+        
+        inline(contentId, contentType, new FileSystemResource(file))
+    }
+    
+    void inline(String contentId, String contentType, InputStreamSource source) {
+        InputStream stream = source.inputStream;
+        try {
+            inline(contentId, contentType, stream.bytes);
+        } finally {
+            stream.close();
+        }
+    }
 }
