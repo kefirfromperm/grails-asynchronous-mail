@@ -38,7 +38,6 @@ class AsynchronousMailMessage implements Serializable {
 
     // Attachments
     List<AsynchronousMailAttachment> attachments;
-    static hasMany = [to: String, cc: String, bcc: String, attachments: AsynchronousMailAttachment];
 
     // !!! Additional status fields !!!
     // Message status
@@ -68,6 +67,18 @@ class AsynchronousMailMessage implements Serializable {
     // Mark this message for delete after sent
     boolean markDelete = false;
 
+    /**
+     * Check can message be aborted.
+     */
+    public boolean isAbortable(){
+        return status == MessageStatus.CREATED || status == MessageStatus.ATTEMPTED;
+    }
+
+    // Transient properties
+    static transients = ['abortable'];
+
+    // Database mapping
+    static hasMany = [to: String, cc: String, bcc: String, attachments: AsynchronousMailAttachment];
     static mapping = {
         table 'async_mail_mess';
 

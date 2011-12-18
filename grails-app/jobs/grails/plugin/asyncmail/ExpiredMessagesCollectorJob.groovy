@@ -1,9 +1,5 @@
 package grails.plugin.asyncmail
 
-import grails.plugin.asyncmail.AsynchronousMailMessage
-import grails.plugin.asyncmail.MessageStatus
-
-
 class ExpiredMessagesCollectorJob {
     static triggers = {}
     def concurrent = false;
@@ -11,7 +7,7 @@ class ExpiredMessagesCollectorJob {
 
     def execute() {
         log.trace('Enter to execute method');
-        int count;
+        int count = 0;
         AsynchronousMailMessage.withTransaction {
             count = AsynchronousMailMessage.executeUpdate(
                     "update AsynchronousMailMessage amm set amm.status=:es where amm.endDate<:date and (amm.status=:cs or amm.status=:as)",
