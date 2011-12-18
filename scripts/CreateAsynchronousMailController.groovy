@@ -19,4 +19,14 @@ target('default': "Create controller for manage asynchronous messages") {
             tofile: "$basedir/grails-app/views/asynchronousMail/edit.gsp",
             overwrite: false
     );
+    Ant.copy(
+            file: "${asynchronousMailPluginDir}/src/templates/views/asynchronousMail/_listAddr.gsp",
+            tofile: "$basedir/grails-app/views/asynchronousMail/_listAddr.gsp",
+            overwrite: false
+    );
+    Ant.copy(
+            file: "${asynchronousMailPluginDir}/src/templates/views/asynchronousMail/_flashMessage.gsp",
+            tofile: "$basedir/grails-app/views/asynchronousMail/_flashMessage.gsp",
+            overwrite: false
+    );
 }
