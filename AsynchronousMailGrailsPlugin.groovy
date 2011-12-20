@@ -16,7 +16,7 @@ class AsynchronousMailGrailsPlugin {
             "grails-app/views/test/plain.gsp"
     ]
 
-    def author = "Vitaliy Samolovskih aka Kefir"
+    def author = "Vitalii Samolovskikh aka Kefir"
     def authorEmail = "kefir@perm.ru"
     def title = "Asynchronous mail grails plugin"
     def description = '''\\
