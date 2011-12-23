@@ -270,4 +270,12 @@ class AsynchronousMailMessageBuilder {
             stream.close();
         }
     }
+
+    /**
+     * It's added to compatibility with Mail plugin
+     */
+    boolean isMimeCapable() {
+        // TODO: I need more time for think about it
+        return true;
+    }
 }
