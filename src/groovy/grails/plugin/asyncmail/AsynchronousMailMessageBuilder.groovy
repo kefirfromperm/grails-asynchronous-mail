@@ -21,6 +21,8 @@ class AsynchronousMailMessageBuilder {
     MailMessageContentRenderer mailMessageContentRenderer;
     FileTypeMap fileTypeMap;
 
+    private boolean mimeCapable = false;
+
     def AsynchronousMailMessageBuilder() {
     }
 
@@ -29,6 +31,14 @@ class AsynchronousMailMessageBuilder {
         message.attemptInterval = config?.asynchronous?.mail?.default?.attempt?.interval ?: 300000l;
         message.maxAttemptsCount = config?.asynchronous?.mail?.default?.max?.attempts?.count ?: 1;
         message.markDelete = config?.asynchronous?.mail?.clear?.after?.sent ?: false;
+    }
+
+    boolean isMimeCapable() {
+        return mimeCapable;
+    }
+
+    void setMimeCapable(boolean mimeCapable) {
+        this.mimeCapable = mimeCapable
     }
 
     // Specified fields for asynchronous message
@@ -269,13 +279,5 @@ class AsynchronousMailMessageBuilder {
         } finally {
             stream.close();
         }
-    }
-
-    /**
-     * It's added to compatibility with Mail plugin
-     */
-    boolean isMimeCapable() {
-        // TODO: I need more time for think about it
-        return true;
     }
 }

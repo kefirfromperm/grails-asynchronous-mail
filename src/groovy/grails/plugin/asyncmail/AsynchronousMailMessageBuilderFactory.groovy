@@ -3,12 +3,14 @@ package grails.plugin.asyncmail
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import javax.activation.FileTypeMap
 import javax.activation.MimetypesFileTypeMap
+import org.springframework.mail.javamail.JavaMailSender
 
 /**
- * @author Vitaliy Samolovskih aka Kefir
+ * @author Vitalii Samolovskikh aka Kefir
  */
 class AsynchronousMailMessageBuilderFactory {
     def mailMessageContentRenderer;
+    def mailSender;
     GrailsApplication grailsApplication;
     private final FileTypeMap fileTypeMap;
 
@@ -20,8 +22,8 @@ class AsynchronousMailMessageBuilderFactory {
         AsynchronousMailMessageBuilder builder = new AsynchronousMailMessageBuilder();
         builder.mailMessageContentRenderer = mailMessageContentRenderer;
         builder.fileTypeMap = fileTypeMap;
-        ConfigObject config = grailsApplication.config;
-        builder.init(config);
+        builder.setMimeCapable(mailSender instanceof JavaMailSender);
+        builder.init(grailsApplication.config);
         return builder;
     }
 }

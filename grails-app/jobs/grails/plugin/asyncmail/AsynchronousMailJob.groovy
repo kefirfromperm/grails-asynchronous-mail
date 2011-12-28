@@ -88,10 +88,10 @@ class AsynchronousMailJob {
             }
             to message.to;
             subject message.subject;
-            if (message.headers && !message.headers.isEmpty()) {
+            if (message.headers && !message.headers.isEmpty() && isMimeCapable()) {
                 headers message.headers;
             }
-            if (message.html) {
+            if (message.html && isMimeCapable()) {
                 html message.text;
             } else {
                 body message.text;
@@ -108,11 +108,13 @@ class AsynchronousMailJob {
             if (message.from) {
                 from message.from;
             }
-            message.attachments.each {AsynchronousMailAttachment attachment ->
-                if (!attachment.inline) {
-                    attachBytes attachment.attachmentName, attachment.mimeType, attachment.content;
-                } else {
-                    inline attachment.attachmentName, attachment.mimeType, attachment.content;
+            if (isMimeCapable()) {
+                message.attachments.each {AsynchronousMailAttachment attachment ->
+                    if (!attachment.inline) {
+                        attachBytes attachment.attachmentName, attachment.mimeType, attachment.content;
+                    } else {
+                        inline attachment.attachmentName, attachment.mimeType, attachment.content;
+                    }
                 }
             }
         }
