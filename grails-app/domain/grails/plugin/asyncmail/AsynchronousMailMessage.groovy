@@ -1,5 +1,8 @@
 package grails.plugin.asyncmail
 
+import org.apache.commons.lang.StringUtils
+import org.apache.commons.validator.EmailValidator
+
 class AsynchronousMailMessage implements Serializable {
     /**
      * This date is accepted as max date because different DBMSs store date in
@@ -70,7 +73,7 @@ class AsynchronousMailMessage implements Serializable {
     /**
      * Check can message be aborted.
      */
-    public boolean isAbortable(){
+    public boolean isAbortable() {
         return status == MessageStatus.CREATED || status == MessageStatus.ATTEMPTED;
     }
 
@@ -87,7 +90,7 @@ class AsynchronousMailMessage implements Serializable {
         to(
                 indexColumn: 'to_idx',
                 joinTable: [
-                        name: 'async_mail_mess_to',
+                        name: 'async_mail_to',
                         length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'to_string'
@@ -97,7 +100,7 @@ class AsynchronousMailMessage implements Serializable {
         cc(
                 indexColumn: 'cc_idx',
                 joinTable: [
-                        name: 'async_mail_mess_cc',
+                        name: 'async_mail_cc',
                         length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'cc_string'
@@ -107,7 +110,7 @@ class AsynchronousMailMessage implements Serializable {
         bcc(
                 indexColumn: 'bcc_idx',
                 joinTable: [
-                        name: 'async_mail_mess_bcc',
+                        name: 'async_mail_bcc',
                         length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'bcc_string'
@@ -117,7 +120,7 @@ class AsynchronousMailMessage implements Serializable {
         headers(
                 indexColumn: [name: 'header_name', length: 255],
                 joinTable: [
-                        name: 'async_mail_mess_header',
+                        name: 'async_mail_header',
                         key: 'message_id',
                         column: 'header_value'
                 ]
@@ -128,12 +131,25 @@ class AsynchronousMailMessage implements Serializable {
 
     static constraints = {
         // message fields
-        from(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
-        replyTo(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
+        from(nullable: true, email: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
+        replyTo(nullable: true, email: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
 
-        to(nullable: false, validator: {List<String> val -> !val.isEmpty();})
-        cc(nullable: true);
-        bcc(nullable: true);
+        // The validator for email addresses list
+        def emailList = {List<String> list ->
+            boolean flag = true;
+            if (list != null) {
+                list.each {String addr ->
+                    if (StringUtils.isBlank(addr) || !EmailValidator.getInstance().isValid(addr)) {
+                        flag = false;
+                    }
+                }
+            }
+            return flag;
+        }
+
+        to(nullable: false, minSize: 1, validator: emailList)
+        cc(nullable: true, validator: emailList);
+        bcc(nullable: true, validator: emailList);
 
         headers(nullable: true);
 
@@ -166,8 +182,8 @@ class AsynchronousMailMessage implements Serializable {
         builder.append("id:$id;")
         builder.append("subject: $subject;");
         builder.append("to: ");
-        to.eachWithIndex  {String addr, int index ->
-            if(index!=0){
+        to.eachWithIndex {String addr, int index ->
+            if (index != 0) {
                 builder.append(',');
             }
             builder.append(addr);

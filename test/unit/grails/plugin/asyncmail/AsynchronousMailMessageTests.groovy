@@ -59,7 +59,7 @@ class AsynchronousMailMessageTests extends GrailsUnitTestCase {
                 attemptInterval: -1
         );
         assertFalse message.validate();
-        assertEquals "validator", message.errors["to"];
+        assertEquals "minSize", message.errors["to"];
         assertEquals "blank", message.errors["subject"];
         assertEquals "blank", message.errors["text"];
         assertEquals "nullable", message.errors["status"];
