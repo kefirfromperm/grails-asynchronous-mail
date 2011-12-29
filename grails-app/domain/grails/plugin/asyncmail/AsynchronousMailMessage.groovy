@@ -153,8 +153,8 @@ class AsynchronousMailMessage implements Serializable {
 
         headers(nullable: true, validator: {Map<String, String> map ->
             boolean flag = true;
-            map?.entrySet()?.each {Map.Entry<String, String> entry ->
-                if (StringUtils.isBlank(entry.key) || StringUtils.isBlank(entry.value)) {
+            map?.each {String key, String value ->
+                if (StringUtils.isBlank(key) || StringUtils.isBlank(value)) {
                     flag = false;
                 }
             }

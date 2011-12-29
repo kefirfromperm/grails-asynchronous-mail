@@ -98,7 +98,19 @@ class AsynchronousMailMessageBuilder {
             throw new GrailsMailException("You must use a JavaMailSender to customise the headers.")
         }
         
-        message.headers = headers;
+        Map map = new HashMap();
+        
+        headers.each{key, value->
+            String keyString = key?.toString();
+            String valueString = value?.toString();
+            
+            Assert.hasText(keyString, "Header name can't be null or empty.")
+            Assert.hasText(valueString, "Value of header ${keyString} can't be null or empty.")
+            
+            map.put(keyString, valueString);
+        }
+        
+        message.headers = map;
     }
 
     // Field "to"
