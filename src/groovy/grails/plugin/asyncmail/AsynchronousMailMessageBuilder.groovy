@@ -43,10 +43,14 @@ class AsynchronousMailMessageBuilder {
 
     // Specified fields for asynchronous message
     void beginDate(Date begin) {
+        Assert.notNull(begin, "Begin date can't be null.");
+        
         message.beginDate = begin;
     }
 
     void endDate(Date end) {
+        Assert.notNull(end, "End date can't be null.");
+        
         message.endDate = end;
     }
 
@@ -88,6 +92,12 @@ class AsynchronousMailMessageBuilder {
 
     // Mail message headers
     void headers(Map headers) {
+        Assert.notEmpty(headers, "Headers can't be null.");
+
+        if(!mimeCapable){
+            throw new GrailsMailException("You must use a JavaMailSender to customise the headers.")
+        }
+        
         message.headers = headers;
     }
 

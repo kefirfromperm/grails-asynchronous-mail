@@ -151,7 +151,15 @@ class AsynchronousMailMessage implements Serializable {
         cc(nullable: true, validator: emailList);
         bcc(nullable: true, validator: emailList);
 
-        headers(nullable: true);
+        headers(nullable: true, validator: {Map<String, String> map ->
+            boolean flag = true;
+            map?.entrySet()?.each {Map.Entry<String, String> entry ->
+                if (StringUtils.isBlank(entry.key) || StringUtils.isBlank(entry.value)) {
+                    flag = false;
+                }
+            }
+            return flag;
+        });
 
         subject(nullable: false, blank: false, maxSize: 988);
         text(nullable: false, blank: false);
