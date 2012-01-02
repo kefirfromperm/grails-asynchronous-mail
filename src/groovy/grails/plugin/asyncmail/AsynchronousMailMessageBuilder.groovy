@@ -7,6 +7,7 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.InputStreamSource
 import org.springframework.util.Assert
 import javax.activation.FileTypeMap
+import org.apache.commons.validator.EmailValidator
 
 /**
  * Build new synchronous message
@@ -114,52 +115,83 @@ class AsynchronousMailMessageBuilder {
     }
 
     // Field "to"
-    void to(String recipient) {
-        message.to = [recipient];
+    void to(CharSequence recipient) {
+        Assert.notNull(recipient, "Field to can't be null.");
+        to([recipient]);
     }
 
-    void to(String[] recipients) {
-        message.to = Arrays.asList(recipients);
+    void to(CharSequence[] recipients) {
+        Assert.notNull(recipients, "Field to can't be null.");
+        to(Arrays.asList(recipients));
     }
 
-    void to(List<String> recipients) {
-        message.to = recipients;
+    void to(List<CharSequence> recipients) {
+        message.to = validateAndConvertAddrList('to', recipients);
+    }
+
+    private List<String> validateAndConvertAddrList(String fieldName, List<CharSequence> recipients) {
+        Assert.notNull(recipients, "Field $fieldName can't be null.");
+        Assert.notEmpty(recipients, "Field $fieldName can't be empty.");
+
+        List<String> list = new ArrayList<String>(recipients.size());
+        recipients.each {CharSequence seq ->
+            String addr = seq.toString();
+            assertEmail(addr, fieldName);
+            list.add(addr);
+        }
+        return list;
+    }
+
+    private assertEmail(String addr, String fieldName) {
+        Assert.notNull(addr, "Value of $fieldName can't be null.");
+        Assert.hasText(addr, "Value of $fieldName can't be blank.");
+        if (!EmailValidator.getInstance().isValid(addr)) {
+            throw new GrailsMailException("Value of $fieldName must be email address.");
+        }
     }
 
     // Field "bcc"
-    void bcc(String val) {
-        message.bcc = [val];
+    void bcc(CharSequence val) {
+        Assert.notNull(val, "Field bcc can't be null.");
+        bcc([val]);
     }
 
-    void bcc(String[] recipients) {
-        message.bcc = Arrays.asList(recipients);
+    void bcc(CharSequence[] recipients) {
+        Assert.notNull(recipients, "Field bcc can't be null.");
+        bcc(Arrays.asList(recipients));
     }
 
-    void bcc(List<String> recipients) {
-        message.bcc = recipients;
+    void bcc(List<CharSequence> recipients) {
+        message.bcc = validateAndConvertAddrList('bcc', recipients);
     }
 
     // Field "cc"
-    void cc(String val) {
-        message.cc = [val];
+    void cc(CharSequence val) {
+        Assert.notNull(val, "Field cc can't be null.");
+        cc([val]);
     }
 
-    void cc(String[] recipients) {
-        message.cc = Arrays.asList(recipients);
+    void cc(CharSequence[] recipients) {
+        Assert.notNull(recipients, "Field cc can't be null.");
+        cc(Arrays.asList(recipients));
     }
 
-    void cc(List<String> recipients) {
-        message.cc = recipients;
+    void cc(List<CharSequence> recipients) {
+        message.cc = validateAndConvertAddrList('cc', recipients);
     }
 
     // Field "replyTo"
     void replyTo(CharSequence val) {
-        message.replyTo = val.toString();
+        def addr = val.toString();
+        assertEmail(addr, 'replyTo');
+        message.replyTo = addr;
     }
 
     // Field "from"
     void from(CharSequence sender) {
-        message.from = sender.toString();
+        def addr = sender.toString()
+        assertEmail(addr, 'from');
+        message.from = addr;
     }
 
     // Field "subject"
@@ -168,7 +200,9 @@ class AsynchronousMailMessageBuilder {
     }
 
     void subject(CharSequence subject) {
-        message.subject = subject.toString();
+        String string = subject?.toString()
+        Assert.hasText(string, "Field subject can't be null or blank.")
+        message.subject = string;
     }
 
     // Body
