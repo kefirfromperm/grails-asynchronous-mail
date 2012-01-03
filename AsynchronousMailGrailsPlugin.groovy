@@ -1,6 +1,7 @@
+import grails.plugin.asyncmail.AsynchronousMailMessageBuilderFactory
 import grails.plugin.mail.MailService
 import grails.util.GrailsUtil
-import grails.plugin.asyncmail.AsynchronousMailMessageBuilderFactory
+import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
@@ -49,7 +50,7 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
         }
     }
 
-    def doWithApplicationContext = { applicationContext ->
+    def doWithApplicationContext = {GrailsApplicationContext applicationContext ->
         configureSendMail(application, applicationContext)
     }
 
@@ -57,7 +58,10 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
         configureSendMail(event.application, event.ctx)
     }
 
-    def configureSendMail(application, applicationContext) {
+    def configureSendMail(application, GrailsApplicationContext applicationContext) {
+        // Register alias for asynchronousMailService
+        applicationContext.registerAlias('asynchronousMailService', 'asyncMailService');
+
         // Override mailService
         if (application.config.asynchronous.mail.override) {
             applicationContext.mailService.metaClass*.sendMail = {Closure callable ->

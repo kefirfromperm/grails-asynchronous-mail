@@ -52,6 +52,13 @@ class AsynchronousMailService {
     }
 
     /**
+     * @see #sendAsynchronousMail
+     */
+    def sendMail(Closure callable){
+        return sendAsynchronousMail(callable);
+    }
+
+    /**
      * Start send job immediately. If you send more than one message in one method,
      * you can disable asynchronous.mail.send.immediately flag (default true) and use this method
      * after then create all messages.
