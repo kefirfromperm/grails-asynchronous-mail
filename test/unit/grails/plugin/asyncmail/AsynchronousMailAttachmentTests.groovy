@@ -13,6 +13,7 @@ class AsynchronousMailAttachmentTests extends GrailsUnitTestCase {
         assertNull attachment.attachmentName;
         assertEquals AsynchronousMailAttachment.DEFAULT_MIME_TYPE, attachment.mimeType;
         assertNull attachment.content;
+        assertFalse attachment.inline;
     }
 
     void testConstraints(){

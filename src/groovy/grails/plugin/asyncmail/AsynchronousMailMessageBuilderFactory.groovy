@@ -6,6 +6,8 @@ import javax.activation.MimetypesFileTypeMap
 import org.springframework.mail.javamail.JavaMailSender
 
 /**
+ * Create an message builder.
+ *
  * @author Vitalii Samolovskikh aka Kefir
  */
 class AsynchronousMailMessageBuilderFactory {

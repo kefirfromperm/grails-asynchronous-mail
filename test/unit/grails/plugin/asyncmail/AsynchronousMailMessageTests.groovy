@@ -72,7 +72,7 @@ class AsynchronousMailMessageTests extends GrailsUnitTestCase {
 
         // Minimal valid message
         message = new AsynchronousMailMessage(
-                to: ['kefir@perm.ru'],
+                to: ['test@example.com'],
                 subject: 'Subject',
                 text: 'Text'
         );
