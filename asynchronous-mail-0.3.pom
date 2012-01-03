@@ -3,7 +3,7 @@
   <groupId>org.grails.plugins</groupId>
   <artifactId>asynchronous-mail</artifactId>
   <packaging>zip</packaging>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.3</version>
   <name>Asynchronous mail grails plugin</name>
   <description>\
 This plugin realise asynchronous mail sent. It place messages to DB and sent them by quartz job asynchronously.
@@ -11,7 +11,7 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
   <url>http://www.grails.org/plugin/asynchronous-mail</url>
   <developers>
     <developer>
-      <name>Vitaliy Samolovskih aka Kefir</name>
+      <name>Vitalii Samolovskikh aka Kefir</name>
       <email>kefir@perm.ru</email>
     </developer>
   </developers>
