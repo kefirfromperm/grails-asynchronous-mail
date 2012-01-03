@@ -182,14 +182,14 @@ class AsynchronousMailMessageBuilder {
 
     // Field "replyTo"
     void replyTo(CharSequence val) {
-        def addr = val.toString();
+        def addr = val?.toString();
         assertEmail(addr, 'replyTo');
         message.replyTo = addr;
     }
 
     // Field "from"
     void from(CharSequence sender) {
-        def addr = sender.toString()
+        def addr = sender?.toString()
         assertEmail(addr, 'from');
         message.from = addr;
     }
@@ -200,7 +200,7 @@ class AsynchronousMailMessageBuilder {
     }
 
     void subject(CharSequence subject) {
-        String string = subject?.toString()
+        String string = subject?.toString();
         Assert.hasText(string, "Field subject can't be null or blank.")
         message.subject = string;
     }
@@ -211,9 +211,9 @@ class AsynchronousMailMessageBuilder {
     }
 
     void body(Map params) {
-        Assert.notEmpty(params, "body cannot be null or empty")
+        Assert.notEmpty(params, "body cannot be null or empty");
 
-        def render = doRender(params)
+        def render = doRender(params);
 
         if (render.html) {
             html(render.out.toString())
@@ -224,7 +224,9 @@ class AsynchronousMailMessageBuilder {
 
     void text(CharSequence seq) {
         message.html = false;
-        message.text = seq.toString();
+        def string = seq?.toString();
+        Assert.hasText(string, "Body text can't be null or blank.");
+        message.text = string;
     }
 
     void text(Map params) {
@@ -233,7 +235,9 @@ class AsynchronousMailMessageBuilder {
 
     void html(CharSequence seq) {
         message.html = true;
-        message.text = seq.toString();
+        def string = seq?.toString();
+        Assert.hasText(string, "Body can't be null or blank.");
+        message.text = string;
     }
 
     void html(Map params) {
@@ -257,7 +261,7 @@ class AsynchronousMailMessageBuilder {
     void locale(String localeStr) {
         Assert.hasText(localeStr, "locale cannot be null or empty")
 
-        locale(new Locale(* localeStr.split('_', 3)));
+        locale(new Locale(localeStr.split('_', 3).toArrayString()));
     }
 
     void locale(Locale locale) {
@@ -268,6 +272,13 @@ class AsynchronousMailMessageBuilder {
 
     // Attachments
     void attachBytes(String name, String mimeType, byte[] content) {
+        Assert.hasText(name, "Attachment name can't be blank.");
+        Assert.notNull(content, "Attachment content can't be null.");
+
+        if(!isMimeCapable()){
+            throw new GrailsMailException("You must use a JavaMailSender to add attachment.");
+        }
+
         message.addToAttachments(
                 new AsynchronousMailAttachment(
                         attachmentName: name, mimeType: mimeType, content: content
@@ -305,6 +316,13 @@ class AsynchronousMailMessageBuilder {
     }
     
     void inline(String name, String mimeType, byte[] content) {
+        Assert.hasText(name, "Inline id can't be blank.");
+        Assert.notNull(content, "Inline content can't be null.");
+
+        if(!isMimeCapable()){
+            throw new GrailsMailException("You must use a JavaMailSender to add inlines.");
+        }
+
         message.addToAttachments(
                 new AsynchronousMailAttachment(
                         attachmentName: name, mimeType: mimeType, content: content, inline: true
