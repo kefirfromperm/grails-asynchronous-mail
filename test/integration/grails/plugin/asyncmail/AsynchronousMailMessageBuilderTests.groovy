@@ -14,16 +14,15 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         super.setUp();
 
         // Apply constraints for message objects
-        def existingMessage = new AsynchronousMailMessage();
-        mockForConstraintsTests(AsynchronousMailMessage, [existingMessage]);
+        mockForConstraintsTests(AsynchronousMailMessage);
 
         // Apply constraints for attachment objects
-        def existingAttachment = new AsynchronousMailAttachment();
-        mockForConstraintsTests(AsynchronousMailAttachment, [existingAttachment]);
+        mockForConstraintsTests(AsynchronousMailAttachment);
     }
 
     void testBuilder() {
         def c = {
+            from 'John Smith <john@example.com>';
             to 'test1@example.com';
             subject 'Subject';
             text 'Text';
@@ -42,6 +41,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         // Validate message
         assertTrue(message.validate());
 
+        assertEquals('John Smith <john@example.com>', message.from);
         assertEquals(['test1@example.com'], message.to);
         assertEquals('Subject', message.subject);
         assertEquals('Text', message.text);

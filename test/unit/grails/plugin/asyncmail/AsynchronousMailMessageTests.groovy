@@ -33,10 +33,25 @@ class AsynchronousMailMessageTests extends GrailsUnitTestCase {
         assertEquals 0, message.priority;
     }
 
+    void testValid(){
+        // Apply constraints for message objects
+        mockForConstraintsTests(AsynchronousMailMessage);
+
+        def message = new AsynchronousMailMessage(
+                from: 'John Smith <john@example.com>',
+                replyTo: 'James Smith <james@example.com>',
+                to: ['Mary Smith <mary@example.com>', 'carl@example.com'],
+                cc: ['Mary Smith <mary@example.com>', 'carl@example.com'],
+                bcc: ['Mary Smith <mary@example.com>', 'carl@example.com'],
+                subject: 'Subject',
+                text: 'Text'
+        );
+        assertTrue message.validate();
+    }
+
     void testConstraints() {
         // Apply constraints for message objects
-        def existingMessage = new AsynchronousMailMessage();
-        mockForConstraintsTests(AsynchronousMailMessage, [existingMessage]);
+        mockForConstraintsTests(AsynchronousMailMessage);
 
         // Constraints on default message
         def message = new AsynchronousMailMessage();
@@ -69,13 +84,5 @@ class AsynchronousMailMessageTests extends GrailsUnitTestCase {
         assertEquals "min", message.errors["attemptsCount"];
         assertEquals "min", message.errors["maxAttemptsCount"];
         assertEquals "min", message.errors["attemptInterval"];
-
-        // Minimal valid message
-        message = new AsynchronousMailMessage(
-                to: ['test@example.com'],
-                subject: 'Subject',
-                text: 'Text'
-        );
-        assertTrue message.validate();
     }
 }

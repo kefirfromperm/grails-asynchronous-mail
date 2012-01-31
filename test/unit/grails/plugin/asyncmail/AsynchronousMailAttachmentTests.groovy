@@ -18,8 +18,7 @@ class AsynchronousMailAttachmentTests extends GrailsUnitTestCase {
 
     void testConstraints(){
         // Apply constraints for attachment objects
-        def existingAttachment = new AsynchronousMailAttachment();
-        mockForConstraintsTests(AsynchronousMailAttachment, [existingAttachment]);
+        mockForConstraintsTests(AsynchronousMailAttachment);
 
         // Constraints on default attachment
         def attachment = new AsynchronousMailAttachment();

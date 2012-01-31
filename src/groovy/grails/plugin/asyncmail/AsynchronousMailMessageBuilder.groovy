@@ -7,7 +7,6 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.InputStreamSource
 import org.springframework.util.Assert
 import javax.activation.FileTypeMap
-import org.apache.commons.validator.EmailValidator
 
 /**
  * Build new synchronous message
@@ -145,7 +144,7 @@ class AsynchronousMailMessageBuilder {
     private assertEmail(String addr, String fieldName) {
         Assert.notNull(addr, "Value of $fieldName can't be null.");
         Assert.hasText(addr, "Value of $fieldName can't be blank.");
-        if (!EmailValidator.getInstance().isValid(addr)) {
+        if (!Validator.isMailbox(addr)) {
             throw new GrailsMailException("Value of $fieldName must be email address.");
         }
     }

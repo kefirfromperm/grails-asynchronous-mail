@@ -1,7 +1,6 @@
 package grails.plugin.asyncmail
 
 import org.apache.commons.lang.StringUtils
-import org.apache.commons.validator.EmailValidator
 
 class AsynchronousMailMessage implements Serializable {
     /**
@@ -130,16 +129,20 @@ class AsynchronousMailMessage implements Serializable {
     }
 
     static constraints = {
+        def mailboxValidator = {String value ->
+            return value == null || Validator.isMailbox(value);
+        }
+
         // message fields
-        from(nullable: true, email: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
-        replyTo(nullable: true, email: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE);
+        from(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator);
+        replyTo(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator);
 
         // The validator for email addresses list
         def emailList = {List<String> list ->
             boolean flag = true;
             if (list != null) {
                 list.each {String addr ->
-                    if (StringUtils.isBlank(addr) || !EmailValidator.getInstance().isValid(addr)) {
+                    if (StringUtils.isBlank(addr) && Validator.isMailbox(addr)) {
                         flag = false;
                     }
                 }
