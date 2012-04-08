@@ -5,16 +5,18 @@ import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 
 class AsynchronousMailGrailsPlugin {
     // the plugin version
-    def version = "0.4"
+    def version = "0.5"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0.0 > *"
     // the other plugins this plugin depends on
-    def dependsOn = ['mail': '1.0 > *', 'quartz': '0.4.2 > *', 'hibernate': '2.0.0 > *']
-    def loadAfter = ['mail', 'quartz', 'hibernate'];
+    def dependsOn = ['mail': '1.0 > *', 'quartz2': '0.2.2 > *', 'hibernate': '2.0.0 > *']
+    def loadAfter = ['mail', 'hibernate'];
+    def loadBefore = ['quartz2'];
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/test/html.gsp",
-            "grails-app/views/test/plain.gsp"
+            "grails-app/views/test/plain.gsp",
+            'grails-app/conf/Config.groovy'
     ]
 
     def author = "Vitalii Samolovskikh aka Kefir"

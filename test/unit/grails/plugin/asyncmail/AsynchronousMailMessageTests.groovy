@@ -3,11 +3,13 @@ package grails.plugin.asyncmail
 import grails.test.GrailsUnitTestCase
 import grails.plugin.asyncmail.AsynchronousMailMessage
 import grails.plugin.asyncmail.MessageStatus
+import grails.test.mixin.TestFor
 
 /**
  * Test AsynchronousMailMessage constraints
  */
-class AsynchronousMailMessageTests extends GrailsUnitTestCase {
+@TestFor(AsynchronousMailMessage)
+class AsynchronousMailMessageTests {
     void testDefault() {
         def message = new AsynchronousMailMessage();
         assertNull message.to;

@@ -69,8 +69,6 @@ class AsynchronousMailService {
      * asynchronousMailService.sendImmediately()</code>
      */
     def sendImmediately() {
-        AsynchronousMailJob.triggerNow(
-                ['messagesAtOnce': grailsApplication.config.asynchronous.mail.messages.at.once]
-        );
+        AsynchronousMailJob.triggerNow();
     }
 }

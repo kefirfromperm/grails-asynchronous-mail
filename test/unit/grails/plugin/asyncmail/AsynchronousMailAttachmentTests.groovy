@@ -3,11 +3,13 @@ package grails.plugin.asyncmail
 import grails.test.GrailsUnitTestCase
 import grails.plugin.asyncmail.AsynchronousMailAttachment
 import grails.plugin.asyncmail.AsynchronousMailMessage
+import grails.test.mixin.TestFor
 
 /**
  * Attachment unit tests
  */
-class AsynchronousMailAttachmentTests extends GrailsUnitTestCase {
+@TestFor(AsynchronousMailAttachment)
+class AsynchronousMailAttachmentTests {
     void testDefault(){
         def attachment = new AsynchronousMailAttachment();
         assertNull attachment.attachmentName;

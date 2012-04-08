@@ -2,12 +2,20 @@ package grails.plugin.asyncmail
 
 import grails.plugin.mail.MailService
 import org.springframework.mail.*
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
 /** Sent asynchronous messages         */
 class AsynchronousMailJob {
-    static triggers = {}
     def concurrent = false;
     def group = "AsynchronousMail";
+
+    GrailsApplication grailsApplication;
+
+    def getTriggers() {
+        return {
+            simple([repeatInterval: (Long) config.asynchronous.mail.send.repeat.interval]);
+        }
+    }
 
     // Dependency injection
     MailService nonAsynchronousMailService;
@@ -28,7 +36,7 @@ class AsynchronousMailJob {
             order('endDate', 'asc');
             order('attemptsCount', 'asc');
             order('beginDate', 'asc');
-            maxResults((int) context.mergedJobDataMap.get('messagesAtOnce'));
+            maxResults((int) config.asynchronous.mail.messages.at.once);
         }
 
         // Send each message and save new status

@@ -1,4 +1,4 @@
-<plugin name='asynchronous-mail' version='0.4' grailsVersion='2.0.0 &gt; *'>
+<plugin name='asynchronous-mail' version='0.5' grailsVersion='2.0.0 &gt; *'>
   <author>Vitalii Samolovskikh aka Kefir</author>
   <authorEmail>kefir@perm.ru</authorEmail>
   <title>Asynchronous mail grails plugin</title>
@@ -8,7 +8,6 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
   <documentation>http://www.grails.org/plugin/asynchronous-mail</documentation>
   <type>AsynchronousMailGrailsPlugin</type>
   <resources>
-    <resource>AsynchronousMailBootStrap</resource>
     <resource>DefaultAsynchronousMailConfig</resource>
     <resource>grails.plugin.asyncmail.AsynchronousMailAttachment</resource>
     <resource>grails.plugin.asyncmail.AsynchronousMailMessage</resource>
@@ -28,7 +27,7 @@ This plugin realise asynchronous mail sent. It place messages to DB and sent the
   <plugins />
   <runtimePluginRequirements>
     <plugin name='mail' version='1.0 &gt; *' />
-    <plugin name='quartz' version='0.4.2 &gt; *' />
+    <plugin name='quartz2' version='0.2.2 &gt; *' />
     <plugin name='hibernate' version='2.0.0 &gt; *' />
   </runtimePluginRequirements>
   <behavior />
