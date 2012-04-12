@@ -23,7 +23,7 @@ class AsynchronousMailGrailsPlugin {
     def authorEmail = "kefir@perm.ru"
     def title = "Asynchronous mail grails plugin"
     def description = '''\\
-This plugin realise asynchronous mail sent. It place messages to DB and sent them by quartz job asynchronously.
+This plugin realises asynchronous mail sending. It places messages to DB and sends them by quartz job asynchronously.
 '''
 
     // URL to the plugin's documentation
