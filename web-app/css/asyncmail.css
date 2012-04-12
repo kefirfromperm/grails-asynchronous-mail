@@ -1,0 +1,77 @@
+body {
+    background-color: white;
+    font-family: sans-serif;
+}
+
+div, h1 {
+    margin: 5px;
+    padding: 5px;
+}
+
+a {
+    color: green;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border: solid green 1px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+
+td.id {
+    text-align: right;
+}
+
+td.fieldName {
+    text-align: right;
+    font-weight: bold;
+}
+
+th {
+    border: green solid 1px;
+}
+
+td {
+    border-left: green dotted 1px;
+}
+
+td {
+    border-left: green dotted 1px;
+}
+
+tr.even {
+    background-color: #ccffcc;
+}
+
+/* Paginate */
+div.paginate {
+    margin: 5px 0;
+    padding: 5px 0;
+}
+
+div.paginate a, div.paginate span {
+    padding: 5px;
+}
+
+.message {
+    margin: 10px;
+    border: solid green 1px;
+}
+
+.error, .message.error, tr.even.error {
+    border: red solid 1px;
+    background-color: #ffcccc;
+    color: red;
+}
+
