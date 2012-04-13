@@ -3,7 +3,7 @@
   <authorEmail>kefir@perm.ru</authorEmail>
   <title>Asynchronous mail grails plugin</title>
   <description>\
-This plugin realise asynchronous mail sent. It place messages to DB and sent them by quartz job asynchronously.
+This plugin realises asynchronous mail sending. It places messages to DB and sends them by quartz job asynchronously.
 </description>
   <documentation>http://www.grails.org/plugin/asynchronous-mail</documentation>
   <type>AsynchronousMailGrailsPlugin</type>
