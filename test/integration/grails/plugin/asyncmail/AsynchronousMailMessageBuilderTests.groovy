@@ -135,6 +135,42 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertEquals(false, message.html);
     }
 
+    void testMail3() {
+        // make test data
+        Object[] toArray = ['test1@example.com'] as Object[];
+        Object[] bccArray = ['test2@example.com'] as Object[];
+        Object[] ccArray = ['test3@example.com'] as Object[];
+        String subjectString = 'Test subject';
+        String textString = 'Text test';
+
+        // Apply test data
+        def c = {
+            to(toArray);
+            bcc(bccArray);
+            cc(ccArray);
+            subject(subjectString);
+            text(textString);
+        }
+
+        def builder = asynchronousMailMessageBuilderFactory.createBuilder();
+        c.delegate = builder;
+        c.call();
+
+        // Message
+        AsynchronousMailMessage message = builder.message;
+
+        // Validate message
+        assertTrue(message.validate());
+
+        // Assert data
+        assertEquals(toArray as List, message.to);
+        assertEquals(bccArray as List, message.bcc);
+        assertEquals(ccArray as List, message.cc);
+        assertEquals(subjectString, message.subject);
+        assertEquals(textString, message.text);
+        assertEquals(false, message.html);
+    }
+
     void testHtml(){
         String htmlString = '<html><head></head><body></body></html>';
 

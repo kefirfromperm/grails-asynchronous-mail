@@ -119,16 +119,16 @@ class AsynchronousMailMessageBuilder {
         to([recipient]);
     }
 
-    void to(CharSequence[] recipients) {
+    void to(Object[] recipients) {
         Assert.notNull(recipients, "Field to can't be null.");
-        to(Arrays.asList(recipients));
+        to(recipients*.toString());
     }
 
-    void to(List<CharSequence> recipients) {
+    void to(List<? extends CharSequence> recipients) {
         message.to = validateAndConvertAddrList('to', recipients);
     }
 
-    private List<String> validateAndConvertAddrList(String fieldName, List<CharSequence> recipients) {
+    private List<String> validateAndConvertAddrList(String fieldName, List<? extends CharSequence> recipients) {
         Assert.notNull(recipients, "Field $fieldName can't be null.");
         Assert.notEmpty(recipients, "Field $fieldName can't be empty.");
 
@@ -155,12 +155,12 @@ class AsynchronousMailMessageBuilder {
         bcc([val]);
     }
 
-    void bcc(CharSequence[] recipients) {
+    void bcc(Object[] recipients) {
         Assert.notNull(recipients, "Field bcc can't be null.");
-        bcc(Arrays.asList(recipients));
+        bcc(recipients*.toString());
     }
 
-    void bcc(List<CharSequence> recipients) {
+    void bcc(List<? extends CharSequence> recipients) {
         message.bcc = validateAndConvertAddrList('bcc', recipients);
     }
 
@@ -170,12 +170,12 @@ class AsynchronousMailMessageBuilder {
         cc([val]);
     }
 
-    void cc(CharSequence[] recipients) {
+    void cc(Object[] recipients) {
         Assert.notNull(recipients, "Field cc can't be null.");
-        cc(Arrays.asList(recipients));
+        cc(recipients*.toString());
     }
 
-    void cc(List<CharSequence> recipients) {
+    void cc(List<? extends CharSequence> recipients) {
         message.cc = validateAndConvertAddrList('cc', recipients);
     }
 
