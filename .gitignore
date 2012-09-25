@@ -1,0 +1,13 @@
+# JetBrains IntelliJ IDEA files
+.idea/
+*.iml
+
+# Log files
+*.log
+
+# Libraries and others
+*.jar
+*.zip
+
+# Target
+target/
