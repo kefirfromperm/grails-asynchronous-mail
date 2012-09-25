@@ -1,7 +1,5 @@
 package grails.plugin.asyncmail
 
-import org.codehaus.groovy.grails.commons.GrailsApplication
-
 class ExpiredMessagesCollectorJob {
     def concurrent = false;
     def group = "AsynchronousMail";

@@ -2,7 +2,6 @@ package grails.plugin.asyncmail
 
 import grails.plugin.mail.MailService
 import org.springframework.mail.*
-import org.codehaus.groovy.grails.commons.GrailsApplication
 
 /** Sent asynchronous messages         */
 class AsynchronousMailJob {
