@@ -16,7 +16,10 @@ class AsynchronousMailGrailsPlugin {
     def pluginExcludes = [
             "grails-app/views/test/html.gsp",
             "grails-app/views/test/plain.gsp",
-            'grails-app/conf/Config.groovy'
+            'grails-app/conf/Config.groovy',
+            'grails-app/conf/BuildConfig.groovy',
+            'grails-app/conf/UrlMappings.groovy',
+            'grails-app/conf/DataSource.groovy'
     ]
 
     def author = "Vitalii Samolovskikh aka Kefir"

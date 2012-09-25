@@ -9,8 +9,6 @@ class AsynchronousMailJob {
     def concurrent = false;
     def group = "AsynchronousMail";
 
-    GrailsApplication grailsApplication;
-
     def getTriggers() {
         return {
             simple([repeatInterval: (Long) config.asynchronous.mail.send.repeat.interval]);
