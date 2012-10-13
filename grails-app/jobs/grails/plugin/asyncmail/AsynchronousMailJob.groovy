@@ -9,8 +9,12 @@ class AsynchronousMailJob {
     def group = "AsynchronousMail";
 
     def getTriggers() {
-        return {
-            simple([repeatInterval: (Long) config.asynchronous.mail.send.repeat.interval]);
+        if (!config.asynchronous.mail.disable) {
+            return {
+                simple([repeatInterval: (Long) config.asynchronous.mail.send.repeat.interval]);
+            }
+        } else {
+            return {};
         }
     }
 

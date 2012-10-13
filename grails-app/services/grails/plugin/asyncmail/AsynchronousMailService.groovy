@@ -30,7 +30,10 @@ class AsynchronousMailService {
         } else {
             immediately = grailsApplication.config.asynchronous.mail.send.immediately
         }
-        immediately = immediately && message.beginDate.time <= System.currentTimeMillis();
+        immediately =
+            immediately &&
+                    message.beginDate.time <= System.currentTimeMillis() &&
+                    !grailsApplication.config.asynchronous.mail.disable;
 
         // Save message to DB
         if (!message.save(flush: immediately)) {
@@ -54,7 +57,7 @@ class AsynchronousMailService {
     /**
      * @see #sendAsynchronousMail
      */
-    def sendMail(Closure callable){
+    def sendMail(Closure callable) {
         return sendAsynchronousMail(callable);
     }
 

@@ -5,8 +5,12 @@ class ExpiredMessagesCollectorJob {
     def group = "AsynchronousMail";
 
     def getTriggers() {
-        return {
-            simple([repeatInterval: (Long) config.asynchronous.mail.expired.collector.repeat.interval]);
+        if (!config.asynchronous.mail.disable) {
+            return {
+                simple([repeatInterval: (Long) config.asynchronous.mail.expired.collector.repeat.interval]);
+            }
+        } else {
+            return {};
         }
     }
 
