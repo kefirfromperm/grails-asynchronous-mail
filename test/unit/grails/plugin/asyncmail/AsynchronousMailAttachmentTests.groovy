@@ -1,8 +1,5 @@
 package grails.plugin.asyncmail
 
-import grails.test.GrailsUnitTestCase
-import grails.plugin.asyncmail.AsynchronousMailAttachment
-import grails.plugin.asyncmail.AsynchronousMailMessage
 import grails.test.mixin.TestFor
 
 /**
@@ -11,40 +8,40 @@ import grails.test.mixin.TestFor
 @TestFor(AsynchronousMailAttachment)
 class AsynchronousMailAttachmentTests {
     void testDefault(){
-        def attachment = new AsynchronousMailAttachment();
-        assertNull attachment.attachmentName;
-        assertEquals AsynchronousMailAttachment.DEFAULT_MIME_TYPE, attachment.mimeType;
-        assertNull attachment.content;
-        assertFalse attachment.inline;
+        def attachment = new AsynchronousMailAttachment()
+        assertNull attachment.attachmentName
+        assertEquals AsynchronousMailAttachment.DEFAULT_MIME_TYPE, attachment.mimeType
+        assertNull attachment.content
+        assertFalse attachment.inline
     }
 
     void testConstraints(){
         // Apply constraints for attachment objects
-        mockForConstraintsTests(AsynchronousMailAttachment);
+        mockForConstraintsTests(AsynchronousMailAttachment)
 
         // Constraints on default attachment
-        def attachment = new AsynchronousMailAttachment();
-        assertFalse attachment.validate();
-        assertEquals "nullable", attachment.errors['attachmentName'];
-        assertEquals "nullable", attachment.errors['content'];
-        assertEquals "nullable", attachment.errors['message'];
+        def attachment = new AsynchronousMailAttachment()
+        assertFalse attachment.validate()
+        assertEquals "nullable", attachment.errors['attachmentName']
+        assertEquals "nullable", attachment.errors['content']
+        assertEquals "nullable", attachment.errors['message']
 
         attachment = new AsynchronousMailAttachment(
                 attachmentName:'',
                 mimeType:null
-        );
-        assertFalse attachment.validate();
-        assertEquals "blank", attachment.errors['attachmentName'];
-        assertEquals "nullable", attachment.errors['mimeType'];
-        assertEquals "nullable", attachment.errors['content'];
-        assertEquals "nullable", attachment.errors['message'];
+        )
+        assertFalse attachment.validate()
+        assertEquals "blank", attachment.errors['attachmentName']
+        assertEquals "nullable", attachment.errors['mimeType']
+        assertEquals "nullable", attachment.errors['content']
+        assertEquals "nullable", attachment.errors['message']
 
         // Valid attachment
         attachment = new AsynchronousMailAttachment(
                 attachmentName:'name',
                 content:'Grails'.getBytes(),
                 message: new AsynchronousMailMessage()
-        );
-        assertTrue attachment.validate();
+        )
+        assertTrue attachment.validate()
     }
 }

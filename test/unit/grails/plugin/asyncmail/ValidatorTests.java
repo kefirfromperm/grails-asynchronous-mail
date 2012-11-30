@@ -1,6 +1,7 @@
 package grails.plugin.asyncmail;
 
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Vitalii Samolovskikh aka Kefir

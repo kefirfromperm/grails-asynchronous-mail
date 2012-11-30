@@ -2,9 +2,8 @@ import grails.plugin.asyncmail.AsynchronousMailMessage
 import grails.plugin.asyncmail.MessageStatus
 
 class AsynchronousMailController {
-    static defaultAction = 'list';
+    static defaultAction = 'list'
 
-    // the delete, save and update actions only accept POST requests
     static allowedMethods = [update: 'POST']
 
     /**
@@ -13,23 +12,23 @@ class AsynchronousMailController {
     def list() {
         params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
         if (!params.sort) {
-            params.sort = 'createDate';
+            params.sort = 'createDate'
         }
         if (!params.order) {
-            params.order = 'desc';
+            params.order = 'desc'
         }
         [list: AsynchronousMailMessage.list(params), total: AsynchronousMailMessage.count()]
     }
 
     private withMessage(Closure cl) {
-        AsynchronousMailMessage message = AsynchronousMailMessage.get(params.id);
+        AsynchronousMailMessage message = AsynchronousMailMessage.get(params.id)
         if (message) {
-            return cl(message);
-        } else {
-            flash.message = "Message with id ${params.id} not found.";
-            flash.error = true;
-            redirect(action: 'list');
+            return cl(message)
         }
+
+        flash.message = "Message with id ${params.id} not found."
+        flash.error = true
+        redirect(action: 'list')
     }
 
     /**
@@ -37,7 +36,7 @@ class AsynchronousMailController {
      */
     def show() {
         withMessage {AsynchronousMailMessage message ->
-            return [message: message];
+            return [message: message]
         }
     }
 
@@ -46,7 +45,7 @@ class AsynchronousMailController {
      */
     def edit() {
         withMessage {AsynchronousMailMessage message ->
-            return [message: message];
+            return [message: message]
         }
     }
 
@@ -68,8 +67,8 @@ class AsynchronousMailController {
                                     'markDelete'
                             ]
                     ]
-            );
-            message.attemptsCount = 0;
+            )
+            message.attemptsCount = 0
             if (!message.hasErrors() && message.save()) {
                 flash.message = "Message ${params.id} was updated."
                 redirect(action: 'show', id: message.id)
@@ -85,18 +84,18 @@ class AsynchronousMailController {
     def abort() {
         withMessage {AsynchronousMailMessage message ->
             if (message.abortable) {
-                message.status = MessageStatus.ABORT;
+                message.status = MessageStatus.ABORT
                 if (message.save()) {
                     flash.message = "Message ${message.id} was aborted."
                 } else {
-                    flash.message = "Can't abort message with id ${message.id}.";
-                    flash.error = true;
+                    flash.message = "Can't abort message with id ${message.id}."
+                    flash.error = true
                 }
             } else {
-                flash.message = "Can't abort message with id ${message.id} and status ${message.status}.";
-                flash.error = true;
+                flash.message = "Can't abort message with id ${message.id} and status ${message.status}."
+                flash.error = true
             }
-            redirect(action: 'list');
+            redirect(action: 'list')
         }
     }
 
@@ -106,13 +105,13 @@ class AsynchronousMailController {
     def delete() {
         withMessage {AsynchronousMailMessage message ->
             try {
-                message.delete();
-                flash.message = "Message with id ${message.id} was deleted.";
-                redirect(action: 'list');
+                message.delete()
+                flash.message = "Message with id ${message.id} was deleted."
+                redirect(action: 'list')
             } catch (Exception e) {
-                flash.message = "Can't delete message with id ${message.id}.";
-                flash.error = true;
-                redirect(action: 'show', id: message.id);
+                flash.message = "Can't delete message with id ${message.id}."
+                flash.error = true
+                redirect(action: 'show', id: message.id)
             }
         }
     }
