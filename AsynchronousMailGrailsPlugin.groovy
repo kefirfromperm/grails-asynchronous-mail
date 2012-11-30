@@ -9,7 +9,6 @@ class AsynchronousMailGrailsPlugin {
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0.0 > *"
     // the other plugins this plugin depends on
-    def dependsOn = ['mail': '1.0 > *', 'quartz2': '0.2.2 > *', 'hibernate': '2.0.0 > *']
     def loadAfter = ['mail', 'hibernate'];
     def loadBefore = ['quartz2'];
     // resources that are excluded from plugin packaging
