@@ -20,6 +20,10 @@ class AsynchronousMailGrailsPlugin {
     def description = 'Realises asynchronous mail sending. It places messages to DB and sends them by quartz job asynchronously.'
     def documentation = "http://www.grails.org/plugin/asynchronous-mail"
 
+    String license = 'APACHE'
+    def issueManagement = [system: 'JIRA', url: 'http://jira.grails.org/browse/GPASYNCHRONOUSMAIL']
+    def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
+
     def doWithSpring = {
         def config = application.config
         GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
