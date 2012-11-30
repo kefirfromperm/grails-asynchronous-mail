@@ -12,12 +12,10 @@
 # Target
 target/
 
-# Grails web files
 web-app/WEB-INF/
-web-app/js/
-web-app/images/
-web-app/css/errors.css
-web-app/css/main.css
-web-app/css/mobile.css
 
 grails-app/i18n/
+
+docs/
+plugin.xml
+.settings

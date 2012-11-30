@@ -1,8 +1,5 @@
 package grails.plugin.asyncmail
 
-import grails.test.GrailsUnitTestCase
-import grails.plugin.asyncmail.AsynchronousMailMessage
-import grails.plugin.asyncmail.MessageStatus
 import grails.test.mixin.TestFor
 
 /**
@@ -11,33 +8,33 @@ import grails.test.mixin.TestFor
 @TestFor(AsynchronousMailMessage)
 class AsynchronousMailMessageTests {
     void testDefault() {
-        def message = new AsynchronousMailMessage();
-        assertNull message.to;
-        assertNull message.subject;
-        assertNull message.headers;
-        assertNull message.text;
-        assertFalse message.html;
-        assertNull message.bcc;
-        assertNull message.cc;
-        assertNull message.replyTo;
-        assertNull message.from;
-        assertNull message.attachments;
-        assertEquals MessageStatus.CREATED, message.status;
-        assertNotNull message.createDate;
-        assertNull message.sentDate;
-        assertNotNull message.beginDate;
-        assertNotNull message.endDate;
-        assertEquals 0, message.attemptsCount;
-        assertEquals 1, message.maxAttemptsCount;
-        assertNull message.lastAttemptDate;
-        assertEquals 300000l, message.attemptInterval;
-        assertFalse message.markDelete;
-        assertEquals 0, message.priority;
+        def message = new AsynchronousMailMessage()
+        assertNull message.to
+        assertNull message.subject
+        assertNull message.headers
+        assertNull message.text
+        assertFalse message.html
+        assertNull message.bcc
+        assertNull message.cc
+        assertNull message.replyTo
+        assertNull message.from
+        assertNull message.attachments
+        assertEquals MessageStatus.CREATED, message.status
+        assertNotNull message.createDate
+        assertNull message.sentDate
+        assertNotNull message.beginDate
+        assertNotNull message.endDate
+        assertEquals 0, message.attemptsCount
+        assertEquals 1, message.maxAttemptsCount
+        assertNull message.lastAttemptDate
+        assertEquals 300000l, message.attemptInterval
+        assertFalse message.markDelete
+        assertEquals 0, message.priority
     }
 
     void testValid(){
         // Apply constraints for message objects
-        mockForConstraintsTests(AsynchronousMailMessage);
+        mockForConstraintsTests(AsynchronousMailMessage)
 
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
@@ -47,20 +44,20 @@ class AsynchronousMailMessageTests {
                 bcc: ['Mary Smith <mary@example.com>', 'carl@example.com'],
                 subject: 'Subject',
                 text: 'Text'
-        );
-        assertTrue message.validate();
+        )
+        assertTrue message.validate()
     }
 
     void testConstraints() {
         // Apply constraints for message objects
-        mockForConstraintsTests(AsynchronousMailMessage);
+        mockForConstraintsTests(AsynchronousMailMessage)
 
         // Constraints on default message
-        def message = new AsynchronousMailMessage();
-        assertFalse message.validate();
-        assertEquals "nullable", message.errors["to"];
-        assertEquals "nullable", message.errors["subject"];
-        assertEquals "nullable", message.errors["text"];
+        def message = new AsynchronousMailMessage()
+        assertFalse message.validate()
+        assertEquals "nullable", message.errors["to"]
+        assertEquals "nullable", message.errors["subject"]
+        assertEquals "nullable", message.errors["text"]
 
         // Constraint on all fields
         message = new AsynchronousMailMessage(
@@ -74,17 +71,17 @@ class AsynchronousMailMessageTests {
                 attemptsCount: -1,
                 maxAttemptsCount: -1,
                 attemptInterval: -1
-        );
-        assertFalse message.validate();
-        assertEquals "minSize", message.errors["to"];
-        assertEquals "blank", message.errors["subject"];
-        assertEquals "blank", message.errors["text"];
-        assertEquals "nullable", message.errors["status"];
-        assertEquals "nullable", message.errors["createDate"];
-        assertEquals "nullable", message.errors["beginDate"];
-        assertEquals "validator", message.errors["endDate"];
-        assertEquals "min", message.errors["attemptsCount"];
-        assertEquals "min", message.errors["maxAttemptsCount"];
-        assertEquals "min", message.errors["attemptInterval"];
+        )
+        assertFalse message.validate()
+        assertEquals "minSize", message.errors["to"]
+        assertEquals "blank", message.errors["subject"]
+        assertEquals "blank", message.errors["text"]
+        assertEquals "nullable", message.errors["status"]
+        assertEquals "nullable", message.errors["createDate"]
+        assertEquals "nullable", message.errors["beginDate"]
+        assertEquals "validator", message.errors["endDate"]
+        assertEquals "min", message.errors["attemptsCount"]
+        assertEquals "min", message.errors["maxAttemptsCount"]
+        assertEquals "min", message.errors["attemptInterval"]
     }
 }
