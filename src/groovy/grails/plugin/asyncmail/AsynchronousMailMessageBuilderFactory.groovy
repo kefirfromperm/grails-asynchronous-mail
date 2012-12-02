@@ -12,7 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender
  * @author Vitalii Samolovskikh aka Kefir
  */
 class AsynchronousMailMessageBuilderFactory {
-
     def mailMessageContentRenderer
     def mailSender
     GrailsApplication grailsApplication
@@ -20,9 +19,11 @@ class AsynchronousMailMessageBuilderFactory {
 
     AsynchronousMailMessageBuilder createBuilder() {
         AsynchronousMailMessageBuilder builder = new AsynchronousMailMessageBuilder(
-            mailMessageContentRenderer: mailMessageContentRenderer,
-            fileTypeMap: fileTypeMap,
-            mimeCapable: (mailSender instanceof JavaMailSender))
+                (mailSender instanceof JavaMailSender),
+                grailsApplication.config,
+                fileTypeMap,
+                mailMessageContentRenderer
+        )
         builder.init(grailsApplication.config)
         return builder
     }

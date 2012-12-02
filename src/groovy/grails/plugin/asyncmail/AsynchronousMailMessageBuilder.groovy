@@ -9,35 +9,48 @@ import javax.activation.FileTypeMap
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.InputStreamSource
 import org.springframework.util.Assert
+import org.springframework.mail.MailMessage
+import org.springframework.mail.MailSender
+import org.springframework.mail.javamail.JavaMailSender
 
 /**
  * Build new synchronous message
  */
 class AsynchronousMailMessageBuilder {
-    AsynchronousMailMessage message
-    boolean immediately = false
-    boolean immediatelySetted = false
+    private AsynchronousMailMessage message
+    private boolean immediately = false
+    private boolean immediatelySetted = false
 
     private Locale locale
 
-    MailMessageContentRenderer mailMessageContentRenderer
-    FileTypeMap fileTypeMap
+    final boolean mimeCapable
+    final MailMessageContentRenderer mailMessageContentRenderer
 
-    private boolean mimeCapable = false
+    private FileTypeMap fileTypeMap
+
+    final String defaultFrom
+    final String defaultTo
+    final String overrideAddress
+
+    AsynchronousMailMessageBuilder(
+            boolean mimeCapable,
+            ConfigObject config,
+            FileTypeMap fileTypeMap,
+            MailMessageContentRenderer mailMessageContentRenderer = null
+    ) {
+        this.mimeCapable = mimeCapable;
+        this.overrideAddress = config.overrideAddress ?: null
+        this.defaultFrom = overrideAddress ?: (config.default.from ?: null)
+        this.defaultTo = overrideAddress ?: (config.default.to ?: null)
+        this.fileTypeMap = fileTypeMap;
+        this.mailMessageContentRenderer = mailMessageContentRenderer;
+    }
 
     void init(config) {
         message = new AsynchronousMailMessage()
         message.attemptInterval = config?.asynchronous?.mail?.default?.attempt?.interval ?: 300000l
         message.maxAttemptsCount = config?.asynchronous?.mail?.default?.max?.attempts?.count ?: 1
         message.markDelete = config?.asynchronous?.mail?.clear?.after?.sent ?: false
-    }
-
-    boolean isMimeCapable() {
-        return mimeCapable
-    }
-
-    void setMimeCapable(boolean mimeCapable) {
-        this.mimeCapable = mimeCapable
     }
 
     // Specified fields for asynchronous message
@@ -273,7 +286,7 @@ class AsynchronousMailMessageBuilder {
         Assert.hasText(name, "Attachment name can't be blank.")
         Assert.notNull(content, "Attachment content can't be null.")
 
-        if(!isMimeCapable()){
+        if(!mimeCapable){
             throw new GrailsMailException("You must use a JavaMailSender to add attachment.")
         }
 
@@ -317,7 +330,7 @@ class AsynchronousMailMessageBuilder {
         Assert.hasText(name, "Inline id can't be blank.")
         Assert.notNull(content, "Inline content can't be null.")
 
-        if(!isMimeCapable()){
+        if(!mimeCapable){
             throw new GrailsMailException("You must use a JavaMailSender to add inlines.")
         }
 
@@ -351,5 +364,23 @@ class AsynchronousMailMessageBuilder {
         } finally {
             stream.close()
         }
+    }
+
+    MailMessage finishMessage() {
+        throw new UnsupportedOperationException(
+                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+        );
+    }
+
+    MailMessage sendMessage() {
+        throw new UnsupportedOperationException(
+                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+        );
+    }
+
+    MailSender getMailSender(){
+        throw new UnsupportedOperationException(
+                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+        );
     }
 }
