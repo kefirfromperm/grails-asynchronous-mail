@@ -11,7 +11,14 @@ class AsynchronousMailGrailsPlugin {
     def loadAfter = ['mail', 'hibernate']
     def loadBefore = ['quartz2']
     def pluginExcludes = [
-            "grails-app/views/test/**"
+            "grails-app/views/test/**",
+            "web-app/WEB-INF/**",
+            "web-app/images/**",
+            "web-app/js/**",
+            "web-app/css/errors.css",
+            "web-app/css/main.css",
+            "web-app/css/mobile.css",
+            "grails-app/i18n/**"
     ]
 
     def author = "Vitalii Samolovskikh aka Kefir"
@@ -42,7 +49,7 @@ class AsynchronousMailGrailsPlugin {
             grailsApplication = ref("grailsApplication")
         }
 
-        asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory){
+        asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
             it.autowire = true
         }
     }
