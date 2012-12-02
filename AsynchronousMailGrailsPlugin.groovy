@@ -17,7 +17,7 @@ class AsynchronousMailGrailsPlugin {
     def author = "Vitalii Samolovskikh aka Kefir"
     def authorEmail = "kefir@perm.ru"
     def title = "Asynchronous mail grails plugin"
-    def description = 'Realises asynchronous mail sending. It places messages to DB and sends them by quartz job asynchronously.'
+    def description = 'Realises asynchronous mail sending. It stored messages in the DB and sends them by the quartz job asynchronously.'
     def documentation = "http://www.grails.org/plugin/asynchronous-mail"
 
     String license = 'APACHE'
