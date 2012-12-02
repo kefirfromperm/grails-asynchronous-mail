@@ -150,7 +150,8 @@ class AsynchronousMailMessage implements Serializable {
             return flag
         }
 
-        to(minSize: 1, validator: emailList)
+        // The nullable constraint isn't applied for collections by default.
+        to(nullable: false, minSize: 1, validator: emailList)
         cc(nullable: true, validator: emailList)
         bcc(nullable: true, validator: emailList)
 
