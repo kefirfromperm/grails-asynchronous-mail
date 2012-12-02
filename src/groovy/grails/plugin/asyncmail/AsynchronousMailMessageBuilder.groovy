@@ -3,15 +3,13 @@ package grails.plugin.asyncmail
 import grails.plugin.mail.GrailsMailException
 import grails.plugin.mail.MailMessageContentRender
 import grails.plugin.mail.MailMessageContentRenderer
-
-import javax.activation.FileTypeMap
-
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.InputStreamSource
-import org.springframework.util.Assert
 import org.springframework.mail.MailMessage
 import org.springframework.mail.MailSender
-import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.util.Assert
+
+import javax.activation.FileTypeMap
 
 /**
  * Build new synchronous message
@@ -382,5 +380,17 @@ class AsynchronousMailMessageBuilder {
         throw new UnsupportedOperationException(
                 "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
+    }
+
+    AsynchronousMailMessage getMessage() {
+        return message
+    }
+
+    boolean getImmediately() {
+        return immediately
+    }
+
+    boolean getImmediatelySetted() {
+        return immediatelySetted
     }
 }
