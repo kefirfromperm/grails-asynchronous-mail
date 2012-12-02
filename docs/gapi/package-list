@@ -1,8 +1,0 @@
-DefaultPackage
-grails-app.conf
-grails-app.domain.ru.perm.kefir.asynchronousmail
-grails-app.jobs.ru.perm.kefir.asynchronousmail
-grails-app.services.ru.perm.kefir.asynchronousmail
-scripts
-src.groovy.ru.perm.kefir.asynchronousmail
-src.templates.controllers

@@ -4,9 +4,9 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.validation.ObjectError
 
 class AsynchronousMailService {
-    boolean transactional = true;
-    AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory;
-    GrailsApplication grailsApplication;
+
+    AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory
+    GrailsApplication grailsApplication
 
     /**
      * Create synchronous message and save it to DB.
@@ -15,50 +15,49 @@ class AsynchronousMailService {
      * then this method start send job after create message
      */
     def sendAsynchronousMail(Closure callable) {
-        def messageBuilder = asynchronousMailMessageBuilderFactory.createBuilder();
-        callable.delegate = messageBuilder;
+        def messageBuilder = asynchronousMailMessageBuilderFactory.createBuilder()
+        callable.delegate = messageBuilder
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.call()
 
         // Mail message
-        AsynchronousMailMessage message = messageBuilder.message;
+        AsynchronousMailMessage message = messageBuilder.message
 
         // Get immediately behavior configuration
-        boolean immediately;
+        boolean immediately
         if (messageBuilder.immediatelySetted) {
-            immediately = messageBuilder.immediately;
+            immediately = messageBuilder.immediately
         } else {
             immediately = grailsApplication.config.asynchronous.mail.send.immediately
         }
         immediately =
             immediately &&
                     message.beginDate.time <= System.currentTimeMillis() &&
-                    !grailsApplication.config.asynchronous.mail.disable;
+                    !grailsApplication.config.asynchronous.mail.disable
 
         // Save message to DB
         if (!message.save(flush: immediately)) {
-            StringBuilder errorMessage = new StringBuilder();
+            StringBuilder errorMessage = new StringBuilder()
             message.errors?.allErrors?.each {ObjectError error ->
-                errorMessage.append(error.getDefaultMessage());
+                errorMessage.append(error.getDefaultMessage())
             }
-            throw new Exception(errorMessage.toString());
+            throw new Exception(errorMessage.toString())
         }
 
         // Start job immediately
         if (immediately) {
-            log.trace("Start send job immediately.");
-            sendImmediately();
+            log.trace("Start send job immediately.")
+            sendImmediately()
         }
 
-        // Return message object 
-        return message;
+        return message
     }
 
     /**
      * @see #sendAsynchronousMail
      */
     def sendMail(Closure callable) {
-        return sendAsynchronousMail(callable);
+        return sendAsynchronousMail(callable)
     }
 
     /**
@@ -72,6 +71,6 @@ class AsynchronousMailService {
      * asynchronousMailService.sendImmediately()</code>
      */
     def sendImmediately() {
-        AsynchronousMailJob.triggerNow();
+        AsynchronousMailJob.triggerNow()
     }
 }
