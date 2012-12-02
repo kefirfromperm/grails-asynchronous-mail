@@ -84,7 +84,7 @@ class AsynchronousMailJob {
                 }
             }
         } catch (Exception e) {
-            log.warn('Abort mail sent.', e)
+            log.error('Abort mail sent.', e)
         }
     }
 
