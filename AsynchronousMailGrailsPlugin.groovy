@@ -6,7 +6,7 @@ import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 
 class AsynchronousMailGrailsPlugin {
 
-    def version = "0.8"
+    def version = "0.9"
     def grailsVersion = "2.0.0 > *"
     def loadAfter = ['mail', 'hibernate']
     def loadBefore = ['quartz2']
@@ -23,8 +23,9 @@ class AsynchronousMailGrailsPlugin {
 
     def author = "Vitalii Samolovskikh aka Kefir"
     def authorEmail = "kefir@perm.ru"
-    def title = "Asynchronous mail grails plugin"
-    def description = 'Realises asynchronous mail sending. It stored messages in the DB and sends them by the quartz job asynchronously.'
+    def title = "Asynchronous Mail Plugin"
+    def description = 'The plugin realises asynchronous mail sending. ' +
+            'It stores messages in the DB and sends asynchronously them by the quartz job.'
     def documentation = "http://www.grails.org/plugin/asynchronous-mail"
 
     String license = 'APACHE'
@@ -69,6 +70,10 @@ class AsynchronousMailGrailsPlugin {
         // Override mailService
         if (application.config.asynchronous.mail.override) {
             applicationContext.mailService.metaClass*.sendMail = {Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            }
+        } else {
+            applicationContext.asynchronousMailService.metaClass*.sendMail = {Closure callable ->
                 applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
             }
         }
