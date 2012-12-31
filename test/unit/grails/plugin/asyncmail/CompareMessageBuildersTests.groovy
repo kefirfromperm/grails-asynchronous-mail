@@ -1,6 +1,5 @@
 package grails.plugin.asyncmail
 
-import grails.test.mixin.TestFor
 import grails.plugin.mail.MailMessageBuilder
 import org.junit.Assert
 
@@ -9,8 +8,7 @@ import org.junit.Assert
  *
  * @author kefir
  */
-@TestFor
-class CompareMessageBuildersTests {
+class CompareMessageBuildersTests extends GroovyTestCase {
     void testBuildersMethods() {
         def ammbMethods = AsynchronousMailMessageBuilder.metaClass.methods;
 

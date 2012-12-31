@@ -55,26 +55,28 @@ class AsynchronousMailGrailsPlugin {
         }
     }
 
-    def doWithApplicationContext = {GrailsApplicationContext applicationContext ->
+    def doWithApplicationContext = { GrailsApplicationContext applicationContext ->
         configureSendMail(application, applicationContext)
     }
 
-    def onChange = {event ->
+    def onChange = { event ->
         configureSendMail(application, (GrailsApplicationContext) event.ctx)
     }
 
     def configureSendMail(application, GrailsApplicationContext applicationContext) {
-        // Register alias for asynchronousMailService
-        applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
+        if (Environment.current != Environment.TEST) {
+            // Register alias for asynchronousMailService
+            applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
 
-        // Override mailService
-        if (application.config.asynchronous.mail.override) {
-            applicationContext.mailService.metaClass*.sendMail = {Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
-            }
-        } else {
-            applicationContext.asynchronousMailService.metaClass*.sendMail = {Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            // Override mailService
+            if (application.config.asynchronous.mail.override) {
+                applicationContext.mailService.metaClass*.sendMail = { Closure callable ->
+                    applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+                }
+            } else {
+                applicationContext.asynchronousMailService.metaClass*.sendMail = { Closure callable ->
+                    applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+                }
             }
         }
     }

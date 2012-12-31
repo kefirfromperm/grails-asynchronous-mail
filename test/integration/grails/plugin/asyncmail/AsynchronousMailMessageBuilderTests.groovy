@@ -223,7 +223,6 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertNotNull(message.text)
     }
 
-/*
     void testBodyHtmlRender(){
         def c = {
             to 'test@example.com'
@@ -247,7 +246,6 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertTrue(message.html)
         assertNotNull(message.text)
     }
-*/
 
     void testTextRender(){
         def c = {
@@ -274,7 +272,6 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertNotNull(message.text)
     }
 
-/*
     void testHtmlRender(){
         def c = {
             to 'test@example.com'
@@ -299,5 +296,4 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertTrue(message.html)
         assertNotNull(message.text)
     }
-*/
 }
