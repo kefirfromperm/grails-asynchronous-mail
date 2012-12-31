@@ -69,12 +69,12 @@ class AsynchronousMailGrailsPlugin {
 
         // Override mailService
         if (application.config.asynchronous.mail.override) {
-            applicationContext.mailService.metaClass*.sendMail = {Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            applicationContext.mailMailService.metaClass*.sendMail = {Closure callable ->
+                applicationContext.asynchronousMailAsynchronousMailService?.sendAsynchronousMail(callable)
             }
         } else {
-            applicationContext.asynchronousMailService.metaClass*.sendMail = {Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            applicationContext.asynchronousMailAsynchronousMailService.metaClass*.sendMail = {Closure callable ->
+                applicationContext.asynchronousMailAsynchronousMailService?.sendAsynchronousMail(callable)
             }
         }
     }
