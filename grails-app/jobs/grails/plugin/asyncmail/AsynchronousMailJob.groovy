@@ -3,7 +3,9 @@ package grails.plugin.asyncmail
 import grails.plugin.mail.MailService
 import org.springframework.mail.*
 
-/** Sent asynchronous messages         */
+/**
+ * Send asynchronous messages
+ */
 class AsynchronousMailJob {
     def concurrent = false
     def group = "AsynchronousMail"
@@ -88,7 +90,9 @@ class AsynchronousMailJob {
         }
     }
 
-    /** Send message by SMTP    */
+    /**
+     * Send message by SMTP
+     */
     private MailMessage sendMessage(AsynchronousMailMessage message) {
         return nonAsynchronousMailService.sendMail {
             if (message.attachments) {
