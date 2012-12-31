@@ -25,7 +25,7 @@ class AsynchronousMailGrailsPlugin {
     def authorEmail = "kefir@perm.ru"
     def title = "Asynchronous Mail Plugin"
     def description = 'The plugin realises asynchronous mail sending. ' +
-            'It stores messages in the DB and sends asynchronously them by the quartz job.'
+            'It stores messages in the DB and sends them asynchronously by the quartz job.'
     def documentation = "http://www.grails.org/plugin/asynchronous-mail"
 
     String license = 'APACHE'
@@ -60,7 +60,7 @@ class AsynchronousMailGrailsPlugin {
     }
 
     def onChange = {event ->
-        configureSendMail(event.application, event.ctx)
+        configureSendMail(application, (GrailsApplicationContext) event.ctx)
     }
 
     def configureSendMail(application, GrailsApplicationContext applicationContext) {
@@ -69,12 +69,12 @@ class AsynchronousMailGrailsPlugin {
 
         // Override mailService
         if (application.config.asynchronous.mail.override) {
-            applicationContext.mailMailService.metaClass*.sendMail = {Closure callable ->
-                applicationContext.asynchronousMailAsynchronousMailService?.sendAsynchronousMail(callable)
+            applicationContext.mailService.metaClass*.sendMail = {Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
             }
         } else {
-            applicationContext.asynchronousMailAsynchronousMailService.metaClass*.sendMail = {Closure callable ->
-                applicationContext.asynchronousMailAsynchronousMailService?.sendAsynchronousMail(callable)
+            applicationContext.asynchronousMailService.metaClass*.sendMail = {Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
             }
         }
     }
