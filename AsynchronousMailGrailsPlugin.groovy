@@ -9,7 +9,7 @@ class AsynchronousMailGrailsPlugin {
     def version = "1.0-SNAPSHOT"
     def grailsVersion = "2.2.0 > *"
     def loadAfter = ['mail', 'hibernate']
-    def loadBefore = ['quartz2']
+    def loadBefore = ['quartz']
     def pluginExcludes = [
             "grails-app/views/test/**",
             "web-app/WEB-INF/**",
