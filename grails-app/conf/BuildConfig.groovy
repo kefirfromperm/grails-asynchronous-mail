@@ -13,7 +13,7 @@ grails.project.dependency.resolution = {
     plugins {
 
         compile ':mail:1.0.1'
-        compile ':quartz:1.0-RC4'
+        compile ':quartz:1.0-RC5'
 
         build(':release:2.1.0', ':rest-client-builder:1.0.2') {
             export = false
