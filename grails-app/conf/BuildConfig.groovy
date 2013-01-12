@@ -11,6 +11,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
+        runtime ":hibernate:$grailsVersion"
 
         compile ':mail:1.0.1'
         compile ':quartz:1.0-RC5'

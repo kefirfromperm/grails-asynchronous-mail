@@ -11,14 +11,15 @@ class AsynchronousMailGrailsPlugin {
     def loadAfter = ['mail', 'hibernate']
     def loadBefore = ['quartz']
     def pluginExcludes = [
+            "grails-app/conf/DataSource.groovy",
+            "grails-app/i18n/**",
             "grails-app/views/test/**",
             "web-app/WEB-INF/**",
             "web-app/images/**",
             "web-app/js/**",
             "web-app/css/errors.css",
             "web-app/css/main.css",
-            "web-app/css/mobile.css",
-            "grails-app/i18n/**"
+            "web-app/css/mobile.css"
     ]
 
     def author = "Vitalii Samolovskikh aka Kefir"
@@ -64,19 +65,17 @@ class AsynchronousMailGrailsPlugin {
     }
 
     def configureSendMail(application, GrailsApplicationContext applicationContext) {
-        if (Environment.current != Environment.TEST) {
-            // Register alias for asynchronousMailService
-            applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
+        // Register alias for asynchronousMailService
+        applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
 
-            // Override mailService
-            if (application.config.asynchronous.mail.override) {
-                applicationContext.mailService.metaClass*.sendMail = { Closure callable ->
-                    applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
-                }
-            } else {
-                applicationContext.asynchronousMailService.metaClass*.sendMail = { Closure callable ->
-                    applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
-                }
+        // Override mailService
+        if (application.config.asynchronous.mail.override) {
+            applicationContext.mailService.metaClass*.sendMail = { Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            }
+        } else {
+            applicationContext.asynchronousMailService.metaClass*.sendMail = { Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
             }
         }
     }
