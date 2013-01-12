@@ -22,6 +22,7 @@ class AsynchronousMailJob {
 
     // Dependency injection
     MailService nonAsynchronousMailService
+    def grailsApplication
 
     def execute() {
         log.trace('Enter to execute method')
@@ -39,7 +40,7 @@ class AsynchronousMailJob {
             order('endDate', 'asc')
             order('attemptsCount', 'asc')
             order('beginDate', 'asc')
-            maxResults((int) config.asynchronous.mail.messages.at.once)
+            maxResults((int) grailsApplication.config.asynchronous.mail.messages.at.once)
         }
 
         // Send each message and save new status
