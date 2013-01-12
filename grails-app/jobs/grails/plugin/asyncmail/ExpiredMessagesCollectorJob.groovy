@@ -9,8 +9,9 @@ class ExpiredMessagesCollectorJob {
             return {
                 simple([repeatInterval: (Long) config.asynchronous.mail.expired.collector.repeat.interval])
             }
+        } else {
+            return {}
         }
-        return {}
     }
 
     def execute() {

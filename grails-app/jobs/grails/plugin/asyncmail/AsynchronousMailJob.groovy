@@ -15,14 +15,15 @@ class AsynchronousMailJob {
             return {
                 simple([repeatInterval: (Long) config.asynchronous.mail.send.repeat.interval])
             }
+        } else {
+            return {}
         }
-        return {}
     }
 
     // Dependency injection
     MailService nonAsynchronousMailService
 
-    def execute(context) {
+    def execute() {
         log.trace('Enter to execute method')
 
         // Get messages from DB
@@ -79,7 +80,7 @@ class AsynchronousMailJob {
                         message.save(flush: true)
                     }
 
-                    // Delete message if it sent successfully and can be deleted
+                    // Delete message if it is sent successfully and can be deleted
                     if (message.status == MessageStatus.SENT && message.markDelete) {
                         message.delete()
                     }
