@@ -4,12 +4,12 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.validation.ObjectError
 
 class AsynchronousMailService {
-
+    AsynchronousMailPersistenceService asynchronousMailPersistenceService
     AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory
     GrailsApplication grailsApplication
 
     /**
-     * Create synchronous message and save it to DB.
+     * Create asynchronous message and save it to DB.
      *
      * If configuration flag asynchronous.mail.send.immediately is true (default)
      * then this method start send job after create message
@@ -36,7 +36,7 @@ class AsynchronousMailService {
                     !grailsApplication.config.asynchronous.mail.disable
 
         // Save message to DB
-        if (!message.save(flush: immediately)) {
+        if (!asynchronousMailPersistenceService.save(message, immediately)) {
             StringBuilder errorMessage = new StringBuilder()
             message.errors?.allErrors?.each {ObjectError error ->
                 errorMessage.append(error.getDefaultMessage())

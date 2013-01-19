@@ -10,6 +10,10 @@ class AsynchronousMailJob {
     def concurrent = false
     def group = "AsynchronousMail"
 
+    // Dependency injection
+    AsynchronousMailPersistenceService asynchronousMailPersistenceService
+    AsynchronousMailSendService asynchronousMailSendService
+
     def getTriggers() {
         if (!config.asynchronous.mail.disable) {
             return {
@@ -20,28 +24,11 @@ class AsynchronousMailJob {
         }
     }
 
-    // Dependency injection
-    MailService nonAsynchronousMailService
-    def grailsApplication
-
     def execute() {
         log.trace('Enter to execute method')
 
         // Get messages from DB
-        def messages = AsynchronousMailMessage.withCriteria {
-            Date now = new Date()
-            lt('beginDate', now)
-            gt('endDate', now)
-            or {
-                eq('status', MessageStatus.CREATED)
-                eq('status', MessageStatus.ATTEMPTED)
-            }
-            order('priority', 'desc')
-            order('endDate', 'asc')
-            order('attemptsCount', 'asc')
-            order('beginDate', 'asc')
-            maxResults((int) grailsApplication.config.asynchronous.mail.messages.at.once)
-        }
+        def messages = asynchronousMailPersistenceService.selectMessagesForSend()
 
         // Send each message and save new status
         try {
@@ -59,11 +46,11 @@ class AsynchronousMailJob {
 
                     // It guarantee that e-mail can't be sent more than 1 time
                     message.status = MessageStatus.ERROR
-                    message.save(flush: true)
+                    asynchronousMailPersistenceService.save(message, true)
 
                     // Attempt to send
                     try {
-                        sendMessage(message)
+                        asynchronousMailSendService.send(message)
                         message.sentDate = now
                         message.status = MessageStatus.SENT
                     } catch (MailException e) {
@@ -78,59 +65,17 @@ class AsynchronousMailJob {
                             throw e
                         }
                     } finally {
-                        message.save(flush: true)
+                        asynchronousMailPersistenceService.save(message, true)
                     }
 
                     // Delete message if it is sent successfully and can be deleted
                     if (message.status == MessageStatus.SENT && message.markDelete) {
-                        message.delete()
+                        asynchronousMailPersistenceService.delete(message);
                     }
                 }
             }
         } catch (Exception e) {
             log.error('Abort mail sent.', e)
-        }
-    }
-
-    /**
-     * Send message by SMTP
-     */
-    private MailMessage sendMessage(AsynchronousMailMessage message) {
-        return nonAsynchronousMailService.sendMail {
-            if (message.attachments) {
-                multipart true
-            }
-            to message.to
-            subject message.subject
-            if (message.headers && !message.headers.isEmpty() && isMimeCapable()) {
-                headers message.headers
-            }
-            if (message.html && isMimeCapable()) {
-                html message.text
-            } else {
-                body message.text
-            }
-            if (message.bcc && !message.bcc.isEmpty()) {
-                bcc message.bcc
-            }
-            if (message.cc && !message.cc.isEmpty()) {
-                cc message.cc
-            }
-            if (message.replyTo) {
-                replyTo message.replyTo
-            }
-            if (message.from) {
-                from message.from
-            }
-            if (isMimeCapable()) {
-                message.attachments.each {AsynchronousMailAttachment attachment ->
-                    if (!attachment.inline) {
-                        attachBytes attachment.attachmentName, attachment.mimeType, attachment.content
-                    } else {
-                        inline attachment.attachmentName, attachment.mimeType, attachment.content
-                    }
-                }
-            }
         }
     }
 }
