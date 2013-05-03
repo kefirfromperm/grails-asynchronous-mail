@@ -14,9 +14,9 @@ grails.project.dependency.resolution = {
         runtime ":hibernate:$grailsVersion"
 
         compile ':mail:1.0.1'
-        compile ':quartz:1.0-RC5'
+        compile ':quartz:1.0-RC7'
 
-        build(':release:2.1.0', ':rest-client-builder:1.0.2') {
+        build(':release:3.0.0', ':rest-client-builder:1.0.2') {
             export = false
         }
     }
