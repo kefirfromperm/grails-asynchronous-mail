@@ -90,7 +90,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'to_idx',
                 joinTable: [
                         name: 'async_mail_to',
-                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'to_string'
                 ]
@@ -100,7 +100,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'cc_idx',
                 joinTable: [
                         name: 'async_mail_cc',
-                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'cc_string'
                 ]
@@ -110,7 +110,7 @@ class AsynchronousMailMessage implements Serializable {
                 indexColumn: 'bcc_idx',
                 joinTable: [
                         name: 'async_mail_bcc',
-                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'bcc_string'
                 ]
@@ -134,8 +134,8 @@ class AsynchronousMailMessage implements Serializable {
         }
 
         // message fields
-        from(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
-        replyTo(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
+        from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
+        replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
 
         // The validator for email addresses list
         def emailList = {List<String> list ->
@@ -189,16 +189,16 @@ class AsynchronousMailMessage implements Serializable {
     String toString() {
         StringBuilder builder = new StringBuilder()
         builder.append("Asynchronous mail message{")
-        builder.append("id:$id")
-        builder.append(",subject: $subject")
-        builder.append(",to: ")
+        builder.append("id: $id")
+        builder.append(", subject: $subject")
+        builder.append(", to: [")
         to.eachWithIndex {String addr, int index ->
             if (index != 0) {
-                builder.append(',')
+                builder.append(', ')
             }
             builder.append(addr)
         }
-        builder.append(",status: $status}")
+        builder.append("], status: $status}")
         return builder.toString()
     }
 }

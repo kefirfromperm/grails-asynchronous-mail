@@ -1,21 +1,17 @@
 package grails.plugin.asyncmail
 
 class ExpiredMessagesCollectorJob {
-    def concurrent = false
-    def group = "AsynchronousMail"
-
-    def getTriggers() {
+    static triggers = {
         if (!config.asynchronous.mail.disable) {
-            return {
-                simple([repeatInterval: (Long) config.asynchronous.mail.expired.collector.repeat.interval])
-            }
-        } else {
-            return {}
+            simple([repeatInterval: (Long) config.asynchronous.mail.expired.collector.repeat.interval])
         }
     }
 
+    def concurrent = false
+    def group = "AsynchronousMail"
+
     def execute() {
-        log.trace('Enter to execute method')
+        log.trace('Enter to execute method.')
         int count = 0
         AsynchronousMailMessage.withTransaction {
             count = AsynchronousMailMessage.executeUpdate(
@@ -24,5 +20,6 @@ class ExpiredMessagesCollectorJob {
             )
         }
         log.trace("${count} expired messages was updated.")
+        log.trace('Exit from execute method.')
     }
 }
