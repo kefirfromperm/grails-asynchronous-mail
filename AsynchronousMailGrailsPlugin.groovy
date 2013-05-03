@@ -1,4 +1,6 @@
+import grails.plugin.asyncmail.AsynchronousMailJob
 import grails.plugin.asyncmail.AsynchronousMailMessageBuilderFactory
+import grails.plugin.asyncmail.ExpiredMessagesCollectorJob
 import grails.plugin.mail.MailService
 import grails.util.Environment
 
@@ -7,7 +9,7 @@ import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 class AsynchronousMailGrailsPlugin {
 
     def version = "1.0-RC4"
-    def grailsVersion = "2.2.1 > *"
+    def grailsVersion = "2.1.1 > *"
     def loadAfter = ['mail', 'hibernate']
     def loadBefore = ['quartz']
     def pluginExcludes = [
@@ -34,16 +36,18 @@ class AsynchronousMailGrailsPlugin {
     def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
 
     def doWithSpring = {
+        loadAsyncMailConfig()
         def config = application.config
-        GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
-        // merging default config into main application config
-        config.merge(new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass('DefaultAsynchronousMailConfig')))
+        if (!config.asynchronous.mail.disable) {
+            long jobRepeatInterval = config.asynchronous.mail.send.repeat.interval
+            AsynchronousMailJob.triggers = {
+                simple([repeatInterval: jobRepeatInterval])
+            }
 
-        // merging user-defined config into main application config if provided
-        try {
-            config.merge(new ConfigSlurper(Environment.current.name).parse(classLoader.loadClass('AsynchronousMailConfig')))
-        } catch (Exception ignored) {
-            // ignore, just use the defaults
+            long collectorRepeatInterval = config.asynchronous.mail.expired.collector.repeat.interval
+            ExpiredMessagesCollectorJob.triggers = {
+                simple([repeatInterval: collectorRepeatInterval])
+            }
         }
 
         nonAsynchronousMailService(MailService) {
@@ -56,6 +60,24 @@ class AsynchronousMailGrailsPlugin {
         }
     }
 
+    private void loadAsyncMailConfig() {
+        def config = application.config
+        GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
+        // merging default config into main application config
+        config.merge(new ConfigSlurper(Environment.current.name).parse(
+                classLoader.loadClass('DefaultAsynchronousMailConfig'))
+        )
+
+        // merging user-defined config into main application config if provided
+        try {
+            config.merge(new ConfigSlurper(Environment.current.name).parse(
+                    classLoader.loadClass('AsynchronousMailConfig'))
+            )
+        } catch (Exception ignored) {
+            // ignore, just use the defaults
+        }
+    }
+
     def doWithApplicationContext = { GrailsApplicationContext applicationContext ->
         configureSendMail(application, applicationContext)
     }
@@ -64,7 +86,7 @@ class AsynchronousMailGrailsPlugin {
         configureSendMail(application, (GrailsApplicationContext) event.ctx)
     }
 
-    def configureSendMail(application, GrailsApplicationContext applicationContext) {
+    private static configureSendMail(application, GrailsApplicationContext applicationContext) {
         // Register alias for asynchronousMailService
         applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
 

@@ -1,11 +1,7 @@
 package grails.plugin.asyncmail
 
 class ExpiredMessagesCollectorJob {
-    static triggers = {
-        if (!config.asynchronous.mail.disable) {
-            simple([repeatInterval: (Long) config.asynchronous.mail.expired.collector.repeat.interval])
-        }
-    }
+    static triggers = {}
 
     def concurrent = false
     def group = "AsynchronousMail"

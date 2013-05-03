@@ -6,11 +6,7 @@ import org.springframework.mail.*
  * Send asynchronous messages
  */
 class AsynchronousMailJob {
-    static triggers = {
-        if (!config.asynchronous.mail.disable) {
-            simple([repeatInterval: (Long) config.asynchronous.mail.send.repeat.interval])
-        }
-    }
+    static triggers = {}
 
     def concurrent = false
     def group = "AsynchronousMail"
