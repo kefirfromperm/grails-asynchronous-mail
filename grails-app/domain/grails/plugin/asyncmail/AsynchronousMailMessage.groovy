@@ -190,15 +190,15 @@ class AsynchronousMailMessage implements Serializable {
         StringBuilder builder = new StringBuilder()
         builder.append("Asynchronous mail message{")
         builder.append("id:$id")
-        builder.append("subject: $subject")
-        builder.append("to: ")
+        builder.append(",subject: $subject")
+        builder.append(",to: ")
         to.eachWithIndex {String addr, int index ->
             if (index != 0) {
                 builder.append(',')
             }
             builder.append(addr)
         }
-        builder.append("status: $status}")
+        builder.append(",status: $status}")
         return builder.toString()
     }
 }
