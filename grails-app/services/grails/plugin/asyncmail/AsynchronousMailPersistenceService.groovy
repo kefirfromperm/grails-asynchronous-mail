@@ -1,6 +1,10 @@
 package grails.plugin.asyncmail
 
+import org.codehaus.groovy.grails.commons.GrailsApplication
+
 class AsynchronousMailPersistenceService {
+    GrailsApplication grailsApplication;
+
     AsynchronousMailMessage save(AsynchronousMailMessage message, boolean flush = false){
         return message.save(flush: flush)
     }
@@ -22,7 +26,7 @@ class AsynchronousMailPersistenceService {
             order('endDate', 'asc')
             order('attemptsCount', 'asc')
             order('beginDate', 'asc')
-            maxResults((int) config.asynchronous.mail.messages.at.once)
+            maxResults((int) grailsApplication.config.asynchronous.mail.messages.at.once)
         }
     }
 }
