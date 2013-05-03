@@ -36,7 +36,7 @@ class AsynchronousMailGrailsPlugin {
     def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
 
     def doWithSpring = {
-        loadAsyncMailConfig()
+        loadAsyncMailConfig(application.config)
         def config = application.config
         if (!config.asynchronous.mail.disable) {
             long jobRepeatInterval = config.asynchronous.mail.send.repeat.interval
@@ -60,8 +60,7 @@ class AsynchronousMailGrailsPlugin {
         }
     }
 
-    private void loadAsyncMailConfig() {
-        def config = application.config
+    private void loadAsyncMailConfig(def config) {
         GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
         // merging default config into main application config
         config.merge(new ConfigSlurper(Environment.current.name).parse(
