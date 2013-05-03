@@ -20,8 +20,10 @@ web-app/css/errors.css
 web-app/css/main.css
 web-app/css/mobile.css
 
-grails-app/i18n/
-
 docs/
 plugin.xml
 .settings
+
+# Unused grails files
+grails-app/i18n/
+grails-app/conf/UrlMappings.groovy
