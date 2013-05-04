@@ -52,7 +52,7 @@ class AsynchronousMailGrailsPlugin {
     }
 
     def doWithDynamicMethods = { GrailsApplicationContext applicationContext ->
-        configureSendMail(applicationContext)
+        configureSendMail(application, applicationContext)
 
         // Starts jobs
         def asyncMailConfig = application.config.asynchronous.mail
@@ -63,13 +63,13 @@ class AsynchronousMailGrailsPlugin {
     }
 
     def onChange = { event ->
-        configureSendMail((GrailsApplicationContext) event.ctx)
+        configureSendMail(application, (GrailsApplicationContext) event.ctx)
     }
 
     /**
      * Configure sendMail methods
      */
-    void configureSendMail(GrailsApplicationContext applicationContext){
+    static configureSendMail(application, GrailsApplicationContext applicationContext){
         def asyncMailConfig = application.config.asynchronous.mail
 
         // Override the mailService
