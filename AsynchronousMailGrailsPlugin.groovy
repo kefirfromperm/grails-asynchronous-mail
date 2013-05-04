@@ -8,7 +8,7 @@ import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 class AsynchronousMailGrailsPlugin {
     def version = "1.0-RC4"
     def grailsVersion = "2.0.0 > *"
-    def loadAfter = ['mail', 'quartz']
+    def dependsOn = [mail:'1.0.1 > *', quartz:'1.0 > *', hibernate:'2.0.0 > *']
     def pluginExcludes = [
             "grails-app/conf/DataSource.groovy",
             "grails-app/i18n/**",
@@ -49,21 +49,28 @@ class AsynchronousMailGrailsPlugin {
     def doWithApplicationContext = { GrailsApplicationContext applicationContext ->
         // Register alias for the asynchronousMailService
         applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
-    }
 
-    def doWithDynamicMethods = { GrailsApplicationContext applicationContext ->
+        // Configure sendMail methods
         configureSendMail(application, applicationContext)
 
         // Starts jobs
+        startJobs(application)
+    }
+
+    def onChange = { event ->
+        // Configure sendMail methods
+        configureSendMail(application, (GrailsApplicationContext) event.ctx)
+    }
+
+    /**
+     * Start send job and messages collector
+     */
+    static startJobs(application) {
         def asyncMailConfig = application.config.asynchronous.mail
         if (!asyncMailConfig.disable) {
             AsynchronousMailJob.schedule((Long) asyncMailConfig.send.repeat.interval)
             ExpiredMessagesCollectorJob.schedule((Long) asyncMailConfig.expired.collector.repeat.interval)
         }
-    }
-
-    def onChange = { event ->
-        configureSendMail(application, (GrailsApplicationContext) event.ctx)
     }
 
     /**
