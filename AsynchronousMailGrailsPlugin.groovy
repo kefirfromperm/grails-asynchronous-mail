@@ -3,15 +3,12 @@ import grails.plugin.asyncmail.AsynchronousMailMessageBuilderFactory
 import grails.plugin.asyncmail.ExpiredMessagesCollectorJob
 import grails.plugin.mail.MailService
 import grails.util.Environment
-
 import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 
 class AsynchronousMailGrailsPlugin {
-
     def version = "1.0-RC4"
-    def grailsVersion = "2.1.1 > *"
-    def loadAfter = ['mail', 'hibernate']
-    def loadBefore = ['quartz']
+    def grailsVersion = "2.0.0 > *"
+    def loadAfter = ['mail', 'quartz']
     def pluginExcludes = [
             "grails-app/conf/DataSource.groovy",
             "grails-app/i18n/**",
@@ -37,19 +34,8 @@ class AsynchronousMailGrailsPlugin {
 
     def doWithSpring = {
         loadAsyncMailConfig(application.config)
-        def config = application.config
-        if (!config.asynchronous.mail.disable) {
-            long jobRepeatInterval = config.asynchronous.mail.send.repeat.interval
-            AsynchronousMailJob.triggers = {
-                simple([repeatInterval: jobRepeatInterval])
-            }
 
-            long collectorRepeatInterval = config.asynchronous.mail.expired.collector.repeat.interval
-            ExpiredMessagesCollectorJob.triggers = {
-                simple([repeatInterval: collectorRepeatInterval])
-            }
-        }
-
+        // The mail service from Mail plugin
         nonAsynchronousMailService(MailService) {
             mailMessageBuilderFactory = ref("mailMessageBuilderFactory")
             grailsApplication = ref("grailsApplication")
@@ -60,6 +46,43 @@ class AsynchronousMailGrailsPlugin {
         }
     }
 
+    def doWithApplicationContext = { GrailsApplicationContext applicationContext ->
+        // Register alias for the asynchronousMailService
+        applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
+    }
+
+    def doWithDynamicMethods = { GrailsApplicationContext applicationContext ->
+        def asyncMailConfig = application.config.asynchronous.mail
+
+        // Override the mailService
+        if (asyncMailConfig.override) {
+            applicationContext.mailService.metaClass*.sendMail = { Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            }
+        } else {
+            applicationContext.asynchronousMailService.metaClass*.sendMail = { Closure callable ->
+                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
+            }
+        }
+
+        // Starts jobs
+        if (!asyncMailConfig.disable) {
+            AsynchronousMailJob.schedule((Long) asyncMailConfig.send.repeat.interval)
+            ExpiredMessagesCollectorJob.schedule((Long) asyncMailConfig.expired.collector.repeat.interval)
+        }
+    }
+
+    def onChange = { event ->
+        // Nothing!
+    }
+
+    /**
+     * Loads the asynchronous mail configuration.
+     *
+     * 1. Loads the grails configuration.
+     * 2. Merges it with the default asynchronous mail configuration.
+     * 3. Merges it with the user asynchronous mail configuration.
+     */
     private void loadAsyncMailConfig(def config) {
         GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
         // merging default config into main application config
@@ -74,30 +97,6 @@ class AsynchronousMailGrailsPlugin {
             )
         } catch (Exception ignored) {
             // ignore, just use the defaults
-        }
-    }
-
-    def doWithApplicationContext = { GrailsApplicationContext applicationContext ->
-        configureSendMail(application, applicationContext)
-    }
-
-    def onChange = { event ->
-        configureSendMail(application, (GrailsApplicationContext) event.ctx)
-    }
-
-    private static configureSendMail(application, GrailsApplicationContext applicationContext) {
-        // Register alias for asynchronousMailService
-        applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
-
-        // Override mailService
-        if (application.config.asynchronous.mail.override) {
-            applicationContext.mailService.metaClass*.sendMail = { Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
-            }
-        } else {
-            applicationContext.asynchronousMailService.metaClass*.sendMail = { Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
-            }
         }
     }
 }
