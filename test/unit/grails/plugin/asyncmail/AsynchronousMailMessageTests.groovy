@@ -1,7 +1,7 @@
 package grails.plugin.asyncmail
 
 import grails.test.mixin.TestFor
-
+import org.springframework.validation.BeanPropertyBindingResult
 /**
  * Test AsynchronousMailMessage constraints
  */
@@ -34,7 +34,7 @@ class AsynchronousMailMessageTests {
 
     void testValid(){
         // Apply constraints for message objects
-        mockForConstraintsTests(AsynchronousMailMessage)
+        mockDomain(AsynchronousMailMessage)
 
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
@@ -47,17 +47,64 @@ class AsynchronousMailMessageTests {
         )
         assertTrue message.validate()
     }
+    
+    void testValidWithNoToAdress(){
+        // Apply constraints for message objects
+        mockDomain(AsynchronousMailMessage)
+
+        def message = new AsynchronousMailMessage(
+                from: 'John Smith <john@example.com>',
+                replyTo: 'James Smith <james@example.com>',
+                cc: ['Mary Smith <mary@example.com>', 'carl@example.com'],
+                bcc: ['Mary Smith <mary@example.com>', 'carl@example.com'],
+                subject: 'Subject',
+                text: 'Text'
+        )
+        assertTrue message.validate()
+    }
+    
+    void testAllAdressesNull(){
+        // Apply constraints for message objects
+        mockDomain(AsynchronousMailMessage)
+        
+
+        def message = new AsynchronousMailMessage(
+                from: 'John Smith <john@example.com>',
+                replyTo: 'James Smith <james@example.com>',
+                subject: 'Subject',
+                text: 'Text'
+        )
+        assertFalse message.validate()
+    }
+    
+    void testAllAdressesEmpty(){
+        // Apply constraints for message objects
+        mockDomain(AsynchronousMailMessage)
+        
+
+        def message = new AsynchronousMailMessage(
+                to: [],
+                cc : [],
+                bcc: [],
+                from: 'John Smith <john@example.com>',
+                replyTo: 'James Smith <james@example.com>',
+                subject: 'Subject',
+                text: 'Text'
+        )
+        assertFalse message.validate()
+    }
 
     void testConstraints() {
         // Apply constraints for message objects
-        mockForConstraintsTests(AsynchronousMailMessage)
+        mockDomain(AsynchronousMailMessage)
 
         // Constraints on default message
-        def message = new AsynchronousMailMessage()
+        def message = new AsynchronousMailMessage([:])
         assertFalse message.validate()
-        assertEquals "nullable", message.errors["to"]
-        assertEquals "nullable", message.errors["subject"]
-        assertEquals "nullable", message.errors["text"]
+        assertTrue message.errors.hasGlobalErrors()
+        assertEquals 1,  message.errors.globalErrors.size()
+        assertEquals "nullable", message.errors["subject"].codes.find { it == "nullable" }
+        assertEquals "nullable", message.errors["text"].codes.find { it == "nullable" }
 
         // Constraint on all fields
         message = new AsynchronousMailMessage(
@@ -73,15 +120,15 @@ class AsynchronousMailMessageTests {
                 attemptInterval: -1
         )
         assertFalse message.validate()
-        assertEquals "minSize", message.errors["to"]
-        assertEquals "blank", message.errors["subject"]
-        assertEquals "blank", message.errors["text"]
-        assertEquals "nullable", message.errors["status"]
-        assertEquals "nullable", message.errors["createDate"]
-        assertEquals "nullable", message.errors["beginDate"]
-        assertEquals "validator", message.errors["endDate"]
-        assertEquals "min", message.errors["attemptsCount"]
-        assertEquals "min", message.errors["maxAttemptsCount"]
-        assertEquals "min", message.errors["attemptInterval"]
+        assertEquals "blank", message.errors["subject"].codes.find { it == "blank" }
+        assertEquals "blank", message.errors["text"].codes.find { it == "blank" }
+        assertEquals "nullable", message.errors["status"].codes.find { it == "nullable" }
+        assertEquals "nullable", message.errors["createDate"].codes.find { it == "nullable" }
+        assertEquals "nullable", message.errors["beginDate"].codes.find { it == "nullable" }
+        assertEquals "validator.invalid", message.errors["endDate"].codes.find { it == "validator.invalid" }
+        assertEquals "min.notmet", message.errors["attemptsCount"].codes.find { it == "min.notmet" }
+        assertEquals "min.notmet", message.errors["maxAttemptsCount"].codes.find { it == "min.notmet" }
+        assertEquals "min.notmet", message.errors["attemptInterval"].codes.find { it == "min.notmet" }
     }
+    
 }

@@ -132,7 +132,8 @@ class AsynchronousMailMessage implements Serializable {
         def mailboxValidator = {String value ->
             return value == null || Validator.isMailbox(value)
         }
-
+       
+        
         // message fields
         from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
         replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
@@ -149,9 +150,21 @@ class AsynchronousMailMessage implements Serializable {
             }
             return flag
         }
+        
+        def atLeastOneRecipientValidator = {value, reference, errors ->
+            if(!emailList(value)){
+                return false
+            }
+            
+            boolean hasRecipients = reference.to|| reference.cc || reference.bcc
+            if(!hasRecipients){
+                errors.reject('asyncmail.one.recipient.required')
+            }
+            return hasRecipients
+        }
 
         // The nullable constraint isn't applied for collections by default.
-        to(nullable: false, minSize: 1, validator: emailList)
+        to(nullable: true, validator: atLeastOneRecipientValidator)
         cc(nullable: true, validator: emailList)
         bcc(nullable: true, validator: emailList)
 
@@ -185,6 +198,7 @@ class AsynchronousMailMessage implements Serializable {
         attemptInterval(min: 0l)
     }
 
+    
     @Override
     String toString() {
         StringBuilder builder = new StringBuilder()
