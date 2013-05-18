@@ -13,7 +13,9 @@ class AsynchronousMailSendService {
             if (message.attachments) {
                 multipart true
             }
-            to message.to
+            if(message.to && !message.to.isEmpty()){
+                to message.to
+            }
             subject message.subject
             if (message.headers && !message.headers.isEmpty() && isMimeCapable()) {
                 headers message.headers
