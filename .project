@@ -22,4 +22,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>.link_to_grails_plugins</name>
+			<type>2</type>
+			<location>D:/dev/workspaces/playground/grails-asynchronous-mail/target/plugins</location>
+		</link>
+	</linkedResources>
 </projectDescription>

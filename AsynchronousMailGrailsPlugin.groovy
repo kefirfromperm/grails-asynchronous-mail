@@ -6,7 +6,7 @@ import grails.util.Environment
 import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 
 class AsynchronousMailGrailsPlugin {
-    def version = "1.0-RC4"
+    def version = "1.0-RC5"
     def grailsVersion = "2.0.0 > *"
     def dependsOn = [mail:'1.0.1 > *', quartz:'1.0 > *', hibernate:'2.0.0 > *']
     def pluginExcludes = [
@@ -97,13 +97,20 @@ class AsynchronousMailGrailsPlugin {
      * 1. Loads the grails configuration.
      * 2. Merges it with the default asynchronous mail configuration.
      * 3. Merges it with the user asynchronous mail configuration.
+     * 
+     * http://swestfall.blogspot.co.uk/2011/08/grails-plugins-and-default-configs.html
      */
     private void loadAsyncMailConfig(def config) {
         GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
         // merging default config into main application config
-        config.merge(new ConfigSlurper(Environment.current.name).parse(
-                classLoader.loadClass('DefaultAsynchronousMailConfig'))
-        )
+        ConfigObject currentAsyncConfig = config.asynchronous.mail
+        ConfigObject defaultAsyncConfig = new ConfigSlurper(Environment.current.name)
+                .parse(classLoader.loadClass('DefaultAsynchronousMailConfig'))
+        
+        ConfigObject newAsyncConfig = new ConfigObject()
+        newAsyncConfig.putAll( defaultAsyncConfig.asynchronous.mail.merge(currentAsyncConfig))
+        
+        config.asynchronous.mail = newAsyncConfig
 
         // merging user-defined config into main application config if provided
         try {

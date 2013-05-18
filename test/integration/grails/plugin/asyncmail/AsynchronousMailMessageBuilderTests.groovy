@@ -21,7 +21,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         // Apply constraints for attachment objects
         mockForConstraintsTests(AsynchronousMailAttachment)
     }
-
+    
     void testBuilder() {
         def c = {
             from 'John Smith <john@example.com>'
@@ -56,6 +56,23 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         // Immediately
         assertTrue builder.immediatelySetted
         assertFalse builder.immediately
+    }
+
+    void testMinMail() {
+        def c = {
+            subject 'Subject'
+            text 'Text'
+        }
+
+        def builder = asynchronousMailMessageBuilderFactory.createBuilder()
+        c.delegate = builder
+        c.call()
+
+        // Message
+        AsynchronousMailMessage message = builder.message
+
+        // Validate message
+        assertTrue(message.validate())
     }
 
     void testMail1() {

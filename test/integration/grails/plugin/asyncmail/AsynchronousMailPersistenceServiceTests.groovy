@@ -21,4 +21,14 @@ class AsynchronousMailPersistenceServiceTests extends GroovyTestCase {
         asynchronousMailPersistenceService.delete(message)
         Assert.assertEquals(0, asynchronousMailPersistenceService.selectMessagesForSend()?.size())
     }
+
+    void testSaveSimpleMessage(){
+        def message = new AsynchronousMailMessage(
+                subject: 'Subject',
+                text: 'Text'
+        )
+
+        Assert.assertNotNull(asynchronousMailPersistenceService.save(message, true))
+        asynchronousMailPersistenceService.delete(message)
+    }
 }

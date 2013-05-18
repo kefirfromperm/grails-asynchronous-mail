@@ -1,12 +1,19 @@
 package grails.plugin.asyncmail
 
 import grails.test.mixin.TestFor
-import org.springframework.validation.BeanPropertyBindingResult
+import org.junit.Before
 /**
  * Test AsynchronousMailMessage constraints
  */
 @TestFor(AsynchronousMailMessage)
 class AsynchronousMailMessageTests {
+    
+    @Before
+    public void prepareMock(){
+        // Apply constraints for message objects
+        mockDomain(AsynchronousMailMessage)
+    }
+
     void testDefault() {
         def message = new AsynchronousMailMessage()
         assertNull message.to
@@ -33,9 +40,6 @@ class AsynchronousMailMessageTests {
     }
 
     void testValid(){
-        // Apply constraints for message objects
-        mockDomain(AsynchronousMailMessage)
-
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -49,9 +53,6 @@ class AsynchronousMailMessageTests {
     }
     
     void testValidWithNoToAdress(){
-        // Apply constraints for message objects
-        mockDomain(AsynchronousMailMessage)
-
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -64,10 +65,6 @@ class AsynchronousMailMessageTests {
     }
     
     void testAllAdressesNull(){
-        // Apply constraints for message objects
-        mockDomain(AsynchronousMailMessage)
-        
-
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -78,10 +75,6 @@ class AsynchronousMailMessageTests {
     }
     
     void testAllAdressesEmpty(){
-        // Apply constraints for message objects
-        mockDomain(AsynchronousMailMessage)
-        
-
         def message = new AsynchronousMailMessage(
                 to: [],
                 cc : [],
@@ -95,9 +88,6 @@ class AsynchronousMailMessageTests {
     }
 
     void testConstraints() {
-        // Apply constraints for message objects
-        mockDomain(AsynchronousMailMessage)
-
         // Constraints on default message
         def message = new AsynchronousMailMessage([:])
         assertFalse message.validate()
