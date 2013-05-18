@@ -58,6 +58,23 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         assertFalse builder.immediately
     }
 
+    void testMinMail() {
+        def c = {
+            subject 'Subject'
+            text 'Text'
+        }
+
+        def builder = asynchronousMailMessageBuilderFactory.createBuilder()
+        c.delegate = builder
+        c.call()
+
+        // Message
+        AsynchronousMailMessage message = builder.message
+
+        // Validate message
+        assertTrue(message.validate())
+    }
+
     void testMail1() {
         // make test data
         Map hdr = [test: 'test']

@@ -1,12 +1,19 @@
 package grails.plugin.asyncmail
 
 import grails.test.mixin.TestFor
+import org.junit.Before
 
 /**
  * Test AsynchronousMailMessage constraints
  */
 @TestFor(AsynchronousMailMessage)
 class AsynchronousMailMessageTests {
+    @Before
+    public void prepareMock(){
+        // Apply constraints for message objects
+        mockForConstraintsTests(AsynchronousMailMessage)
+    }
+
     void testDefault() {
         def message = new AsynchronousMailMessage()
         assertNull message.to
@@ -33,9 +40,6 @@ class AsynchronousMailMessageTests {
     }
 
     void testValid(){
-        // Apply constraints for message objects
-        mockForConstraintsTests(AsynchronousMailMessage)
-
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -48,14 +52,18 @@ class AsynchronousMailMessageTests {
         assertTrue message.validate()
     }
 
-    void testConstraints() {
-        // Apply constraints for message objects
-        mockForConstraintsTests(AsynchronousMailMessage)
+    void testWithEmptyTo(){
+        def message = new AsynchronousMailMessage(
+                subject: 'Subject',
+                text: 'Text'
+        )
+        assertTrue message.validate()
+    }
 
+    void testConstraints() {
         // Constraints on default message
         def message = new AsynchronousMailMessage()
         assertFalse message.validate()
-        assertEquals "nullable", message.errors["to"]
         assertEquals "nullable", message.errors["subject"]
         assertEquals "nullable", message.errors["text"]
 
@@ -73,7 +81,6 @@ class AsynchronousMailMessageTests {
                 attemptInterval: -1
         )
         assertFalse message.validate()
-        assertEquals "minSize", message.errors["to"]
         assertEquals "blank", message.errors["subject"]
         assertEquals "blank", message.errors["text"]
         assertEquals "nullable", message.errors["status"]
