@@ -13,5 +13,7 @@ public class ValidatorTests {
         Assert.assertTrue(Validator.isMailbox("John Smith <test@example.com>"));
 
         Assert.assertFalse(Validator.isMailbox("abc"));
+        Assert.assertFalse(Validator.isMailbox(""));
+        Assert.assertFalse(Validator.isMailbox(" "));
     }
 }

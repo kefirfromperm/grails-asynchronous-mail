@@ -2,14 +2,15 @@ package grails.plugin.asyncmail
 
 import grails.test.mixin.TestFor
 import org.junit.Before
+
 /**
  * Test AsynchronousMailMessage constraints
  */
 @TestFor(AsynchronousMailMessage)
 class AsynchronousMailMessageTests {
-    
+
     @Before
-    public void prepareMock(){
+    public void prepareMock() {
         // Apply constraints for message objects
         mockDomain(AsynchronousMailMessage)
     }
@@ -39,7 +40,7 @@ class AsynchronousMailMessageTests {
         assertEquals 0, message.priority
     }
 
-    void testValid(){
+    void testValid() {
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -51,8 +52,8 @@ class AsynchronousMailMessageTests {
         )
         assertTrue message.validate()
     }
-    
-    void testValidWithNoToAdress(){
+
+    void testValidWithNoToAdress() {
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -63,8 +64,8 @@ class AsynchronousMailMessageTests {
         )
         assertTrue message.validate()
     }
-    
-    void testAllAdressesNull(){
+
+    void testAllAdressesNull() {
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -73,11 +74,11 @@ class AsynchronousMailMessageTests {
         )
         assertFalse message.validate()
     }
-    
-    void testAllAdressesEmpty(){
+
+    void testAllAdressesEmpty() {
         def message = new AsynchronousMailMessage(
                 to: [],
-                cc : [],
+                cc: [],
                 bcc: [],
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -92,7 +93,7 @@ class AsynchronousMailMessageTests {
         def message = new AsynchronousMailMessage([:])
         assertFalse message.validate()
         assertTrue message.errors.hasGlobalErrors()
-        assertEquals 1,  message.errors.globalErrors.size()
+        assertEquals 1, message.errors.globalErrors.size()
         assertEquals "nullable", message.errors["subject"].codes.find { it == "nullable" }
         assertEquals "nullable", message.errors["text"].codes.find { it == "nullable" }
 
@@ -120,5 +121,26 @@ class AsynchronousMailMessageTests {
         assertEquals "min.notmet", message.errors["maxAttemptsCount"].codes.find { it == "min.notmet" }
         assertEquals "min.notmet", message.errors["attemptInterval"].codes.find { it == "min.notmet" }
     }
-    
+
+    void testBadToMailbox() {
+        def message = new AsynchronousMailMessage(
+                to: ['mary example com'],
+                subject: 'Subject',
+                text: 'Text'
+        )
+
+        assertFalse(message.validate())
+        assert message.errors['to'].codes.contains('asynchronous.mail.mailbox.invalid')
+    }
+
+    void testBadCcMailbox() {
+        def message = new AsynchronousMailMessage(
+                cc: ['mary example com'],
+                subject: 'Subject',
+                text: 'Text'
+        )
+
+        assertFalse(message.validate())
+        assert message.errors['cc'].codes.contains('asynchronous.mail.mailbox.invalid')
+    }
 }

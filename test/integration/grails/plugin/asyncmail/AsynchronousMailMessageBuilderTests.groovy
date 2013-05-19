@@ -60,6 +60,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
 
     void testMinMail() {
         def c = {
+            to 'john@example.com'
             subject 'Subject'
             text 'Text'
         }

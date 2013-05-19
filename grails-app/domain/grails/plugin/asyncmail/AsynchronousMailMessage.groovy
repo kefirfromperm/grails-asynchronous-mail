@@ -129,7 +129,7 @@ class AsynchronousMailMessage implements Serializable {
     }
 
     static constraints = {
-        def mailboxValidator = {String value ->
+        def mailboxValidator = { String value ->
             return value == null || Validator.isMailbox(value)
         }
 
@@ -138,25 +138,30 @@ class AsynchronousMailMessage implements Serializable {
         replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
 
         // The validator for email addresses list
-        def emailList = {List<String> list ->
+        def emailList = { List<String> list, reference, errors ->
             boolean flag = true
             if (list != null) {
-                list.each {String addr ->
-                    if (StringUtils.isBlank(addr) && Validator.isMailbox(addr)) {
+                list.each { String addr ->
+                    if (!Validator.isMailbox(addr)) {
+                        errors.rejectValue(propertyName, 'asynchronous.mail.mailbox.invalid')
                         flag = false
                     }
                 }
             }
             return flag
         }
-        
-        def atLeastOneRecipientValidator = {value, reference, errors ->
-            if(!emailList(value)){
+
+        def atLeastOneRecipientValidator = { List<String> value, reference, errors ->
+            // It's needed to access to propertyName
+            emailList.delegate = delegate
+
+            // Validate address list
+            if (!emailList(value, reference, errors)) {
                 return false
             }
-            
-            boolean hasRecipients = reference.to|| reference.cc || reference.bcc
-            if(!hasRecipients){
+
+            boolean hasRecipients = reference.to || reference.cc || reference.bcc
+            if (!hasRecipients) {
                 errors.reject('asynchronous.mail.one.recipient.required')
             }
             return hasRecipients
@@ -167,9 +172,9 @@ class AsynchronousMailMessage implements Serializable {
         cc(nullable: true, validator: emailList)
         bcc(nullable: true, validator: emailList)
 
-        headers(nullable: true, validator: {Map<String, String> map ->
+        headers(nullable: true, validator: { Map<String, String> map ->
             boolean flag = true
-            map?.each {String key, String value ->
+            map?.each { String key, String value ->
                 if (StringUtils.isBlank(key) || StringUtils.isBlank(value)) {
                     flag = false
                 }
@@ -185,10 +190,9 @@ class AsynchronousMailMessage implements Serializable {
         createDate()
         sentDate(nullable: true)
         beginDate()
-        endDate(validator: {Date val, AsynchronousMailMessage mess ->
-                    val && mess.beginDate && val.after(mess.beginDate)
-                }
-        )
+        endDate(validator: { Date val, AsynchronousMailMessage mess ->
+            val && mess.beginDate && val.after(mess.beginDate)
+        })
 
         // Attempt fields
         attemptsCount(min: 0)
@@ -197,7 +201,6 @@ class AsynchronousMailMessage implements Serializable {
         attemptInterval(min: 0l)
     }
 
-    
     @Override
     String toString() {
         StringBuilder builder = new StringBuilder()
@@ -205,7 +208,7 @@ class AsynchronousMailMessage implements Serializable {
         builder.append("id: $id")
         builder.append(", subject: $subject")
         builder.append(", to: [")
-        to.eachWithIndex {String addr, int index ->
+        to.eachWithIndex { String addr, int index ->
             if (index != 0) {
                 builder.append(', ')
             }

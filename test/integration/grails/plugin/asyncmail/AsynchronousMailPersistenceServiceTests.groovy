@@ -24,6 +24,7 @@ class AsynchronousMailPersistenceServiceTests extends GroovyTestCase {
 
     void testSaveSimpleMessage(){
         def message = new AsynchronousMailMessage(
+                bcc: ['mary@example.com'],
                 subject: 'Subject',
                 text: 'Text'
         )
