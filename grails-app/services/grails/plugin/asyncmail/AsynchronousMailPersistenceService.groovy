@@ -11,11 +11,11 @@ class AsynchronousMailPersistenceService {
         return message.save(flush: flush)
     }
 
-    private delete(AsynchronousMailMessage message) {
+    void delete(AsynchronousMailMessage message) {
         message.delete()
     }
 
-    private selectMessagesIdsForSend(){
+    List<Long> selectMessagesIdsForSend(){
         return AsynchronousMailMessage.withCriteria {
             Date now = new Date()
             lt('beginDate', now)
