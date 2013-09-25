@@ -10,6 +10,11 @@ grails.project.dependency.resolution = {
         grailsCentral()
     }
 
+    dependencies {
+        compile "org.codehaus.gpars:gpars:1.0.0"
+        compile "org.codehaus.jsr166-mirror:jsr166y:1.7.0"
+    }
+
     plugins {
         runtime(":hibernate:$grailsVersion") {
             export = false
