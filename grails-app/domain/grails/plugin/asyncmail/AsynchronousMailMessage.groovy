@@ -86,8 +86,11 @@ class AsynchronousMailMessage implements Serializable {
 
         from column: 'from_column'
 
+        attachments fetch: 'join'
+
         to(
                 indexColumn: 'to_idx',
+                fetch: 'join',
                 joinTable: [
                         name: 'async_mail_to',
                         length: MAX_EMAIL_ADDR_SIZE,
@@ -98,6 +101,7 @@ class AsynchronousMailMessage implements Serializable {
 
         cc(
                 indexColumn: 'cc_idx',
+                fetch: 'join',
                 joinTable: [
                         name: 'async_mail_cc',
                         length: MAX_EMAIL_ADDR_SIZE,
@@ -108,6 +112,7 @@ class AsynchronousMailMessage implements Serializable {
 
         bcc(
                 indexColumn: 'bcc_idx',
+                fetch: 'join',
                 joinTable: [
                         name: 'async_mail_bcc',
                         length: MAX_EMAIL_ADDR_SIZE,
@@ -118,6 +123,7 @@ class AsynchronousMailMessage implements Serializable {
 
         headers(
                 indexColumn: [name: 'header_name', length: 255],
+                fetch: 'join',
                 joinTable: [
                         name: 'async_mail_header',
                         key: 'message_id',
