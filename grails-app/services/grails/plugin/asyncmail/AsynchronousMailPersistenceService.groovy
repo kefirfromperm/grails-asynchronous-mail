@@ -39,15 +39,14 @@ class AsynchronousMailPersistenceService {
         // Get messages from DB
         def messagesIds = this.selectMessagesIdsForSend()
 
-        boolean useFlushOnSave = grailsApplication.config.asynchronous.mail.useFlushOnSave
         Integer gparsPoolSize = grailsApplication.config.asynchronous.mail.gparsPoolSize
 
         // Send each message and save new status
         try {
             GParsPool.withPool(gparsPoolSize) {
-                messagesIds.eachParallel { messageId ->
+                messagesIds.eachParallel {Long messageId ->
                     AsynchronousMailMessage.withNewSession { session ->
-                        this.processEmailMessage(messageId, useFlushOnSave)
+                        this.processEmailMessage(messageId)
                     }
                 }
             }
@@ -56,9 +55,10 @@ class AsynchronousMailPersistenceService {
         }
     }
 
-    private void processEmailMessage(Long messageId, boolean useFlushOnSave) {
-        def message = AsynchronousMailMessage.get(messageId)
+    private void processEmailMessage(Long messageId) {
+        boolean useFlushOnSave = grailsApplication.config.asynchronous.mail.useFlushOnSave
 
+        def message = AsynchronousMailMessage.get(messageId)
         log.trace("Found a message: " + message.toString())
 
         Date now = new Date()
