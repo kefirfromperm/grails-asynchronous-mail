@@ -1,11 +1,14 @@
 package grails.plugin.asyncmail
 
+import org.codehaus.groovy.grails.support.PersistenceContextInterceptor
 import org.springframework.mail.*
+import groovyx.gpars.GParsPool
 
 class AsynchronousMailProcessService {
     static transactional = false
 
     def grailsApplication
+    PersistenceContextInterceptor persistenceInterceptor
 
     def asynchronousMailPersistenceService
     def asynchronousMailSendService
@@ -15,9 +18,32 @@ class AsynchronousMailProcessService {
         def messagesIds = asynchronousMailPersistenceService.selectMessagesIdsForSend()
 
         // Send each message and save new status
+        Integer gparsPoolSize = grailsApplication.config.asynchronous.mail.gparsPoolSize
+
+        // Send each message and save new status
         try {
-            messagesIds.each {Long messageId ->
-                processEmailMessage(messageId)
+            GParsPool.withPool(gparsPoolSize) {
+                messagesIds.eachParallel {Long messageId ->
+                    persistenceInterceptor.init()
+                    log.debug('Open new session.')
+                    try {
+                        processEmailMessage(messageId)
+                        try{
+                            persistenceInterceptor.flush()
+                            persistenceInterceptor.clear()
+                            log.debug('Flush the session.')
+                        } catch (Exception e) {
+                            log.error("Failed to flush session.", e)
+                        }
+                    } finally{
+                        try {
+                            persistenceInterceptor.destroy();
+                            log.debug('Destroy the session.')
+                        } catch (Exception e) {
+                            log.error("Failed to finalize session after message sent.", e);
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             log.error('Abort mail sent.', e)
