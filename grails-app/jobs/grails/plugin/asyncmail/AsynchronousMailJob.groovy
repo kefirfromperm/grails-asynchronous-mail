@@ -10,16 +10,15 @@ class AsynchronousMailJob {
     def group = "AsynchronousMail"
 
     // Dependency injection
-    def asynchronousMailPersistenceService
+    AsynchronousMailProcessService asynchronousMailProcessService
 
     def execute() {
         log.trace('Enter to execute method.')
+        def startDate = System.currentTimeMillis()
 
-        def startDate = new Date().time
-        asynchronousMailPersistenceService.findAndSendEmails()
-        def endDate = new Date().time
-        log.debug("Execution time = ${endDate - startDate}")
+        asynchronousMailProcessService.findAndSendEmails()
 
-        log.trace("Exit from execute method.");
+        def endDate = System.currentTimeMillis()
+        log.trace("Exit from execute method. Execution time = ${endDate - startDate}");
     }
 }
