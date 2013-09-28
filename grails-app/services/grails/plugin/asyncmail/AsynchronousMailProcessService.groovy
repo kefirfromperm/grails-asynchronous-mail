@@ -1,9 +1,10 @@
 package grails.plugin.asyncmail
 
 import org.springframework.mail.*
-import groovyx.gpars.GParsPool
 
 class AsynchronousMailProcessService {
+    static transactional = false
+
     def grailsApplication
 
     def asynchronousMailPersistenceService
@@ -13,16 +14,10 @@ class AsynchronousMailProcessService {
         // Get messages from DB
         def messagesIds = asynchronousMailPersistenceService.selectMessagesIdsForSend()
 
-        Integer gparsPoolSize = grailsApplication.config.asynchronous.mail.gparsPoolSize
-
         // Send each message and save new status
         try {
-            GParsPool.withPool(gparsPoolSize) {
-                messagesIds.eachParallel {Long messageId ->
-                    AsynchronousMailMessage.withNewSession { session ->
-                        processEmailMessage(messageId)
-                    }
-                }
+            messagesIds.each {Long messageId ->
+                processEmailMessage(messageId)
             }
         } catch (Exception e) {
             log.error('Abort mail sent.', e)

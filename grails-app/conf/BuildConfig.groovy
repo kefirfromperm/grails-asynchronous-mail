@@ -11,8 +11,6 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        compile "org.codehaus.gpars:gpars:1.0.0"
-        compile "org.codehaus.jsr166-mirror:jsr166y:1.7.0"
     }
 
     plugins {
@@ -20,7 +18,9 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        compile ':mail:1.0.1'
+        compile(':mail:1.0.1'){
+            excludes 'spring-test'
+        }
         compile ':quartz:1.0-RC10'
 
         build(':release:2.1.0', ':rest-client-builder:1.0.3') {
