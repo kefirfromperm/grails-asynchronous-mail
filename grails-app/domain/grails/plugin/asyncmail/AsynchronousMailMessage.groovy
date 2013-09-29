@@ -2,6 +2,8 @@ package grails.plugin.asyncmail
 
 import org.apache.commons.lang.StringUtils
 
+import static grails.plugin.asyncmail.MessageStatus.*
+
 class AsynchronousMailMessage implements Serializable {
     /**
      * This date is accepted as max date because different DBMSs store date in
@@ -43,7 +45,7 @@ class AsynchronousMailMessage implements Serializable {
 
     // !!! Additional status fields !!!
     // Message status
-    MessageStatus status = MessageStatus.CREATED
+    MessageStatus status = CREATED
 
     //Date when message was created
     Date createDate = new Date()
@@ -73,7 +75,7 @@ class AsynchronousMailMessage implements Serializable {
      * Check can message be aborted.
      */
     boolean isAbortable() {
-        return status == MessageStatus.CREATED || status == MessageStatus.ATTEMPTED
+        return status in [CREATED, ATTEMPTED]
     }
 
     // Transient properties
