@@ -1,7 +1,10 @@
 package grails.plugin.asyncmail
 
+import groovy.transform.ToString
 import org.apache.commons.lang.StringUtils
+import static grails.plugin.asyncmail.MessageStatus.*
 
+@ToString(includePackage = false, includeNames = true, includeFields = true,  includes = ['id', 'subject', 'to', 'status'])
 class AsynchronousMailMessage implements Serializable {
     /**
      * This date is accepted as max date because different DBMSs store date in
@@ -17,8 +20,11 @@ class AsynchronousMailMessage implements Serializable {
         MAX_DATE = c.getTime()
     }
 
-    // Max length of email address
+    /** Max length of email address */
     static final int MAX_EMAIL_ADDR_SIZE = 320
+
+    /** Id. Need to be declared explicitly for properly @ToString output */
+    Long id
 
     // !!! Message fields !!!
     // Sender attributes
@@ -30,7 +36,7 @@ class AsynchronousMailMessage implements Serializable {
     List<String> cc
     List<String> bcc
 
-    // Additional headers
+    /** Additional headers */
     Map<String, String> headers
 
     // Subject and text
@@ -38,24 +44,24 @@ class AsynchronousMailMessage implements Serializable {
     String text
     boolean html = false
 
-    // Attachments
+    /** Attachments */
     List<AsynchronousMailAttachment> attachments
 
     // !!! Additional status fields !!!
-    // Message status
-    MessageStatus status = MessageStatus.CREATED
+    /** Message status */
+    MessageStatus status = CREATED
 
-    //Date when message was created
+    /** Date when message was created */
     Date createDate = new Date()
 
-    // Date when message was sent
+    /** Date when message was sent */
     Date sentDate
 
-    //Send interval
+    // Send interval
     Date beginDate = new Date()
     Date endDate = MAX_DATE
 
-    // Priority. The greater is first.
+    /** Priority. The greater is first. */
     int priority = 0
 
     // Attempts
@@ -63,23 +69,19 @@ class AsynchronousMailMessage implements Serializable {
     int maxAttemptsCount = 1
     Date lastAttemptDate
 
-    // Minimal interval between attempts in milliseconds
+    /** Minimal interval between attempts in milliseconds */
     long attemptInterval = 300000l
 
-    // Mark this message for delete after sent
+    /** Mark this message for delete after sent */
     boolean markDelete = false
 
-    /**
-     * Check can message be aborted.
-     */
+    /** Check can message be aborted */
     boolean isAbortable() {
-        return status == MessageStatus.CREATED || status == MessageStatus.ATTEMPTED
+        return status in [CREATED, ATTEMPTED]
     }
 
-    // Transient properties
     static transients = ['abortable']
 
-    // Database mapping
     static hasMany = [to: String, cc: String, bcc: String, attachments: AsynchronousMailAttachment]
     static mapping = {
         table 'async_mail_mess'
@@ -207,22 +209,6 @@ class AsynchronousMailMessage implements Serializable {
         attemptInterval(min: 0l)
     }
 
-    @Override
-    String toString() {
-        StringBuilder builder = new StringBuilder()
-        builder.append("Asynchronous mail message{")
-        builder.append("id: $id")
-        builder.append(", subject: $subject")
-        builder.append(", to: [")
-        to.eachWithIndex { String addr, int index ->
-            if (index != 0) {
-                builder.append(', ')
-            }
-            builder.append(addr)
-        }
-        builder.append("], status: $status}")
-        return builder.toString()
-    }
 }
 
 enum MessageStatus {
