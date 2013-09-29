@@ -132,7 +132,7 @@ class AsynchronousMailMessageTests {
         )
 
         assertFalse(message.validate())
-        assert message.errors['to'].codes.contains('asynchronous.mail.mailbox.invalid')
+        assertEquals 'asynchronous.mail.mailbox.invalid', message.errors['to'].codes.find { it == 'asynchronous.mail.mailbox.invalid'}
     }
 
     void testBadCcMailbox() {
@@ -143,7 +143,7 @@ class AsynchronousMailMessageTests {
         )
 
         assertFalse(message.validate())
-        assert message.errors['cc'].codes.contains('asynchronous.mail.mailbox.invalid')
+        assertEquals 'asynchronous.mail.mailbox.invalid', message.errors['cc'].codes.find { it == 'asynchronous.mail.mailbox.invalid'}
     }
 
     void testIsAbortable() {
