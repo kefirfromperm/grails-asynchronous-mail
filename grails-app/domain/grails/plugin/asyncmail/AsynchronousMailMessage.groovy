@@ -1,7 +1,9 @@
 package grails.plugin.asyncmail
 
+import groovy.transform.ToString
 import org.apache.commons.lang.StringUtils
 
+@ToString(includePackage = false, includeNames = true, includeFields = true,  includes = ['id', 'subject', 'to', 'status'])
 class AsynchronousMailMessage implements Serializable {
     /**
      * This date is accepted as max date because different DBMSs store date in
@@ -19,6 +21,8 @@ class AsynchronousMailMessage implements Serializable {
 
     // Max length of email address
     private static final int MAX_EMAIL_ADDR_SIZE = 320
+
+    Long id
 
     // !!! Message fields !!!
     // Sender attributes
@@ -207,22 +211,6 @@ class AsynchronousMailMessage implements Serializable {
         attemptInterval(min: 0l)
     }
 
-    @Override
-    String toString() {
-        StringBuilder builder = new StringBuilder()
-        builder.append("Asynchronous mail message{")
-        builder.append("id: $id")
-        builder.append(", subject: $subject")
-        builder.append(", to: [")
-        to.eachWithIndex { String addr, int index ->
-            if (index != 0) {
-                builder.append(', ')
-            }
-            builder.append(addr)
-        }
-        builder.append("], status: $status}")
-        return builder.toString()
-    }
 }
 
 enum MessageStatus {

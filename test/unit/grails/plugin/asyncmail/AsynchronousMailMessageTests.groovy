@@ -150,7 +150,7 @@ class AsynchronousMailMessageTests {
                 subject: 'Subject',
         )
         message.id = 1
-        assert message.toString() == 'Asynchronous mail message{id: 1, subject: Subject, to: [Mary Smith <mary@example.com>, carl@example.com], status: CREATED}'
+        assert message.toString() == 'AsynchronousMailMessage(id:1, to:[Mary Smith <mary@example.com>, carl@example.com], subject:Subject, status:CREATED)'
     }
 
 }
