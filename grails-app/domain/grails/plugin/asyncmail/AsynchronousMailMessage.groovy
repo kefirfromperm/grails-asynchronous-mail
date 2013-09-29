@@ -2,6 +2,7 @@ package grails.plugin.asyncmail
 
 import groovy.transform.ToString
 import org.apache.commons.lang.StringUtils
+import static grails.plugin.asyncmail.MessageStatus.*
 
 @ToString(includePackage = false, includeNames = true, includeFields = true,  includes = ['id', 'subject', 'to', 'status'])
 class AsynchronousMailMessage implements Serializable {
@@ -48,7 +49,7 @@ class AsynchronousMailMessage implements Serializable {
 
     // !!! Additional status fields !!!
     /** Message status */
-    MessageStatus status = MessageStatus.CREATED
+    MessageStatus status = CREATED
 
     /** Date when message was created */
     Date createDate = new Date()
@@ -76,7 +77,7 @@ class AsynchronousMailMessage implements Serializable {
 
     /** Check can message be aborted */
     boolean isAbortable() {
-        return status == MessageStatus.CREATED || status == MessageStatus.ATTEMPTED
+        return status in [CREATED, ATTEMPTED]
     }
 
     static transients = ['abortable']
