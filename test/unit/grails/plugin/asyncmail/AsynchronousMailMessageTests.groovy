@@ -143,4 +143,14 @@ class AsynchronousMailMessageTests {
         assertFalse(message.validate())
         assert message.errors['cc'].codes.contains('asynchronous.mail.mailbox.invalid')
     }
+
+    void testToString() {
+        def message = new AsynchronousMailMessage(
+                to: ['Mary Smith <mary@example.com>', 'carl@example.com'],
+                subject: 'Subject',
+        )
+        message.id = 1
+        assert message.toString() == 'Asynchronous mail message{id: 1, subject: Subject, to: [Mary Smith <mary@example.com>, carl@example.com], status: CREATED}'
+    }
+
 }
