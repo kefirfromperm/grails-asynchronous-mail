@@ -3,6 +3,8 @@ package grails.plugin.asyncmail
 import grails.test.mixin.TestFor
 import org.junit.Before
 
+import static grails.plugin.asyncmail.MessageStatus.*
+
 /**
  * Test AsynchronousMailMessage constraints
  */
@@ -27,7 +29,7 @@ class AsynchronousMailMessageTests {
         assertNull message.replyTo
         assertNull message.from
         assertNull message.attachments
-        assertEquals MessageStatus.CREATED, message.status
+        assertEquals CREATED, message.status
         assertNotNull message.createDate
         assertNull message.sentDate
         assertNotNull message.beginDate
@@ -142,5 +144,21 @@ class AsynchronousMailMessageTests {
 
         assertFalse(message.validate())
         assert message.errors['cc'].codes.contains('asynchronous.mail.mailbox.invalid')
+    }
+
+    void testIsAbortable() {
+        def messageWithDefaultStatus = new AsynchronousMailMessage()
+        assert messageWithDefaultStatus.status == CREATED
+        assert messageWithDefaultStatus.isAbortable()
+        def messageWithAttemptedStatus = new AsynchronousMailMessage(status: ATTEMPTED)
+        assert messageWithAttemptedStatus.isAbortable()
+        def messageWithSentStatus = new AsynchronousMailMessage(status: SENT)
+        assert !messageWithSentStatus.isAbortable()
+        def messageWithErrorStatus = new AsynchronousMailMessage(status: ERROR)
+        assert !messageWithErrorStatus.isAbortable()
+        def messageWithExpiredStatus = new AsynchronousMailMessage(status: EXPIRED)
+        assert !messageWithExpiredStatus.isAbortable()
+        def messageWithAbortStatus = new AsynchronousMailMessage(status: ABORT)
+        assert !messageWithAbortStatus.isAbortable()
     }
 }
