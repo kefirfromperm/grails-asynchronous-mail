@@ -22,6 +22,7 @@ class AsynchronousMailMessage implements Serializable {
     // Max length of email address
     private static final int MAX_EMAIL_ADDR_SIZE = 320
 
+    /** Id. Need to be declared explicitly for properly @ToString output */
     Long id
 
     // !!! Message fields !!!
