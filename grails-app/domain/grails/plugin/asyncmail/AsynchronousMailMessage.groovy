@@ -18,7 +18,7 @@ class AsynchronousMailMessage implements Serializable {
     }
 
     // Max length of email address
-    static final int MAX_EMAIL_ADDR_SIZE = 320
+    private static final int MAX_EMAIL_ADDR_SIZE = 256
 
     // !!! Message fields !!!
     // Sender attributes
@@ -93,7 +93,7 @@ class AsynchronousMailMessage implements Serializable {
                 fetch: 'join',
                 joinTable: [
                         name: 'async_mail_to',
-                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'to_string'
                 ]
@@ -104,7 +104,7 @@ class AsynchronousMailMessage implements Serializable {
                 fetch: 'join',
                 joinTable: [
                         name: 'async_mail_cc',
-                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'cc_string'
                 ]
@@ -115,7 +115,7 @@ class AsynchronousMailMessage implements Serializable {
                 fetch: 'join',
                 joinTable: [
                         name: 'async_mail_bcc',
-                        length: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE,
+                        length: MAX_EMAIL_ADDR_SIZE,
                         key: 'message_id',
                         column: 'bcc_string'
                 ]
@@ -140,8 +140,8 @@ class AsynchronousMailMessage implements Serializable {
         }
 
         // message fields
-        from(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
-        replyTo(nullable: true, maxSize: AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
+        from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
+        replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
 
         // The validator for email addresses list
         def emailList = { List<String> list, reference, errors ->
