@@ -6,7 +6,7 @@ import grails.util.Environment
 import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 
 class AsynchronousMailGrailsPlugin {
-    def version = "1.0-RC7"
+    def version = "1.0-RC6"
     def grailsVersion = "2.0.0 > *"
     def dependsOn = [mail:'1.0.1 > *', quartz:'1.0 > *', hibernate:'2.0.0 > *']
     def pluginExcludes = [
