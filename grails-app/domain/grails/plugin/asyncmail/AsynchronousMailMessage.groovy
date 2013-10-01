@@ -20,8 +20,8 @@ class AsynchronousMailMessage implements Serializable {
         MAX_DATE = c.getTime()
     }
 
-    /** Max length of email address */
-    static final int MAX_EMAIL_ADDR_SIZE = 320
+    /** Max length of email address. See the RFC 5321. */
+    static final int MAX_EMAIL_ADDR_SIZE = 256
 
     /** Id. Need to be declared explicitly for properly @ToString output */
     Long id
