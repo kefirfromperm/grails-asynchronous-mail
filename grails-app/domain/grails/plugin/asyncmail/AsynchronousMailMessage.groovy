@@ -4,7 +4,7 @@ import groovy.transform.ToString
 import org.apache.commons.lang.StringUtils
 import static grails.plugin.asyncmail.MessageStatus.*
 
-@ToString(includePackage = false, includeNames = true, includeFields = true,  includes = ['id', 'subject', 'to', 'status'])
+@ToString(includeNames = true, includeFields = true,  includes = 'id,subject,to,status')
 class AsynchronousMailMessage implements Serializable {
     /**
      * This date is accepted as max date because different DBMSs store date in
