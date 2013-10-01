@@ -21,7 +21,7 @@ class AsynchronousMailMessage implements Serializable {
     }
 
     /** Max length of email address. See the RFC 5321. */
-    static final int MAX_EMAIL_ADDR_SIZE = 256
+    private static final int MAX_EMAIL_ADDR_SIZE = 256
 
     /** Id. Need to be declared explicitly for properly @ToString output */
     Long id
@@ -90,6 +90,10 @@ class AsynchronousMailMessage implements Serializable {
 
         attachments fetch: 'join'
 
+        /**
+         * Don't touch!
+         * "AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE" is needed for backward compatibility with Grails 2.0.0
+         */
         to(
                 indexColumn: 'to_idx',
                 fetch: 'join',
