@@ -11,12 +11,8 @@ class AsynchronousMailController {
      */
     def list() {
         params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
-        if (!params.sort) {
-            params.sort = 'createDate'
-        }
-        if (!params.order) {
-            params.order = 'desc'
-        }
+        params.sort = params.sort ?: 'createDate'
+        params.order = params.order ?: 'desc'
         [list: AsynchronousMailMessage.list(params), total: AsynchronousMailMessage.count()]
     }
 
