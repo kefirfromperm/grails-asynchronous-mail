@@ -1,1 +1,0 @@
-The Grails Asynchronous Mail plug-in.
