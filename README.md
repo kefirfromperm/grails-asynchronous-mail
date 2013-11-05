@@ -36,11 +36,24 @@ Contribution
 If you want to contribute the plugin just open a pull request to repository
 <https://github.com/kefirfromperm/grails-asynchronous-mail>.
 
+Logging
+-------
+
+For enable full plugin log add following lines to configuration (`/grails-app/conf/Config.grovy`).
+
+    log4j = {
+        …
+        trace 'grails.app.jobs.grails.plugin.asyncmail', 'grails.app.services.grails.plugin.asyncmail'
+        …
+    }
+
 Issue tracking
 --------------
 
 You can report about bugs on the [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) or
 [GitHub](https://github.com/kefirfromperm/grails-asynchronous-mail/issues?state=open).
 You also can ask me by email [kefir@perm.ru](mailto:kefir@perm.ru).
+
+Please, enable logs and attach it to your issue.
 
 Please, review this project on [Ohloh](https://www.ohloh.net/p/grails-asynchronous-mail).
