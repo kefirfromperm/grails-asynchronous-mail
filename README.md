@@ -36,6 +36,13 @@ Contribution
 If you want to contribute the plugin just open a pull request to repository
 <https://github.com/kefirfromperm/grails-asynchronous-mail>.
 
+Unit tests are very very sweet things. They help us find bugs, modify code without new bugs. It's very interesting to
+see how they work. I like to see how they work. What is the better than unit tests? More unit tests!
+Unit tests are good!
+
+And comments... Comments are good also. They are not better than unit tests, but they are good, definitely. If you known
+Chinese or Arabic it is good. Seriously. It's awesome! But I don't known them. So write comments in English.
+
 Logging
 -------
 
