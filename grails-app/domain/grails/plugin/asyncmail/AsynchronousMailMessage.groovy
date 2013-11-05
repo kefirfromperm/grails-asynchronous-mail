@@ -85,8 +85,7 @@ class AsynchronousMailMessage implements Serializable {
     static hasMany = [to: String, cc: String, bcc: String, attachments: AsynchronousMailAttachment]
     static mapping = {
         table 'async_mail_mess'
-        id generator: 'sequence', params: [sequence: 'async_mail_mess_seq']
-
+        id generator: 'org.hibernate.id.enhanced.SequenceStyleGenerator', params: [sequence_name: 'async_mail_mess_seq']
         from column: 'from_column'
 
         attachments fetch: 'join'
