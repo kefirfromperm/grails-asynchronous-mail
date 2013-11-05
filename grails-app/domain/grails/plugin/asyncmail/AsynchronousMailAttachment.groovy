@@ -15,6 +15,7 @@ class AsynchronousMailAttachment implements Serializable {
 
     static mapping = {
         table 'async_mail_attachment'
+        id generator: 'org.hibernate.id.enhanced.SequenceStyleGenerator', params: [sequence_name: 'async_mail_attachment_seq']
         version false
     }
 

@@ -27,9 +27,9 @@ class AsynchronousMailAttachmentTests {
         assertEquals "nullable", attachment.errors['message']
 
         attachment = new AsynchronousMailAttachment(
-                attachmentName:'',
                 mimeType:null
         )
+        attachment.attachmentName =' \t\n'
         assertFalse attachment.validate()
         assertEquals "blank", attachment.errors['attachmentName']
         assertEquals "nullable", attachment.errors['mimeType']
