@@ -102,8 +102,6 @@ class AsynchronousMailMessageTests {
         // Constraint on all fields
         message = new AsynchronousMailMessage(
                 to: [],
-                subject: '',
-                text: '',
                 status: null,
                 createDate: null,
                 beginDate: null,
@@ -112,6 +110,8 @@ class AsynchronousMailMessageTests {
                 maxAttemptsCount: -1,
                 attemptInterval: -1
         )
+        message.subject = ' \t\n'
+        message.text = ' \t\n'
         assertFalse message.validate()
         assertEquals "blank", message.errors["subject"].codes.find { it == "blank" }
         assertEquals "blank", message.errors["text"].codes.find { it == "blank" }
