@@ -43,7 +43,11 @@ For enable full plugin log add following lines to configuration (`/grails-app/co
 
     log4j = {
         …
+        // Enable the Asynchronous Mail plugin logging
         trace 'grails.app.jobs.grails.plugin.asyncmail', 'grails.app.services.grails.plugin.asyncmail'
+
+        // Enable the Quartz plugin logging
+        debug 'grails.plugins.quartz'
         …
     }
 
