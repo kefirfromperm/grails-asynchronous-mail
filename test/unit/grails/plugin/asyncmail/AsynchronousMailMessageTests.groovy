@@ -113,8 +113,8 @@ class AsynchronousMailMessageTests {
                 attemptInterval: -1
         )
         assertFalse message.validate()
-        assertEquals "blank", message.errors["subject"].codes.find { it == "blank" }
-        assertEquals "blank", message.errors["text"].codes.find { it == "blank" }
+        assertEquals "nullable", message.errors["subject"].codes.find { it == "nullable" }
+        assertEquals "nullable", message.errors["text"].codes.find { it == "nullable" }
         assertEquals "nullable", message.errors["status"].codes.find { it == "nullable" }
         assertEquals "nullable", message.errors["createDate"].codes.find { it == "nullable" }
         assertEquals "nullable", message.errors["beginDate"].codes.find { it == "nullable" }

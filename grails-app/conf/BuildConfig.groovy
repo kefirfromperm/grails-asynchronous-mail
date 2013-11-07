@@ -28,7 +28,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime(":hibernate:2.0.0") {
+        runtime(":hibernate:3.6.10.2") {
             export = false
         }
 
@@ -37,7 +37,7 @@ grails.project.dependency.resolution = {
         }
         compile ':quartz:1.0.1'
 
-        build(':release:2.1.0', ':rest-client-builder:1.0.3') {
+        build(':release:3.0.1', ':rest-client-builder:1.0.3') {
             export = false
         }
     }
