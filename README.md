@@ -46,7 +46,7 @@ Chinese or Arabic it is good. Seriously. It's awesome! But I don't known them. S
 Logging
 -------
 
-For enable full plugin log add following lines to configuration (`/grails-app/conf/Config.grovy`).
+For enable full plugin log add following lines to the configuration (`/grails-app/conf/Config.grovy`).
 
     log4j = {
         …
