@@ -22,8 +22,9 @@ Installation
 ------------
 
 For start to use the plugin just add a dependency in the `BuildConfig.groovy`.
-
-    compile ":asynchronous-mail:1.0-RC6"
+```groovy
+compile ":asynchronous-mail:1.0-RC6"
+```
 
 Documentation
 -------------
@@ -47,16 +48,17 @@ Logging
 -------
 
 For enable full plugin log add following lines to the configuration (`/grails-app/conf/Config.grovy`).
+```groovy
+log4j = {
+    ...
+    // Enable the Asynchronous Mail plugin logging
+    trace 'grails.app.jobs.grails.plugin.asyncmail', 'grails.app.services.grails.plugin.asyncmail'
 
-    log4j = {
-        …
-        // Enable the Asynchronous Mail plugin logging
-        trace 'grails.app.jobs.grails.plugin.asyncmail', 'grails.app.services.grails.plugin.asyncmail'
-
-        // Enable the Quartz plugin logging
-        debug 'grails.plugins.quartz'
-        …
-    }
+    // Enable the Quartz plugin logging
+    debug 'grails.plugins.quartz'
+    ...
+}
+```
 
 Issue tracking
 --------------
