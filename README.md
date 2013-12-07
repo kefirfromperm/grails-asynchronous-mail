@@ -23,7 +23,7 @@ Installation
 
 For start to use the plugin just add a dependency in the `BuildConfig.groovy`.
 ```groovy
-compile ":asynchronous-mail:1.0-RC6"
+compile ":asynchronous-mail:1.0"
 ```
 
 Documentation
