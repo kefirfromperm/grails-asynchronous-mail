@@ -28,9 +28,9 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime(":hibernate:3.6.10.2") {
+        /*runtime(":hibernate:3.6.10.2") {
             export = false
-        }
+        }*/
 
         compile(':mail:1.0.1'){
             excludes 'spring-test'
