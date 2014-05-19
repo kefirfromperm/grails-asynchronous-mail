@@ -26,7 +26,7 @@
 		<link>
 			<name>.link_to_grails_plugins</name>
 			<type>2</type>
-			<location>D:/dev/workspaces/playground/grails-asynchronous-mail/target/plugins</location>
+			<location>/media/Others/Repos/grails-asynchronous-mail/target/plugins</location>
 		</link>
 	</linkedResources>
 </projectDescription>
