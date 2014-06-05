@@ -35,13 +35,15 @@ class AsynchronousMailService {
                     message.beginDate.time <= System.currentTimeMillis() &&
                     !grailsApplication.config.asynchronous.mail.disable
 
-        // Save message to DB
-        if (!asynchronousMailPersistenceService.save(message, immediately)) {
-            StringBuilder errorMessage = new StringBuilder()
-            message.errors?.allErrors?.each {ObjectError error ->
-                errorMessage.append(error.getDefaultMessage())
+        AsynchronousMailMessage.withNewSession{
+            // Save message to DB
+            if (!asynchronousMailPersistenceService.save(message, immediately)) {
+                StringBuilder errorMessage = new StringBuilder()
+                message.errors?.allErrors?.each {ObjectError error ->
+                    errorMessage.append(error.getDefaultMessage())
+                }
+                throw new Exception(errorMessage.toString())
             }
-            throw new Exception(errorMessage.toString())
         }
 
         // Start job immediately
