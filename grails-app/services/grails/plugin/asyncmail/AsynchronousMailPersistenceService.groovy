@@ -1,11 +1,8 @@
 package grails.plugin.asyncmail
 
-
 class AsynchronousMailPersistenceService {
 
     def grailsApplication
-    // TODO Read from config.
-    boolean useMongo = true
 
     private AsynchronousMailMessage save(AsynchronousMailMessage message, boolean flush = false) {
         return message.save(flush: flush)
@@ -20,6 +17,9 @@ class AsynchronousMailPersistenceService {
     }
 
     List<Long> selectMessagesIdsForSend() {
+        boolean useMongo = grailsApplication.config.asynchronous.mail.useMongo
+        println useMongo
+
         return AsynchronousMailMessage.withCriteria {
             Date now = new Date()
             lt('beginDate', now)
@@ -45,6 +45,8 @@ class AsynchronousMailPersistenceService {
 
     void updateExpiredMessages(){
         int count = 0
+        boolean useMongo = grailsApplication.config.asynchronous.mail.useMongo
+
         if (useMongo) {
             AsynchronousMailMessage.withCriteria {
                 lt "endDate", new Date()
@@ -58,11 +60,13 @@ class AsynchronousMailPersistenceService {
             }
             return
         }
+
+        // This could be done also with above code.
         AsynchronousMailMessage.withTransaction {
             count = AsynchronousMailMessage.executeUpdate(
                     "update AsynchronousMailMessage amm set amm.status=:es where amm.endDate<:date and (amm.status=:cs or amm.status=:as)",
                     ["es": MessageStatus.EXPIRED, "date": new Date(), "cs": MessageStatus.CREATED, "as": MessageStatus.ATTEMPTED]
-            )
+                    )
         }
         log.trace("${count} expired messages was updated.")
     }
