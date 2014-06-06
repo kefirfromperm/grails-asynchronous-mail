@@ -9,3 +9,4 @@ asynchronous.mail.clear.after.sent=false
 asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
 asynchronous.mail.gparsPoolSize=1
+asynchronous.mail.newSessionOnImmediateSend=false
