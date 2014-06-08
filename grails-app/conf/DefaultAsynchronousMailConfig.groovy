@@ -10,3 +10,4 @@ asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
 asynchronous.mail.useMongo=false
 asynchronous.mail.gparsPoolSize=1
+asynchronous.mail.newSessionOnImmediateSend=false

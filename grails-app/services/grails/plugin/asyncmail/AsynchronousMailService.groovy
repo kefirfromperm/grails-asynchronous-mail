@@ -36,7 +36,15 @@ class AsynchronousMailService {
                     !grailsApplication.config.asynchronous.mail.disable
 
         // Save message to DB
-        if (!asynchronousMailPersistenceService.save(message, immediately)) {
+		def messageSaved
+		if(grailsApplication.config.asynchronous.mail.newSessionOnImmediateSend)
+			AsynchronousMailMessage.withNewSession{
+				messageSaved = asynchronousMailPersistenceService.save(message, immediately)
+			}
+		else
+			messageSaved = asynchronousMailPersistenceService.save(message, immediately)
+			
+        if (!messageSaved) {
             StringBuilder errorMessage = new StringBuilder()
             message.errors?.allErrors?.each {ObjectError error ->
                 errorMessage.append(error.getDefaultMessage())
