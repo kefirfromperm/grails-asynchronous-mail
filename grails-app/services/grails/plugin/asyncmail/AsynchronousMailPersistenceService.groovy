@@ -39,7 +39,7 @@ class AsynchronousMailPersistenceService {
                     property('id')
                 }
             }
-        }
+        } as List<Long>
     }
 
     void updateExpiredMessages(){
