@@ -2,6 +2,7 @@ import grails.plugin.asyncmail.AsynchronousMailJob
 import grails.plugin.asyncmail.AsynchronousMailMessageBuilderFactory
 import grails.plugin.asyncmail.ExpiredMessagesCollectorJob
 import grails.plugin.mail.MailService
+import grails.plugins.quartz.*
 import grails.util.Environment
 import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 
@@ -54,7 +55,7 @@ class AsynchronousMailGrailsPlugin {
         configureSendMail(application, applicationContext)
 
         // Starts jobs
-        startJobs(application)
+        startJobs(application, applicationContext)
     }
 
     def onChange = { event ->
@@ -65,11 +66,20 @@ class AsynchronousMailGrailsPlugin {
     /**
      * Start send job and messages collector
      */
-    static startJobs(application) {
+    def startJobs(application, applicationContext) {
         def asyncMailConfig = application.config.asynchronous.mail
         if (!asyncMailConfig.disable) {
-            AsynchronousMailJob.schedule((Long) asyncMailConfig.send.repeat.interval)
-            ExpiredMessagesCollectorJob.schedule((Long) asyncMailConfig.expired.collector.repeat.interval)
+            JobManagerService jobManagerService = applicationContext.jobManagerService
+
+            List<JobDescriptor> jobDescriptors = jobManagerService.getJobs("AsynchronousMail")
+
+            if(!jobDescriptors.find{it.name == 'grails.plugin.asyncmail.AsynchronousMailJob'}) {
+                AsynchronousMailJob.schedule((Long) asyncMailConfig.send.repeat.interval)
+            }
+
+            if(!jobDescriptors.find{it.name == 'grails.plugin.asyncmail.ExpiredMessagesCollectorJob'}){
+                ExpiredMessagesCollectorJob.schedule((Long) asyncMailConfig.expired.collector.repeat.interval)
+            }
         }
     }
 
