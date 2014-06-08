@@ -8,4 +8,5 @@ asynchronous.mail.override=false
 asynchronous.mail.clear.after.sent=false
 asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
+asynchronous.mail.useMongo=false
 asynchronous.mail.gparsPoolSize=1

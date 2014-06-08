@@ -11,6 +11,7 @@
 
 # Target
 target/
+target-eclipse/
 
 # Unused web-app files
 web-app/WEB-INF/
@@ -27,3 +28,5 @@ plugin.xml
 # Unused grails files
 grails-app/i18n/
 grails-app/conf/UrlMappings.groovy
+.classpath
+.project
