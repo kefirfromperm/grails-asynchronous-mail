@@ -10,6 +10,7 @@ import org.springframework.mail.MailSender
 import org.springframework.util.Assert
 
 import javax.activation.FileTypeMap
+import java.util.concurrent.ExecutorService
 
 /**
  * Build new synchronous message
@@ -97,6 +98,12 @@ class AsynchronousMailMessageBuilder {
 
     void multipart(int multipartMode) {
         // nothing
+        // Added analogous to mail plugin
+    }
+
+    // Added for compatibility with the Mail plugin
+    void async(boolean async) {
+        // Nothing
         // Added analogous to mail plugin
     }
 
@@ -366,19 +373,19 @@ class AsynchronousMailMessageBuilder {
 
     MailMessage finishMessage() {
         throw new UnsupportedOperationException(
-                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
-    MailMessage sendMessage() {
+    MailMessage sendMessage(ExecutorService executorService) {
         throw new UnsupportedOperationException(
-                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using  Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
     MailSender getMailSender(){
         throw new UnsupportedOperationException(
-                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using  Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
