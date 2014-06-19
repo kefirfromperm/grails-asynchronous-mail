@@ -9,7 +9,7 @@ import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 class AsynchronousMailGrailsPlugin {
     def version = "1.1-SNAPSHOT"
     def grailsVersion = "2.3.1 > *"
-    def loadAfter = ['mail', 'quartz', 'hibernate']
+    def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4']
     def pluginExcludes = [
             "grails-app/conf/DataSource.groovy",
             "grails-app/i18n/**",
@@ -23,7 +23,7 @@ class AsynchronousMailGrailsPlugin {
     ]
 
     def author = "Vitalii Samolovskikh aka Kefir"
-    def authorEmail = "kefir@perm.ru"
+    def authorEmail = "kefirfromperm@gmail.com"
     def title = "Asynchronous Mail Plugin"
     def description = 'The plugin realises asynchronous mail sending. ' +
             'It stores messages in the DB and sends them asynchronously by the quartz job.'
