@@ -73,11 +73,16 @@ class AsynchronousMailGrailsPlugin {
 
             List<JobDescriptor> jobDescriptors = jobManagerService.getJobs("AsynchronousMail")
 
-            if(!jobDescriptors.find{it.name == 'grails.plugin.asyncmail.AsynchronousMailJob'}) {
+
+
+            def sjd = jobDescriptors.find { it.name == 'grails.plugin.asyncmail.AsynchronousMailJob' }
+            if(!sjd?.triggerDescriptors) {
                 AsynchronousMailJob.schedule((Long) asyncMailConfig.send.repeat.interval)
             }
 
-            if(!jobDescriptors.find{it.name == 'grails.plugin.asyncmail.ExpiredMessagesCollectorJob'}){
+
+            def cjd = jobDescriptors.find { it.name == 'grails.plugin.asyncmail.ExpiredMessagesCollectorJob' }
+            if(!cjd.triggerDescriptors){
                 ExpiredMessagesCollectorJob.schedule((Long) asyncMailConfig.expired.collector.repeat.interval)
             }
         }
