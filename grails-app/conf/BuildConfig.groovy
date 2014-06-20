@@ -37,7 +37,7 @@ grails.project.dependency.resolution = {
         compile(':mail:1.0.5'){
             excludes 'spring-test'
         }
-        compile ':quartz:1.0.1'
+        compile ':quartz:1.0.2'
 
         build(':release:3.0.1', ':rest-client-builder:1.0.3') {
             export = false
