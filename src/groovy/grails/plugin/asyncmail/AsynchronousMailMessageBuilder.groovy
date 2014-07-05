@@ -210,6 +210,11 @@ class AsynchronousMailMessageBuilder {
         message.from = addr
     }
 
+    void envelopeFrom(CharSequence envFrom) {
+        // TODO: Add the envelopeFrom field
+        throw new UnsupportedOperationException("The field envelopeFrom is not supported.");
+    }
+
     // Field "subject"
     void title(CharSequence subject1) {
         subject(subject1)

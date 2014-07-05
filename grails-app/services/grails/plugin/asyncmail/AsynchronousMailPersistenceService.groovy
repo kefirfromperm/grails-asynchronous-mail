@@ -17,7 +17,7 @@ class AsynchronousMailPersistenceService {
     }
 
     List<Long> selectMessagesIdsForSend() {
-        boolean useMongo = grailsApplication.config.asynchronous.mail.useMongo
+        boolean useMongo = (grailsApplication.config.asynchronous.mail.persistence.provider == 'mongodb')
 
         return AsynchronousMailMessage.withCriteria {
             Date now = new Date()
@@ -44,7 +44,7 @@ class AsynchronousMailPersistenceService {
 
     void updateExpiredMessages(){
         int count = 0
-        boolean useMongo = grailsApplication.config.asynchronous.mail.useMongo
+        boolean useMongo = (grailsApplication.config.asynchronous.mail.persistence.provider == 'mongodb')
 
         if (useMongo) {
             AsynchronousMailMessage.withCriteria {
@@ -67,6 +67,6 @@ class AsynchronousMailPersistenceService {
                     ["es": MessageStatus.EXPIRED, "date": new Date(), "cs": MessageStatus.CREATED, "as": MessageStatus.ATTEMPTED]
             )
         }
-        log.trace("${count} expired messages was updated.")
+        log.trace("${count} expired messages were updated.")
     }
 }
