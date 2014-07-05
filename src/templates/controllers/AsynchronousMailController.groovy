@@ -1,3 +1,5 @@
+package ${packageName}
+
 import grails.plugin.asyncmail.AsynchronousMailMessage
 import grails.plugin.asyncmail.MessageStatus
 
@@ -22,7 +24,7 @@ class AsynchronousMailController {
             return cl(message)
         }
 
-        flash.message = "Message with id ${params.id} not found."
+        flash.message = "The message \${params.id} was not found."
         flash.error = true
         redirect(action: 'list')
     }
@@ -66,7 +68,7 @@ class AsynchronousMailController {
             )
             message.attemptsCount = 0
             if (!message.hasErrors() && message.save()) {
-                flash.message = "Message ${params.id} was updated."
+                flash.message = "The message \${params.id} was updated."
                 redirect(action: 'show', id: message.id)
             } else {
                 render(view: 'edit', model: [message: message])
@@ -82,13 +84,13 @@ class AsynchronousMailController {
             if (message.abortable) {
                 message.status = MessageStatus.ABORT
                 if (message.save()) {
-                    flash.message = "Message ${message.id} was aborted."
+                    flash.message = "The message \${message.id} was aborted."
                 } else {
-                    flash.message = "Can't abort message with id ${message.id}."
+                    flash.message = "Can't abort the message \${message.id}."
                     flash.error = true
                 }
             } else {
-                flash.message = "Can't abort message with id ${message.id} and status ${message.status}."
+                flash.message = "Can't abort the message \${message.id} with the status \${message.status}."
                 flash.error = true
             }
             redirect(action: 'list')
@@ -102,10 +104,12 @@ class AsynchronousMailController {
         withMessage {AsynchronousMailMessage message ->
             try {
                 message.delete()
-                flash.message = "Message with id ${message.id} was deleted."
+                flash.message = "The message \${message.id} was deleted."
                 redirect(action: 'list')
             } catch (Exception e) {
-                flash.message = "Can't delete message with id ${message.id}."
+                def errorMessage = "Can't delete the message with the id \${message.id}.";
+                log.error(errorMessage, e)
+                flash.message = errorMessage
                 flash.error = true
                 redirect(action: 'show', id: message.id)
             }
