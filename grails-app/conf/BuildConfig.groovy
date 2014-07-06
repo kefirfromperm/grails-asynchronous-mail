@@ -23,8 +23,7 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        compile "org.codehaus.gpars:gpars:1.0.0"
-        compile "org.codehaus.jsr166-mirror:jsr166y:1.7.0"
+        compile "org.codehaus.gpars:gpars:1.2.1"
     }
 
     plugins {
