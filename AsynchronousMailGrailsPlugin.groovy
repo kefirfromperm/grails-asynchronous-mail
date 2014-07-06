@@ -5,11 +5,15 @@ import grails.plugin.mail.MailService
 import grails.plugins.quartz.*
 import grails.util.Environment
 import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
+import org.quartz.Scheduler
+import org.quartz.TriggerKey
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class AsynchronousMailGrailsPlugin {
-    def version = "1.1-RC"
+    def version = "1.1-RC1"
     def grailsVersion = "2.3.1 > *"
-    def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4']
+    def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
     def pluginExcludes = [
             "grails-app/conf/DataSource.groovy",
             "grails-app/i18n/**",
@@ -32,6 +36,9 @@ class AsynchronousMailGrailsPlugin {
     String license = 'APACHE'
     def issueManagement = [system: 'JIRA', url: 'http://jira.grails.org/browse/GPASYNCHRONOUSMAIL']
     def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
+
+    // The logger for the plugin class
+    private Logger log = LoggerFactory.getLogger('grails.plugin.asyncmail.AsynchronousMailJob')
 
     def doWithSpring = {
         loadAsyncMailConfig(application.config)
@@ -64,27 +71,48 @@ class AsynchronousMailGrailsPlugin {
     }
 
     /**
-     * Start send job and messages collector
+     * Start the send job and the messages collector.
+     *
+     * If the plugin is used in cluster we have to remove old triggers.
      */
     def startJobs(application, applicationContext) {
         def asyncMailConfig = application.config.asynchronous.mail
         if (!asyncMailConfig.disable) {
             JobManagerService jobManagerService = applicationContext.jobManagerService
+            Scheduler quartzScheduler = applicationContext.quartzScheduler
 
+            // Get our jobs
             List<JobDescriptor> jobDescriptors = jobManagerService.getJobs("AsynchronousMail")
 
-
-
-            def sjd = jobDescriptors.find { it.name == 'grails.plugin.asyncmail.AsynchronousMailJob' }
-            if(!sjd?.triggerDescriptors) {
-                AsynchronousMailJob.schedule((Long) asyncMailConfig.send.repeat.interval)
+            // Remove old triggers for the send job
+            log.debug("Removing old triggers for the AsynchronousMailJob")
+            JobDescriptor sjd = jobDescriptors.find { it.name == 'grails.plugin.asyncmail.AsynchronousMailJob' }
+            sjd?.triggerDescriptors?.each {TriggerDescriptor td ->
+                def triggerKey = new TriggerKey(td.name, td.group)
+                quartzScheduler.unscheduleJob(triggerKey)
+                log.debug("Removed the trigger ${triggerKey} for the AsynchronousMailJob")
             }
 
+            // Schedule the send job
+            def sendInterval = (Long) asyncMailConfig.send.repeat.interval
+            log.debug("Scheduling the AsynchronousMailJob with repeat interval ${sendInterval}ms")
+            AsynchronousMailJob.schedule(sendInterval)
+            log.debug("Scheduled the AsynchronousMailJob with repeat interval ${sendInterval}ms")
 
-            def cjd = jobDescriptors.find { it.name == 'grails.plugin.asyncmail.ExpiredMessagesCollectorJob' }
-            if(!cjd.triggerDescriptors){
-                ExpiredMessagesCollectorJob.schedule((Long) asyncMailConfig.expired.collector.repeat.interval)
+            // Remove old triggers for the collector job
+            log.debug("Removing old triggers for the ExpiredMessagesCollectorJob")
+            JobDescriptor cjd = jobDescriptors.find { it.name == 'grails.plugin.asyncmail.ExpiredMessagesCollectorJob' }
+            cjd?.triggerDescriptors?.each {TriggerDescriptor td ->
+                def triggerKey = new TriggerKey(td.name, td.group)
+                quartzScheduler.unscheduleJob(triggerKey)
+                log.debug("Removed the trigger ${triggerKey} for the ExpiredMessagesCollectorJob")
             }
+
+            // Schedule the collector job
+            def collectInterval = (Long) asyncMailConfig.expired.collector.repeat.interval
+            log.debug("Scheduling the ExpiredMessagesCollectorJob with repeat interval ${collectInterval}ms")
+            ExpiredMessagesCollectorJob.schedule(collectInterval)
+            log.debug("Scheduled the ExpiredMessagesCollectorJob with repeat interval ${collectInterval}ms")
         }
     }
 
