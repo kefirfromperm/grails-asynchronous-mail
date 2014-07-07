@@ -8,8 +8,7 @@ The Grails Asynchronous Mail is a plugin for asynchronous sending of email messa
 using Grails domain classes and sends them by a scheduled job. It allows to react to user's actions faster. If the SMTP
 server isn't available in time then the plugin can sends message after, when the server will be available.
 
-The plugin depends on [hibernate](http://www.grails.org/plugin/hibernate),
-[quartz](http://www.grails.org/plugin/quartz) and [mail](http://www.grails.org/plugin/mail) plugins.
+The plugin depends on [quartz](http://www.grails.org/plugin/quartz) and [mail](http://www.grails.org/plugin/mail) plugins. You also need a persistence provider plugin. [hibernate](http://www.grails.org/plugin/hibernate), [hibernate4](http://www.grails.org/plugin/hibernate4) and [mongodb](http://www.grails.org/plugin/mongodb) are supported.
 
 Links
 -----
@@ -52,7 +51,9 @@ For enable full plugin log add following lines to the configuration (`/grails-ap
 log4j = {
     ...
     // Enable the Asynchronous Mail plugin logging
-    trace 'grails.app.jobs.grails.plugin.asyncmail', 'grails.app.services.grails.plugin.asyncmail'
+    trace 'grails.app.jobs.grails.plugin.asyncmail', 
+          'grails.app.services.grails.plugin.asyncmail',
+          'grails.plugin.asyncmail'
 
     // Enable the Quartz plugin logging
     debug 'grails.plugins.quartz'
