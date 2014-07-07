@@ -13,8 +13,8 @@ The plugin depends on [quartz](http://www.grails.org/plugin/quartz) and [mail](h
 Links
 -----
 
-The plugin page: <http://grails.org/plugin/asynchronous-mail>
-Repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>
+The plugin page: <http://grails.org/plugin/asynchronous-mail>  
+Repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>  
 Issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>
 
 Installation
@@ -66,7 +66,7 @@ Issue tracking
 
 You can report about bugs on the [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) or
 [GitHub](https://github.com/kefirfromperm/grails-asynchronous-mail/issues?state=open).
-You also can ask me by email [kefir@perm.ru](mailto:kefir@perm.ru).
+You also can ask me by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
 
 Please, enable logs and attach it to your issue.
 
