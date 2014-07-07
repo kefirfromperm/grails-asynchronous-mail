@@ -56,16 +56,16 @@ class AsynchronousMailPersistenceService {
             }.each {
                 it.status = MessageStatus.EXPIRED
                 it.save(flush: true)
+                count++
             }
-            return
-        }
-
-        // This could be done also with the above code.
-        AsynchronousMailMessage.withTransaction {
-            count = AsynchronousMailMessage.executeUpdate(
-                    "update AsynchronousMailMessage amm set amm.status=:es where amm.endDate<:date and (amm.status=:cs or amm.status=:as)",
-                    ["es": MessageStatus.EXPIRED, "date": new Date(), "cs": MessageStatus.CREATED, "as": MessageStatus.ATTEMPTED]
-            )
+        } else {
+            // This could be done also with the above code.
+            AsynchronousMailMessage.withTransaction {
+                count = AsynchronousMailMessage.executeUpdate(
+                        "update AsynchronousMailMessage amm set amm.status=:es where amm.endDate<:date and (amm.status=:cs or amm.status=:as)",
+                        ["es": MessageStatus.EXPIRED, "date": new Date(), "cs": MessageStatus.CREATED, "as": MessageStatus.ATTEMPTED]
+                )
+            }
         }
         log.trace("${count} expired messages were updated.")
     }
