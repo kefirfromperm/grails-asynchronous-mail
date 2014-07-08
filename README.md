@@ -13,9 +13,9 @@ The plugin depends on [quartz](http://www.grails.org/plugin/quartz) and [mail](h
 Links
 -----
 
-The plugin page: <http://grails.org/plugin/asynchronous-mail>  
-Repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>  
-Issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>
+The plugin main page: <http://grails.org/plugin/asynchronous-mail>  
+The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>  
+The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>
 
 Installation
 ------------
