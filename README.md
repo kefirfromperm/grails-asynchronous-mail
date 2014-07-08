@@ -15,7 +15,8 @@ Links
 
 The plugin main page: <http://grails.org/plugin/asynchronous-mail>  
 The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>  
-The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>
+The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>  
+The page at Ohloh: <https://www.ohloh.net/p/grails-asynchronous-mail>
 
 Installation
 ------------
@@ -28,7 +29,9 @@ compile ":asynchronous-mail:1.0"
 Documentation
 -------------
 
-Full documentation is available on [the plugin page](http://grails.org/plugin/asynchronous-mail).
+Full documentation is available at [the plugin page](http://grails.org/plugin/asynchronous-mail).
+
+Also see the sample application at <https://github.com/kefirfromperm/grails-asynchronous-mail-sample>.
 
 Contribution
 ------------
@@ -42,8 +45,6 @@ Unit tests are good!
 
 And comments... Comments are good also. They are not better than unit tests, but they are good, definitely. If you known
 Chinese or Arabic it is good. Seriously. It's awesome! But I don't known them. So write comments in English.
-
-If I've approved your pull request please find yourself at [Ohloh](https://www.ohloh.net/p/grails-asynchronous-mail/contributors).
 
 Logging
 -------
@@ -68,6 +69,7 @@ Issue tracking
 
 You can report about bugs on the [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) or
 [GitHub](https://github.com/kefirfromperm/grails-asynchronous-mail/issues?state=open).
-You also can ask me by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com). Please, enable logs and attach it to your issue.
+You also can ask me by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
+Please, enable logs and attach it to your issue.
 
 Please, review this project on [Ohloh](https://www.ohloh.net/p/grails-asynchronous-mail).
