@@ -43,7 +43,7 @@ Unit tests are good!
 And comments... Comments are good also. They are not better than unit tests, but they are good, definitely. If you known
 Chinese or Arabic it is good. Seriously. It's awesome! But I don't known them. So write comments in English.
 
-If I approved your pull request please find yourself at [Ohloh](https://www.ohloh.net/p/grails-asynchronous-mail/contributors).
+If I've approved your pull request please find yourself at [Ohloh](https://www.ohloh.net/p/grails-asynchronous-mail/contributors).
 
 Logging
 -------
