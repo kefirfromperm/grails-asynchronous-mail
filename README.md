@@ -8,7 +8,9 @@ The Grails Asynchronous Mail is a plugin for asynchronous sending of email messa
 using Grails domain classes and sends them by a scheduled job. It allows to react to user's actions faster. If the SMTP
 server isn't available in time then the plugin can sends message after, when the server will be available.
 
-The plugin depends on [quartz](http://www.grails.org/plugin/quartz) and [mail](http://www.grails.org/plugin/mail) plugins. You also need a persistence provider plugin. [hibernate](http://www.grails.org/plugin/hibernate), [hibernate4](http://www.grails.org/plugin/hibernate4) and [mongodb](http://www.grails.org/plugin/mongodb) are supported.
+The plugin depends on [quartz](http://www.grails.org/plugin/quartz) and [mail](http://www.grails.org/plugin/mail)
+plugins. You also need a persistence provider plugin. [hibernate](http://www.grails.org/plugin/hibernate),
+[hibernate4](http://www.grails.org/plugin/hibernate4) and [mongodb](http://www.grails.org/plugin/mongodb) are supported.
 
 Links
 -----
@@ -16,14 +18,14 @@ Links
 The plugin main page: <http://grails.org/plugin/asynchronous-mail>  
 The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>  
 The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>  
-The page at Ohloh: <https://www.ohloh.net/p/grails-asynchronous-mail>
+The page at OpenHUB: <https://www.openhub.net/p/grails-asynchronous-mail>
 
 Installation
 ------------
 
 For start to use the plugin just add a dependency in the `BuildConfig.groovy`.
 ```groovy
-compile ":asynchronous-mail:1.0"
+compile ":asynchronous-mail:1.1"
 ```
 
 Documentation
@@ -72,4 +74,4 @@ You can report about bugs on the [JIRA](http://jira.grails.org/browse/GPASYNCHRO
 You also can ask me by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
 Please, enable logs and attach it to your issue.
 
-Please, review this project on [Ohloh](https://www.ohloh.net/p/grails-asynchronous-mail).
+Please, review this project on [OpenHUB](https://www.openhub.net/p/grails-asynchronous-mail).
