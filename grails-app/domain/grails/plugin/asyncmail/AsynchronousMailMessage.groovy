@@ -88,8 +88,6 @@ class AsynchronousMailMessage implements Serializable {
 
         from column: 'from_column'
 
-        attachments fetch: 'join'
-
         /**
          * Don't touch!
          * "AsynchronousMailMessage.MAX_EMAIL_ADDR_SIZE" is needed for backward compatibility with Grails 2.0.0
