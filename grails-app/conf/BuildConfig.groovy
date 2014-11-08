@@ -27,16 +27,16 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        test(":hibernate:3.6.10.15") {
+        test(":hibernate:3.6.10.18") {
             export = false
         }
 
-        compile(':mail:1.0.6'){
+        compile(':mail:1.0.7'){
             excludes 'spring-test'
         }
         compile ':quartz:1.0.2'
 
-        build(':release:3.0.1', ':rest-client-builder:1.0.3') {
+        build(':release:3.0.1', ':rest-client-builder:2.0.3') {
             export = false
         }
     }
