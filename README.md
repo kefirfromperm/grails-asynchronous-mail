@@ -38,7 +38,7 @@ Also see the sample application at <https://github.com/kefirfromperm/grails-asyn
 Contribution
 ------------
 
-If you want to contribute the plugin just open a pull request to repository
+If you want to contribute the plugin just open a pull request to the repository
 <https://github.com/kefirfromperm/grails-asynchronous-mail>.
 
 Unit tests are very very sweet things. They help us find bugs, modify code without new bugs. It's very interesting to
@@ -72,6 +72,6 @@ Issue tracking
 You can report about bugs on the [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) or
 [GitHub](https://github.com/kefirfromperm/grails-asynchronous-mail/issues?state=open).
 You also can ask me by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
-Please, enable logs and attach it to your issue.
+Please, enable logs and attach them to your issue.
 
 Please, review this project on [OpenHUB](https://www.openhub.net/p/grails-asynchronous-mail).
