@@ -39,6 +39,9 @@ class AsynchronousMailMessage implements Serializable {
     /** Additional headers */
     Map<String, String> headers
 
+    // Envelope from field
+    String envelopeFrom
+
     // Subject and text
     String subject
     String text
@@ -187,6 +190,8 @@ class AsynchronousMailMessage implements Serializable {
             }
             return flag
         })
+
+        envelopeFrom(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
 
         subject(blank: false, maxSize: 988)
         text(blank: false)

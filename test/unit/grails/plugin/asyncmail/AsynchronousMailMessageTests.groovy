@@ -28,6 +28,7 @@ class AsynchronousMailMessageTests {
         assertNull message.cc
         assertNull message.replyTo
         assertNull message.from
+        assertNull message.envelopeFrom
         assertNull message.attachments
         assertEquals CREATED, message.status
         assertNotNull message.createDate
@@ -55,7 +56,7 @@ class AsynchronousMailMessageTests {
         assertTrue message.validate()
     }
 
-    void testValidWithNoToAdress() {
+    void testValidWithNoToAddress() {
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -67,7 +68,7 @@ class AsynchronousMailMessageTests {
         assertTrue message.validate()
     }
 
-    void testAllAdressesNull() {
+    void testAllAddressesNull() {
         def message = new AsynchronousMailMessage(
                 from: 'John Smith <john@example.com>',
                 replyTo: 'James Smith <james@example.com>',
@@ -77,7 +78,7 @@ class AsynchronousMailMessageTests {
         assertFalse message.validate()
     }
 
-    void testAllAdressesEmpty() {
+    void testAllAddressesEmpty() {
         def message = new AsynchronousMailMessage(
                 to: [],
                 cc: [],
@@ -144,6 +145,29 @@ class AsynchronousMailMessageTests {
 
         assertFalse(message.validate())
         assertEquals 'asynchronous.mail.mailbox.invalid', message.errors['cc'].codes.find { it == 'asynchronous.mail.mailbox.invalid'}
+    }
+
+    void testBadBccMailbox() {
+        def message = new AsynchronousMailMessage(
+                bcc: ['mary example com'],
+                subject: 'Subject',
+                text: 'Text'
+        )
+
+        assertFalse(message.validate())
+        assertEquals 'asynchronous.mail.mailbox.invalid', message.errors['bcc'].codes.find { it == 'asynchronous.mail.mailbox.invalid'}
+    }
+
+    void testBadEnvelopeFromMailbox() {
+        def message = new AsynchronousMailMessage(
+                to: ['john@example.com'],
+                envelopeFrom: 'mary example com',
+                subject: 'Subject',
+                text: 'Text'
+        )
+
+        assertFalse(message.validate())
+        assertEquals 'validator.invalid', message.errors['envelopeFrom'].codes.find { it == 'validator.invalid'}
     }
 
     void testIsAbortable() {

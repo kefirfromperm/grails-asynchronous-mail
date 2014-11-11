@@ -210,9 +210,11 @@ class AsynchronousMailMessageBuilder {
         message.from = addr
     }
 
+    // Field "envelope from"
     void envelopeFrom(CharSequence envFrom) {
-        // TODO: Add the envelopeFrom field
-        throw new UnsupportedOperationException("The field envelopeFrom is not supported.");
+        def addr = envFrom?.toString()
+        assertEmail(addr, 'envelopeFrom')
+        message.envelopeFrom = envFrom
     }
 
     // Field "subject"
