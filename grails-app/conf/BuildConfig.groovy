@@ -27,7 +27,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        test(":hibernate:3.6.10.18") {
+        test(":hibernate:3.6.10.16") {
             export = false
         }
 
