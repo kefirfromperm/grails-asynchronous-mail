@@ -25,22 +25,22 @@ class AsynchronousMailProcessService {
             messagesIds.eachParallel { Long messageId ->
                 try {
                     persistenceInterceptor.init()
-                    log.debug('Open a new session.')
+                    log.debug('Open a new persistence session.')
                     try {
                         processEmailMessage(messageId)
                         try {
                             persistenceInterceptor.flush()
                             persistenceInterceptor.clear()
-                            log.debug('Flush the session.')
+                            log.debug('Flush the persistence session.')
                         } catch (Exception e) {
-                            log.error("Failed to flush the session.", e)
+                            log.error("Failed to flush the persistence session.", e)
                         }
                     } finally {
                         try {
                             persistenceInterceptor.destroy();
-                            log.debug('Destroy the session.')
+                            log.debug('Destroy the persistence session.')
                         } catch (Exception e) {
-                            log.error("Failed to finalize the session after message sent.", e);
+                            log.error("Failed to finalize the persistence session after message sent.", e);
                         }
                     }
                 } catch (Exception e) {
