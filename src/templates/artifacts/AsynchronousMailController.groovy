@@ -23,7 +23,7 @@ class @artifact.name@ {
             return cl(message)
         }
 
-        flash.message = "The message \${params.id} was not found."
+        flash.message = "The message ${params.id} was not found."
         flash.error = true
         redirect(action: 'list')
     }
@@ -67,7 +67,7 @@ class @artifact.name@ {
             )
             message.attemptsCount = 0
             if (!message.hasErrors() && message.save()) {
-                flash.message = "The message \${params.id} was updated."
+                flash.message = "The message ${params.id} was updated."
                 redirect(action: 'show', id: message.id)
             } else {
                 render(view: 'edit', model: [message: message])
@@ -83,13 +83,13 @@ class @artifact.name@ {
             if (message.abortable) {
                 message.status = MessageStatus.ABORT
                 if (message.save()) {
-                    flash.message = "The message \${message.id} was aborted."
+                    flash.message = "The message ${message.id} was aborted."
                 } else {
-                    flash.message = "Can't abort the message \${message.id}."
+                    flash.message = "Can't abort the message ${message.id}."
                     flash.error = true
                 }
             } else {
-                flash.message = "Can't abort the message \${message.id} with the status \${message.status}."
+                flash.message = "Can't abort the message ${message.id} with the status ${message.status}."
                 flash.error = true
             }
             redirect(action: 'list')
@@ -103,10 +103,10 @@ class @artifact.name@ {
         withMessage {AsynchronousMailMessage message ->
             try {
                 message.delete()
-                flash.message = "The message \${message.id} was deleted."
+                flash.message = "The message ${message.id} was deleted."
                 redirect(action: 'list')
             } catch (Exception e) {
-                def errorMessage = "Can't delete the message with the id \${message.id}.";
+                def errorMessage = "Can't delete the message with the id ${message.id}.";
                 log.error(errorMessage, e)
                 flash.message = errorMessage
                 flash.error = true
