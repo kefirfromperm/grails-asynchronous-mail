@@ -9,7 +9,7 @@ class AsynchronousMailController {
     static allowedMethods = [update: 'POST']
 
     /**
-     * Show all message in table.
+     * List messages.
      */
     def list() {
         params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
@@ -39,7 +39,7 @@ class AsynchronousMailController {
     }
 
     /**
-     * Show form for editing.
+     * Edit message data.
      */
     def edit() {
         withMessage {AsynchronousMailMessage message ->
@@ -48,7 +48,7 @@ class AsynchronousMailController {
     }
 
     /**
-     * Update message
+     * Update message.
      */
     def update() {
         withMessage {AsynchronousMailMessage message ->
@@ -77,7 +77,7 @@ class AsynchronousMailController {
     }
 
     /**
-     * Abort message sent
+     * Abort message sending.
      */
     def abort() {
         withMessage {AsynchronousMailMessage message ->
@@ -98,7 +98,7 @@ class AsynchronousMailController {
     }
 
     /**
-     * Delete message
+     * Delete message.
      */
     def delete() {
         withMessage {AsynchronousMailMessage message ->

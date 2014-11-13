@@ -3,7 +3,7 @@ import groovy.text.SimpleTemplateEngine
 includeTargets << grailsScript("_GrailsInit")
 
 /**
- * Create the controller and views for manage asynchronous messages.
+ * Create the controller and views for managing asynchronous messages.
  */
 target(createAsynchronousMailController: "Create the controller and views for manage asynchronous messages.") {
     def packageName = argsMap?.package?:metadata.'app.name'?.replaceAll(/\-/, '')?:'app'
@@ -21,7 +21,7 @@ target(createAsynchronousMailController: "Create the controller and views for ma
     File out = new File("$basedir/grails-app/controllers/${dirName}AsynchronousMailController.groovy");
 
     if(!out.exists()){
-        // in case it's in a package, create dirs
+        // In case it's in a package, create dirs
         ant.mkdir dir: out.parentFile
 
         out.withWriter { writer ->

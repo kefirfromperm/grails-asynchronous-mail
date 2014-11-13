@@ -65,7 +65,7 @@ class AsynchronousMailProcessService {
             message.lastAttemptDate = now
             message.attemptsCount++
 
-            // It guarantee that e-mail can't be sent more than 1 time
+            // Guarantee that e-mail can't be sent more than 1 time
             message.status = MessageStatus.ERROR
             asynchronousMailPersistenceService.save(message, useFlushOnSave)
 

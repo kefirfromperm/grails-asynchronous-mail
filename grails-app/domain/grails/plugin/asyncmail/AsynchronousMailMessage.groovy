@@ -7,10 +7,10 @@ import static grails.plugin.asyncmail.MessageStatus.*
 @ToString(includeNames = true, includeFields = true,  includes = 'id,subject,to,status')
 class AsynchronousMailMessage implements Serializable {
     /**
-     * This date is accepted as max date because different DBMSs store date in
-     * different formats. So we can't use date which is maximum in Java.
-     * I want to believe that my plugin will work 1000 years. If asynchronous mail plugin
-     * works 1000 years then I or somebody else will change this value.
+     * This date is accepted as the max date because different DBMSs store dates in
+     * different formats. We can't use a date which is the maximum in Java.
+     * I want to believe that my plugin will work in 1000 years. If asynchronous mail plugin
+     * works in 1000 years then I or somebody else will change this value.
      */
     private static final MAX_DATE
     static {
@@ -23,7 +23,7 @@ class AsynchronousMailMessage implements Serializable {
     /** Max length of email address. See the RFC 5321. */
     private static final int MAX_EMAIL_ADDR_SIZE = 256
 
-    /** Id. Need to be declared explicitly for properly @ToString output */
+    /** Id. Need to be declared explicitly for proper @ToString output */
     Long id
 
     // !!! Message fields !!!
@@ -31,7 +31,7 @@ class AsynchronousMailMessage implements Serializable {
     String from
     String replyTo
 
-    // Receivers attributes
+    // Receiver attributes
     List<String> to
     List<String> cc
     List<String> bcc
@@ -64,7 +64,7 @@ class AsynchronousMailMessage implements Serializable {
     Date beginDate = new Date()
     Date endDate = MAX_DATE
 
-    /** Priority. The greater is first. */
+    /** Priority. Higher number, higher priority. */
     int priority = 0
 
     // Attempts
@@ -72,13 +72,13 @@ class AsynchronousMailMessage implements Serializable {
     int maxAttemptsCount = 1
     Date lastAttemptDate
 
-    /** Minimal interval between attempts in milliseconds */
+    /** Minimum interval between attempts in milliseconds */
     long attemptInterval = 300000l
 
-    /** Mark this message for delete after sent */
+    /** Mark this message for deletion after it's sent */
     boolean markDelete = false
 
-    /** Check can message be aborted */
+    /** Check if message can be aborted */
     boolean isAbortable() {
         return status in [CREATED, ATTEMPTED]
     }
@@ -142,11 +142,11 @@ class AsynchronousMailMessage implements Serializable {
             return value == null || Validator.isMailbox(value)
         }
 
-        // message fields
+        // Message fields
         from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
         replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
 
-        // The validator for email addresses list
+        // The validator for list of email addresses
         def emailList = { List<String> list, reference, errors ->
             boolean flag = true
             if (list != null) {

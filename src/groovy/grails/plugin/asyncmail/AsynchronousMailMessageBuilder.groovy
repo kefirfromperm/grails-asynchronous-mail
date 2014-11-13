@@ -79,7 +79,7 @@ class AsynchronousMailMessageBuilder {
         message.attemptInterval = interval
     }
 
-    // Mark that the message must be sent immediately
+    // Mark message must be sent immediately
     void immediate(boolean value) {
         immediately = value
         immediatelySetted = true
@@ -92,12 +92,12 @@ class AsynchronousMailMessageBuilder {
 
     // Multipart field do nothing
     void multipart(boolean multipart) {
-        // nothing
+        // Nothing
         // Added analogous to mail plugin
     }
 
     void multipart(int multipartMode) {
-        // nothing
+        // Nothing
         // Added analogous to mail plugin
     }
 

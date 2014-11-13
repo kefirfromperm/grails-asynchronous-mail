@@ -9,10 +9,10 @@ class AsynchronousMailService {
     GrailsApplication grailsApplication
 
     /**
-     * Create asynchronous message and save it to DB.
+     * Create asynchronous message and save it to the DB.
      *
      * If configuration flag asynchronous.mail.send.immediately is true (default)
-     * then this method start send job after create message
+     * then this method starts the send job after message is created
      */
     def sendAsynchronousMail(Closure callable) {
         def messageBuilder = asynchronousMailMessageBuilderFactory.createBuilder()
@@ -44,7 +44,7 @@ class AsynchronousMailService {
         } else {
             savedMessage = asynchronousMailPersistenceService.save(message, immediately)
         }
-			
+
         if (!savedMessage) {
             StringBuilder errorMessage = new StringBuilder()
             message.errors?.allErrors?.each {ObjectError error ->
@@ -72,7 +72,7 @@ class AsynchronousMailService {
     /**
      * Start send job immediately. If you send more than one message in one method,
      * you can disable asynchronous.mail.send.immediately flag (default true) and use this method
-     * after then create all messages.
+     * after creating all messages.
      *
      * <code>asynchronousMailService.sendAsynchronousMail{...}<br/>
      * asynchronousMailService.sendAsynchronousMail{...}<br/>
