@@ -14,7 +14,7 @@ class @artifact.name@ {
         params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
         params.sort = params.sort ?: 'createDate'
         params.order = params.order ?: 'desc'
-        [list: AsynchronousMailMessage.list(params), total: AsynchronousMailMessage.count()]
+        [resultList: AsynchronousMailMessage.list(params)]
     }
 
     private withMessage(Closure cl) {

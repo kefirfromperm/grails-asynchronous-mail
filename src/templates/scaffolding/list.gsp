@@ -33,7 +33,7 @@
         </tr>
         </thead>
         <tbody>
-        <g:each in="${list}" status="i" var="message">
+        <g:each in="${resultList}" status="i" var="message">
             <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                 <td class="id">${message.id}</td>
                 <td><g:link action="show" id="${message.id}">${fieldValue(bean: message, field: 'subject')}</g:link></td>
@@ -56,7 +56,7 @@
     </table>
 
     <div class="paginate">
-        <g:paginate total="${total}"/>
+        <g:paginate total="${resultList.totalCount}"/>
     </div>
 </div>
 </body>
