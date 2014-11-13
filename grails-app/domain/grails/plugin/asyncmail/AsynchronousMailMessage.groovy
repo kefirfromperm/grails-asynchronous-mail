@@ -83,6 +83,30 @@ class AsynchronousMailMessage implements Serializable {
         return status in [CREATED, ATTEMPTED]
     }
 
+    boolean hasCreatedStatus() {
+        return status == CREATED
+    }
+
+    boolean hasAttemptedStatus() {
+        return status == ATTEMPTED
+    }
+
+    boolean hasSentStatus() {
+        return status == SENT
+    }
+
+    boolean hasErrorStatus() {
+        return status == ERROR
+    }
+
+    boolean hasExpiredStatus() {
+        return status == EXPIRED
+    }
+
+    boolean hasAbortStatus() {
+        return status == ABORT
+    }
+
     static transients = ['abortable']
 
     static hasMany = [to: String, cc: String, bcc: String, attachments: AsynchronousMailAttachment]

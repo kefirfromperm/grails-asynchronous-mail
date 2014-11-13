@@ -58,8 +58,8 @@ class AsynchronousMailProcessService {
 
         Date now = new Date()
         Date attemptDate = new Date(now.getTime() - message.attemptInterval)
-        boolean canAttempt = message.status == MessageStatus.ATTEMPTED && message.lastAttemptDate.before(attemptDate)
-        if (message.status == MessageStatus.CREATED || canAttempt) {
+        boolean canAttempt = message.hasAttemptedStatus() && message.lastAttemptDate.before(attemptDate)
+        if (message.hasCreatedStatus() || canAttempt) {
             message.lastAttemptDate = now
             message.attemptsCount++
 
@@ -90,7 +90,7 @@ class AsynchronousMailProcessService {
             }
 
             // Delete message if it is sent successfully and can be deleted
-            if (message.status == MessageStatus.SENT && message.markDelete) {
+            if (message.hasSentStatus() && message.markDelete) {
                 long id = message.id
                 asynchronousMailPersistenceService.delete(message);
                 log.trace("The message with id=${id} was deleted.")
