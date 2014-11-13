@@ -234,7 +234,7 @@ class AsynchronousMailMessageBuilder {
     }
 
     void body(Map params) {
-        Assert.notEmpty(params, "body cannot be null or empty")
+        Assert.notEmpty(params, "Body can't be null or empty.")
 
         def render = doRender(params)
 
@@ -270,25 +270,25 @@ class AsynchronousMailMessageBuilder {
     protected MailMessageContentRender doRender(Map params) {
         if (mailMessageContentRenderer == null) {
             throw new GrailsMailException(
-                    "mail message builder was constructed without a message content render so cannot render views"
+                    "Mail message builder was constructed without a message content renderer so views can't be rendered"
             )
         }
 
         if (!params.view) {
-            throw new GrailsMailException("no view specified")
+            throw new GrailsMailException("No view specified.")
         }
 
         return mailMessageContentRenderer.render(new StringWriter(), params.view, params.model, locale, params.plugin)
     }
 
     void locale(String localeStr) {
-        Assert.hasText(localeStr, "locale cannot be null or empty")
+        Assert.hasText(localeStr, "Locale can't be null or empty.")
 
         locale(new Locale(localeStr.split('_', 3).toArrayString()))
     }
 
     void locale(Locale locale) {
-        Assert.notNull(locale, "locale cannot be null")
+        Assert.notNull(locale, "Locale can't be null.")
 
         this.locale = locale
     }
@@ -323,7 +323,7 @@ class AsynchronousMailMessageBuilder {
 
     void attach(String fileName, String contentType, File file) {
         if (!file.exists()) {
-            throw new FileNotFoundException("cannot use $file as an attachment as it does not exist")
+            throw new FileNotFoundException("Can't use $file as an attachment as it does not exist.")
         }
 
         attach(fileName, contentType, new FileSystemResource(file))
@@ -363,7 +363,7 @@ class AsynchronousMailMessageBuilder {
 
     void inline(String contentId, String contentType, File file) {
         if (!file.exists()) {
-            throw new FileNotFoundException("cannot use $file as an attachment as it does not exist")
+            throw new FileNotFoundException("Can't use $file as an attachment as it does not exist.")
         }
 
         inline(contentId, contentType, new FileSystemResource(file))
@@ -380,19 +380,19 @@ class AsynchronousMailMessageBuilder {
 
     MailMessage finishMessage() {
         throw new UnsupportedOperationException(
-                "You are using Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using the Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
     MailMessage sendMessage(ExecutorService executorService) {
         throw new UnsupportedOperationException(
-                "You are using  Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using the Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
     MailSender getMailSender(){
         throw new UnsupportedOperationException(
-                "You are using  Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using the Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
