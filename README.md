@@ -1,29 +1,30 @@
-The Grails Asynchronous Mail plug-in
+The Grails Asynchronous Mail plugin
 ====================================
 
 Description
 -----------
 
-The Grails Asynchronous Mail is a plugin for asynchronous sending of email messages. It stores email messages in the DB
-using Grails domain classes and sends them by a scheduled job. It allows to react to user's actions faster. If the SMTP
-server isn't available in time then the plugin can sends message after, when the server will be available.
+Grails Asynchronous Mail is a plugin for sending email messages asynchronously. It persists email messages to the database
+with Grails domain classes and sends them by a scheduled Quartz job. Mail is sent on a different thread, with the
+`sendAsynchronousMail` (or `sendMail`) method returning instantly, not waiting for the mail to be actually sent. If the SMTP
+server isn't available, or other errors occur, the plugin can be set to retry later.
 
-The plugin depends on [quartz](http://www.grails.org/plugin/quartz) and [mail](http://www.grails.org/plugin/mail)
-plugins. You also need a persistence provider plugin. [hibernate](http://www.grails.org/plugin/hibernate),
+The plugin depends on the [quartz](http://www.grails.org/plugin/quartz) and [mail](http://www.grails.org/plugin/mail)
+plugins. You also need a persistence provider plugin: [hibernate](http://www.grails.org/plugin/hibernate),
 [hibernate4](http://www.grails.org/plugin/hibernate4) and [mongodb](http://www.grails.org/plugin/mongodb) are supported.
 
 Links
 -----
 
-The plugin main page: <http://grails.org/plugin/asynchronous-mail>  
-The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>  
-The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>  
+The plugin main page: <http://grails.org/plugin/asynchronous-mail> <br/>
+The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail> <br/>
+The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL> <br/>
 The page at OpenHUB: <https://www.openhub.net/p/grails-asynchronous-mail>
 
 Installation
 ------------
 
-For start to use the plugin just add a dependency in the `BuildConfig.groovy`.
+To install, add the plugin to the plugins block of `BuildConfig.groovy`:
 ```groovy
 compile ":asynchronous-mail:1.1"
 ```
@@ -38,29 +39,29 @@ Also see the sample application at <https://github.com/kefirfromperm/grails-asyn
 Contribution
 ------------
 
-If you want to contribute the plugin just open a pull request to the repository
+If you want to contribute to the plugin, open a pull request to the repository
 <https://github.com/kefirfromperm/grails-asynchronous-mail>.
 
-Unit tests are very very sweet things. They help us find bugs, modify code without new bugs. It's very interesting to
+Unit tests are very very sweet things. They help us find bugs, and modify code without adding new bugs. It's very interesting to
 see how they work. I like to see how they work. What is the better than unit tests? More unit tests!
 Unit tests are good!
 
-And comments... Comments are good also. They are not better than unit tests, but they are good, definitely. If you known
-Chinese or Arabic it is good. Seriously. It's awesome! But I don't known them. So write comments in English.
+And comments... Comments are good also. They are not better than unit tests, but they are definitely good. If you known
+Chinese or Arabic, that is good. Seriously. It's awesome! But I don't known them. So write comments in English.
 
 Logging
 -------
 
-For enable full plugin log add following lines to the configuration (`/grails-app/conf/Config.grovy`).
+To enable full logging for the plugin, add the following lines to `/grails-app/conf/Config.grovy`.
 ```groovy
 log4j = {
     ...
-    // Enable the Asynchronous Mail plugin logging
-    trace 'grails.app.jobs.grails.plugin.asyncmail', 
+    // Enable Asynchronous Mail plugin logging
+    trace 'grails.app.jobs.grails.plugin.asyncmail',
           'grails.app.services.grails.plugin.asyncmail',
           'grails.plugin.asyncmail'
 
-    // Enable the Quartz plugin logging
+    // Enable Quartz plugin logging
     debug 'grails.plugins.quartz'
     ...
 }
@@ -69,9 +70,9 @@ log4j = {
 Issue tracking
 --------------
 
-You can report about bugs on the [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) or
+You can report bugs on [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) or
 [GitHub](https://github.com/kefirfromperm/grails-asynchronous-mail/issues?state=open).
-You also can ask me by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
+You also can ask me questions by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
 Please, enable logs and attach them to your issue.
 
 Please, review this project on [OpenHUB](https://www.openhub.net/p/grails-asynchronous-mail).
