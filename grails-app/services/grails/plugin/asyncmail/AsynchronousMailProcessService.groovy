@@ -58,10 +58,8 @@ class AsynchronousMailProcessService {
 
         Date now = new Date()
         Date attemptDate = new Date(now.getTime() - message.attemptInterval)
-        if (
-        message.status == MessageStatus.CREATED
-                || (message.status == MessageStatus.ATTEMPTED && message.lastAttemptDate.before(attemptDate))
-        ) {
+        boolean canAttempt = message.status == MessageStatus.ATTEMPTED && message.lastAttemptDate.before(attemptDate)
+        if (message.status == MessageStatus.CREATED || canAttempt) {
             message.lastAttemptDate = now
             message.attemptsCount++
 
@@ -78,9 +76,9 @@ class AsynchronousMailProcessService {
                 log.trace("The message with id=${message.id} was sent successfully.")
             } catch (MailException e) {
                 log.warn("Attempt to send the message with id=${message.id} was failed.", e)
-                if (message.attemptsCount < message.maxAttemptsCount &&
-                        !(e instanceof MailParseException || e instanceof MailPreparationException)
-                ) {
+                canAttempt = message.attemptsCount < message.maxAttemptsCount
+                boolean isParseOrPrepException = e instanceof MailParseException || e instanceof MailPreparationException
+                if (canAttempt && !isParseOrPrepException) {
                     message.status = MessageStatus.ATTEMPTED
                 }
 
