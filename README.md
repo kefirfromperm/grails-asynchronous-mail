@@ -16,10 +16,10 @@ plugins. You also need a persistence provider plugin: [hibernate](http://www.gra
 Links
 -----
 
-The plugin main page: <http://grails.org/plugin/asynchronous-mail> <br/>
-The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail> <br/>
-The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL> <br/>
-The page at OpenHUB: <https://www.openhub.net/p/grails-asynchronous-mail>
+* The plugin main page: <http://grails.org/plugin/asynchronous-mail>
+* The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>
+* The issue tracker (Jira): <http://jira.grails.org/browse/GPASYNCHRONOUSMAIL>
+* The page at OpenHUB: <https://www.openhub.net/p/grails-asynchronous-mail>
 
 Installation
 ------------
