@@ -25,22 +25,22 @@ class AsynchronousMailProcessService {
             messagesIds.eachParallel { Long messageId ->
                 try {
                     persistenceInterceptor.init()
-                    log.debug('Open a new session.')
+                    log.debug('Open a new persistence session.')
                     try {
                         processEmailMessage(messageId)
                         try {
                             persistenceInterceptor.flush()
                             persistenceInterceptor.clear()
-                            log.debug('Flush the session.')
+                            log.debug('Flush the persistence session.')
                         } catch (Exception e) {
-                            log.error("Failed to flush the session.", e)
+                            log.error("Failed to flush the persistence session.", e)
                         }
                     } finally {
                         try {
                             persistenceInterceptor.destroy();
-                            log.debug('Destroy the session.')
+                            log.debug('Destroy the persistence session.')
                         } catch (Exception e) {
-                            log.error("Failed to finalize the session after message sent.", e);
+                            log.error("Failed to finalize the persistence session after message sent.", e);
                         }
                     }
                 } catch (Exception e) {
@@ -58,10 +58,8 @@ class AsynchronousMailProcessService {
 
         Date now = new Date()
         Date attemptDate = new Date(now.getTime() - message.attemptInterval)
-        if (
-        message.status == MessageStatus.CREATED
-                || (message.status == MessageStatus.ATTEMPTED && message.lastAttemptDate.before(attemptDate))
-        ) {
+        boolean canAttempt = message.hasAttemptedStatus() && message.lastAttemptDate.before(attemptDate)
+        if (message.hasCreatedStatus() || canAttempt) {
             message.lastAttemptDate = now
             message.attemptsCount++
 
@@ -78,9 +76,9 @@ class AsynchronousMailProcessService {
                 log.trace("The message with id=${message.id} was sent successfully.")
             } catch (MailException e) {
                 log.warn("Attempt to send the message with id=${message.id} was failed.", e)
-                if (message.attemptsCount < message.maxAttemptsCount &&
-                        !(e instanceof MailParseException || e instanceof MailPreparationException)
-                ) {
+                canAttempt = message.attemptsCount < message.maxAttemptsCount
+                boolean isParseOrPrepException = e instanceof MailParseException || e instanceof MailPreparationException
+                if (canAttempt && !isParseOrPrepException) {
                     message.status = MessageStatus.ATTEMPTED
                 }
 
@@ -92,7 +90,7 @@ class AsynchronousMailProcessService {
             }
 
             // Delete message if it is sent successfully and can be deleted
-            if (message.status == MessageStatus.SENT && message.markDelete) {
+            if (message.hasSentStatus() && message.markDelete) {
                 long id = message.id
                 asynchronousMailPersistenceService.delete(message);
                 log.trace("The message with id=${id} was deleted.")
