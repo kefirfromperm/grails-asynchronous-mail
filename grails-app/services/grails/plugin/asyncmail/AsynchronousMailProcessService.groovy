@@ -77,8 +77,8 @@ class AsynchronousMailProcessService {
             } catch (MailException e) {
                 log.warn("Attempt to send the message with id=${message.id} was failed.", e)
                 canAttempt = message.attemptsCount < message.maxAttemptsCount
-                boolean isParseOrPrepException = e instanceof MailParseException || e instanceof MailPreparationException
-                if (canAttempt && !isParseOrPrepException) {
+                boolean fatalException = e instanceof MailParseException || e instanceof MailPreparationException
+                if (canAttempt && !fatalException) {
                     message.status = MessageStatus.ATTEMPTED
                 }
 
