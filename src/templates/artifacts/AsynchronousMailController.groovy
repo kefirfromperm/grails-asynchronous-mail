@@ -66,7 +66,7 @@ class @artifact.name@ {
                     ]
             )
             message.attemptsCount = 0
-            if (!message.hasErrors() && message.save()) {
+            if (!message.hasErrors() && message.save(flush: true)) {
                 flash.message = "The message ${params.id} was updated."
                 redirect(action: 'show', id: message.id)
             } else {
@@ -82,7 +82,7 @@ class @artifact.name@ {
         withMessage {AsynchronousMailMessage message ->
             if (message.abortable) {
                 message.status = MessageStatus.ABORT
-                if (message.save()) {
+                if (message.save(flush: true)) {
                     flash.message = "The message ${message.id} was aborted."
                 } else {
                     flash.message = "Can't abort the message ${message.id}."
@@ -102,7 +102,7 @@ class @artifact.name@ {
     def delete() {
         withMessage {AsynchronousMailMessage message ->
             try {
-                message.delete()
+                message.delete(flush: true)
                 flash.message = "The message ${message.id} was deleted."
                 redirect(action: 'list')
             } catch (Exception e) {
