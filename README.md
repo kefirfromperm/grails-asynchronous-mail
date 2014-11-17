@@ -26,7 +26,7 @@ Installation
 
 To install, add the plugin to the plugins block of `BuildConfig.groovy`:
 ```groovy
-compile ":asynchronous-mail:1.1"
+compile ":asynchronous-mail:1.2-RC2"
 ```
 
 Documentation
@@ -75,4 +75,4 @@ You can report bugs on [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) 
 You also can ask me questions by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
 Please, enable logs and attach them to your issue.
 
-Please, review this project on [OpenHUB](https://www.openhub.net/p/grails-asynchronous-mail).
+Please, review this project at [OpenHUB](https://www.openhub.net/p/grails-asynchronous-mail).
