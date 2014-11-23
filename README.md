@@ -26,7 +26,7 @@ Installation
 
 To install, add the plugin to the plugins block of `BuildConfig.groovy`:
 ```groovy
-compile ":asynchronous-mail:1.2-RC2"
+compile ":asynchronous-mail:1.2"
 ```
 
 Documentation
