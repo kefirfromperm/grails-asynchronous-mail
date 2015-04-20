@@ -1,6 +1,9 @@
 # JetBrains IntelliJ IDEA files
 .idea/
 *.iml
+*.iws
+.gradle
+build/
 
 # Log files
 *.log
@@ -13,20 +16,13 @@
 target/
 target-eclipse/
 
-# Unused web-app files
-web-app/WEB-INF/
-web-app/images/
-web-app/js/
-web-app/css/errors.css
-web-app/css/main.css
-web-app/css/mobile.css
+.DS_Store
 
 docs/
 plugin.xml
 .settings
 
 # Unused grails files
-grails-app/i18n/
-grails-app/conf/UrlMappings.groovy
 .classpath
 .project
+test/reports

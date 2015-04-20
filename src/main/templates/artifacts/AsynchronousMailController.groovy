@@ -3,14 +3,14 @@ import grails.plugin.asyncmail.AsynchronousMailMessage
 import grails.plugin.asyncmail.MessageStatus
 
 class @artifact.name@ {
-    static defaultAction = 'list'
+    static defaultAction = 'index'
 
     static allowedMethods = [update: 'POST']
 
     /**
      * List messages.
      */
-    def list() {
+    def index() {
         params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
         params.sort = params.sort ?: 'createDate'
         params.order = params.order ?: 'desc'
@@ -25,7 +25,7 @@ class @artifact.name@ {
 
         flash.message = "The message ${params.id} was not found."
         flash.error = true
-        redirect(action: 'list')
+        redirect(action: 'index')
     }
 
     /**
@@ -92,7 +92,7 @@ class @artifact.name@ {
                 flash.message = "Can't abort the message ${message.id} with the status ${message.status}."
                 flash.error = true
             }
-            redirect(action: 'list')
+            redirect(action: 'index')
         }
     }
 
@@ -104,7 +104,7 @@ class @artifact.name@ {
             try {
                 message.delete(flush: true)
                 flash.message = "The message ${message.id} was deleted."
-                redirect(action: 'list')
+                redirect(action: 'index')
             } catch (Exception e) {
                 def errorMessage = "Can't delete the message with the id ${message.id}.";
                 log.error(errorMessage, e)

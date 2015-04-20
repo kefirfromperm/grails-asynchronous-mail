@@ -1,15 +1,16 @@
 package grails.plugin.asyncmail
 
+import grails.core.GrailsApplication
+import org.springframework.mail.javamail.JavaMailSender
+
 import javax.activation.FileTypeMap
 import javax.activation.MimetypesFileTypeMap
-
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.springframework.mail.javamail.JavaMailSender
 
 /**
  * Create a message builder.
  *
  * @author Vitalii Samolovskikh aka Kefir
+ * @coauthor Puneet Behl
  */
 class AsynchronousMailMessageBuilderFactory {
     def mailMessageContentRenderer

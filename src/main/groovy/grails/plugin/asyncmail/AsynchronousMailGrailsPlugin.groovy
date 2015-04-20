@@ -1,52 +1,49 @@
-import grails.plugin.asyncmail.AsynchronousMailJob
-import grails.plugin.asyncmail.AsynchronousMailMessageBuilderFactory
-import grails.plugin.asyncmail.ExpiredMessagesCollectorJob
+package grails.plugin.asyncmail
+
 import grails.plugin.mail.MailService
-import grails.plugins.quartz.*
-import grails.util.Environment
-import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
+import grails.plugins.quartz.JobDescriptor
+import grails.plugins.quartz.JobManagerService
+import grails.plugins.quartz.TriggerDescriptor
+import groovy.util.logging.Commons
 import org.quartz.Scheduler
 import org.quartz.TriggerKey
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.springframework.context.ApplicationContext
 
+@Commons
 class AsynchronousMailGrailsPlugin {
     def version = "1.2"
     def grailsVersion = "2.3.1 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
     def pluginExcludes = [
-            "grails-app/conf/DataSource.groovy",
-            "grails-app/i18n/**",
+            "grails-app/views/error.gsp",
             "grails-app/views/test/**",
-            "web-app/WEB-INF/**",
-            "web-app/images/**",
-            "web-app/js/**",
-            "web-app/css/errors.css",
-            "web-app/css/main.css",
-            "web-app/css/mobile.css"
+            "src/webapp/WEB-INF/**",
+            "grails-app/i18n/**",
+            "grails-app/assets/images",
+            "grails-app/assets/javascripts"
     ]
 
-    def author = "Vitalii Samolovskikh aka Kefir"
-    def authorEmail = "kefirfromperm@gmail.com"
+    def author = "Puneet Behl"
+    def authorEmail = "puneet.behl007@gmail.com"
     def title = "Asynchronous Mail Plugin"
     def description = 'The plugin realises asynchronous mail sending. ' +
             'It stores messages in the DB and sends them asynchronously by the quartz job.'
     def documentation = "http://www.grails.org/plugin/asynchronous-mail"
 
     String license = 'APACHE'
+
+    def organization = [ name: "Intelligrape Softwares", url: "http://www.intelligrape.com" ]
+    def developers = [ [ name: "Puneet Behl", email: "puneet.behl007@gmail.com" ],
+                       [name: 'Vitalii Samolovskikh aka Kefir', email: 'kefirfromperm@gmail.com']]
     def issueManagement = [system: 'JIRA', url: 'http://jira.grails.org/browse/GPASYNCHRONOUSMAIL']
     def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
 
-    // The logger for the plugin class
-    private Logger log = LoggerFactory.getLogger('grails.plugin.asyncmail.AsynchronousMailJob')
-
-    def doWithSpring = {
-        loadAsyncMailConfig(application.config)
+    Closure doWithSpring = {
 
         // The mail service from Mail plugin
         nonAsynchronousMailService(MailService) {
             mailMessageBuilderFactory = ref("mailMessageBuilderFactory")
-            grailsApplication = ref("grailsApplication")
+            grailsApplication = grailsApplication
         }
 
         asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
@@ -54,20 +51,24 @@ class AsynchronousMailGrailsPlugin {
         }
     }
 
-    def doWithApplicationContext = { GrailsApplicationContext applicationContext ->
-        // Register alias for the asynchronousMailService
-        applicationContext.registerAlias('asynchronousMailService', 'asyncMailService')
-
-        // Configure sendMail methods
-        configureSendMail(application, applicationContext)
-
-        // Starts jobs
-        startJobs(application, applicationContext)
+    void doWithDynamicMethods() {
+        // TODO Implement registering dynamic methods to classes (optional)
     }
 
-    def onChange = { event ->
+
+    def doWithApplicationContext() {
         // Configure sendMail methods
-        configureSendMail(application, (GrailsApplicationContext) event.ctx)
+        configureSendMail(grailsApplication, applicationContext)
+
+        // Starts jobs
+        startJobs(grailsApplication, applicationContext)
+    }
+
+    void onChange(Map<String, Object> event) {
+        // watching is modified and reloaded. The event contains: event.source,
+        // event.application, event.manager, event.ctx, and event.plugin.
+        // Configure sendMail methods
+        configureSendMail(grailsApplication, (ApplicationContext) event.ctx)
     }
 
     /**
@@ -119,7 +120,7 @@ class AsynchronousMailGrailsPlugin {
     /**
      * Configure sendMail methods
      */
-    static configureSendMail(application, GrailsApplicationContext applicationContext){
+    static configureSendMail(application, ApplicationContext applicationContext){
         def asyncMailConfig = application.config.asynchronous.mail
 
         // Override the mailService
@@ -131,37 +132,6 @@ class AsynchronousMailGrailsPlugin {
             applicationContext.asynchronousMailService.metaClass*.sendMail = { Closure callable ->
                 applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
             }
-        }
-    }
-
-    /**
-     * Loads the asynchronous mail configuration.
-     *
-     * 1. Loads the grails configuration.
-     * 2. Merges it with the default asynchronous mail configuration.
-     * 3. Merges it with the user asynchronous mail configuration.
-     *
-     * http://swestfall.blogspot.co.uk/2011/08/grails-plugins-and-default-configs.html
-     */
-    private void loadAsyncMailConfig(def config) {
-        GroovyClassLoader classLoader = new GroovyClassLoader(getClass().classLoader)
-        // merging default config into main application config
-        ConfigObject currentAsyncConfig = config.asynchronous.mail
-        ConfigObject defaultAsyncConfig = new ConfigSlurper(Environment.current.name)
-                .parse(classLoader.loadClass('DefaultAsynchronousMailConfig'))
-
-        ConfigObject newAsyncConfig = new ConfigObject()
-        newAsyncConfig.putAll( defaultAsyncConfig.asynchronous.mail.merge(currentAsyncConfig))
-
-        config.asynchronous.mail = newAsyncConfig
-
-        // merging user-defined config into main application config if provided
-        try {
-            config.merge(new ConfigSlurper(Environment.current.name).parse(
-                    classLoader.loadClass('AsynchronousMailConfig'))
-            )
-        } catch (Exception ignored) {
-            // ignore, just use the defaults
         }
     }
 }
