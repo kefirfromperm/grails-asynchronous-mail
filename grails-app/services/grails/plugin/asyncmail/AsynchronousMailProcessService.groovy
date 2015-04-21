@@ -1,8 +1,11 @@
 package grails.plugin.asyncmail
 
-import org.codehaus.groovy.grails.support.PersistenceContextInterceptor
-import org.springframework.mail.*
+import grails.persistence.support.PersistenceContextInterceptor
 import groovyx.gpars.GParsPool
+import org.springframework.mail.MailAuthenticationException
+import org.springframework.mail.MailException
+import org.springframework.mail.MailParseException
+import org.springframework.mail.MailPreparationException
 
 class AsynchronousMailProcessService {
     static transactional = false
