@@ -1,11 +1,12 @@
 package grails.plugin.asyncmail
 
 import org.junit.Assert
+import spock.lang.Specification
 
 /**
  * Test for persistence service.
  */
-class AsynchronousMailPersistenceServiceTests extends GroovyTestCase {
+class AsynchronousMailPersistenceServiceTests extends Specification {
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
 
     void testCycle() {

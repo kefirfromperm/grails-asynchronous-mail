@@ -1,11 +1,13 @@
 package grails.plugin.asyncmail
 
+import spock.lang.Specification
+
 /**
  * Tests for service.
  *
  * @author Vitalii Samolovskikh aka Kefir
  */
-class AsynchronousMailTests extends GroovyTestCase {
+class AsynchronousMailTests extends Specification {
     public static final String VALUE_MAIL = 'test@example.com'
 
     AsynchronousMailService asynchronousMailService;

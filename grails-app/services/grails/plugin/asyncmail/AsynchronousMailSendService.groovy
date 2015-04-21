@@ -1,6 +1,6 @@
 package grails.plugin.asyncmail
 
-import grails.plugin.mail.MailService
+import grails.plugins.mail.MailService
 import org.springframework.mail.MailMessage
 
 class AsynchronousMailSendService {

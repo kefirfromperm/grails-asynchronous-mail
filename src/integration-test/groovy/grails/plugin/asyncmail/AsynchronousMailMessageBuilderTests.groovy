@@ -1,20 +1,19 @@
 package grails.plugin.asyncmail
 
-import grails.test.GrailsUnitTestCase
-
+import grails.test.mixin.TestMixin
+import grails.test.mixin.web.ControllerUnitTestMixin
+import spock.lang.Specification
 /**
  * Unit tests for AsynchronousMailMessageBuilder
  */
-class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
+@TestMixin(ControllerUnitTestMixin)
+class AsynchronousMailMessageBuilderTests extends Specification {
 
     static transactional = false
 
     AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory
 
-    @Override
-    protected void setUp() {
-        super.setUp()
-
+    void setup() {
         // Apply constraints for message objects
         mockForConstraintsTests(AsynchronousMailMessage)
 
