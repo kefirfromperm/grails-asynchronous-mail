@@ -2,7 +2,6 @@ package grails.plugin.asyncmail
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.enums.MessageStatus.EXPIRED
@@ -16,7 +15,6 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
     @Autowired
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
 
-    @IgnoreRest
     void testCycle() {
         when: 'a message is instantiated and saved'
         AsynchronousMailMessage message = new AsynchronousMailMessage(

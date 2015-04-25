@@ -1,8 +1,6 @@
 package grails.plugin.asyncmail
-
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
-import org.junit.Ignore
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
@@ -19,7 +17,6 @@ class AsynchronousMailServiceSpec extends Specification {
     @Autowired
     AsynchronousMailService asynchronousMailService
 
-    @Ignore
     void testSendAsynchronousMail(){
         when:
         asynchronousMailService.sendMail {
