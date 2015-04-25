@@ -1,5 +1,6 @@
 package grails.plugin.asyncmail
 
+import grails.plugins.Plugin
 import grails.plugins.mail.MailService
 import grails.plugins.quartz.JobDescriptor
 import grails.plugins.quartz.JobManagerService
@@ -10,7 +11,7 @@ import org.quartz.TriggerKey
 import org.springframework.context.ApplicationContext
 
 @Commons
-class AsynchronousMailGrailsPlugin {
+class AsynchronousMailGrailsPlugin extends Plugin {
     def version = "2.0.0-SNAPSHOT"
     def grailsVersion = "3.0.1 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
@@ -38,16 +39,17 @@ class AsynchronousMailGrailsPlugin {
     def issueManagement = [system: 'JIRA', url: 'http://jira.grails.org/browse/GPASYNCHRONOUSMAIL']
     def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
 
-    Closure doWithSpring = {
+    Closure doWithSpring() { { ->
 
-        // The mail service from Mail plugin
-        nonAsynchronousMailService(MailService) {
-            mailMessageBuilderFactory = ref("mailMessageBuilderFactory")
-            grailsApplication = grailsApplication
-        }
+            // The mail service from Mail plugin
+            nonAsynchronousMailService(MailService) {
+                mailMessageBuilderFactory = ref("mailMessageBuilderFactory")
+                grailsApplication = grailsApplication
+            }
 
-        asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
-            it.autowire = true
+            asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
+                it.autowire = true
+            }
         }
     }
 
@@ -56,7 +58,7 @@ class AsynchronousMailGrailsPlugin {
     }
 
 
-    def doWithApplicationContext() {
+    void doWithApplicationContext() {
         // Configure sendMail methods
         configureSendMail(grailsApplication, applicationContext)
 
@@ -70,6 +72,16 @@ class AsynchronousMailGrailsPlugin {
         // Configure sendMail methods
         configureSendMail(grailsApplication, (ApplicationContext) event.ctx)
     }
+
+    void onConfigChange(Map<String, Object> event) {
+        // TODO Implement code that is executed when the project configuration changes.
+        // The event is the same as for 'onChange'.
+    }
+
+    void onShutdown(Map<String, Object> event) {
+        // TODO Implement code that is executed when the application shuts down (optional)
+    }
+
 
     /**
      * Start the send job and the messages collector.
