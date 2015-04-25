@@ -2,7 +2,7 @@ package grails.plugin.asyncmail
 import grails.plugins.mail.MailMessageBuilder
 import spock.lang.Specification
 /**
- * @author Puneet Behl
+ * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
 class CompareMessageBuilderSpec extends Specification {
 

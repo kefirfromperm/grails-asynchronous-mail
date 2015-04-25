@@ -6,7 +6,7 @@ import spock.lang.Specification
 import static grails.plugin.asyncmail.AsynchronousMailAttachment.DEFAULT_MIME_TYPE
 
 /**
- * @author Puneet Behl
+ * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
 @TestFor(AsynchronousMailAttachment)
 class AsynchronousMailAttachmentSpec extends Specification {

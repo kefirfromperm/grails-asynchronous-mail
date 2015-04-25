@@ -1,6 +1,7 @@
 package grails.plugin.asyncmail
 
 import grails.persistence.support.PersistenceContextInterceptor
+import grails.plugin.asyncmail.enums.MessageStatus
 import groovyx.gpars.GParsPool
 import org.springframework.mail.MailAuthenticationException
 import org.springframework.mail.MailException

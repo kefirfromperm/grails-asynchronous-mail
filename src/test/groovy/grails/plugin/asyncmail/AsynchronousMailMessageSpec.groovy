@@ -3,9 +3,9 @@ import grails.test.mixin.TestFor
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static grails.plugin.asyncmail.MessageStatus.*
+import static grails.plugin.asyncmail.enums.MessageStatus.*
 /**
- * @author Puneet Behl
+ * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
 @TestFor(AsynchronousMailMessage)
 class AsynchronousMailMessageSpec extends Specification {

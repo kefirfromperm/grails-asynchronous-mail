@@ -3,7 +3,7 @@ import spock.lang.Specification
 
 import static grails.plugin.asyncmail.Validator.isMailbox
 /**
- * @author Puneet Behl
+ * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
 class ValidatorSpec extends Specification {
 

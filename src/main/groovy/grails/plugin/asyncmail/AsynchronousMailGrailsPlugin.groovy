@@ -1,6 +1,6 @@
 package grails.plugin.asyncmail
 
-import grails.plugin.mail.MailService
+import grails.plugins.mail.MailService
 import grails.plugins.quartz.JobDescriptor
 import grails.plugins.quartz.JobManagerService
 import grails.plugins.quartz.TriggerDescriptor
@@ -11,8 +11,8 @@ import org.springframework.context.ApplicationContext
 
 @Commons
 class AsynchronousMailGrailsPlugin {
-    def version = "1.2"
-    def grailsVersion = "2.3.1 > *"
+    def version = "2.0.0-SNAPSHOT"
+    def grailsVersion = "3.0.1 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
     def pluginExcludes = [
             "grails-app/views/error.gsp",

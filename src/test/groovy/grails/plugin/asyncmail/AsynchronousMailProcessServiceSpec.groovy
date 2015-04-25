@@ -2,9 +2,9 @@ package grails.plugin.asyncmail
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
-import static grails.plugin.asyncmail.MessageStatus.SENT
+import static grails.plugin.asyncmail.enums.MessageStatus.SENT
 /**
- * @author Puneet Behl
+ * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
 @TestFor(AsynchronousMailProcessService)
 class AsynchronousMailProcessServiceSpec extends Specification {

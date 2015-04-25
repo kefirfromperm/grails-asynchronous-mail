@@ -1,4 +1,4 @@
-<%@ page import="grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.AsynchronousMailMessage" %>
+<%@ page import="grails.plugin.asyncmail.enums.MessageStatus; grails.plugin.asyncmail.enums.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.enums.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.AsynchronousMailMessage" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -40,7 +40,7 @@
                 <td class="fieldName">Status:</td>
                 <td>
                     <g:select
-                            from="${[MessageStatus.CREATED, MessageStatus.ABORT]}"
+                            from="${[grails.plugin.asyncmail.enums.MessageStatus.CREATED, grails.plugin.asyncmail.enums.MessageStatus.ABORT]}"
                             value="${message.status}" name="status"/>
                 </td>
             </tr>
