@@ -1,4 +1,5 @@
 package grails.plugin.asyncmail
+import grails.plugin.asyncmail.enums.MessageStatus
 
 class AsynchronousMailPersistenceService {
 

@@ -1,8 +1,9 @@
 package grails.plugin.asyncmail
 
+import grails.plugin.asyncmail.enums.MessageStatus
 import groovy.transform.ToString
-import org.apache.commons.lang.StringUtils
-import static grails.plugin.asyncmail.MessageStatus.*
+
+import static grails.plugin.asyncmail.enums.MessageStatus.*
 
 @ToString(includeNames = true, includeFields = true,  includes = 'id,subject,to,status')
 class AsynchronousMailMessage implements Serializable {
@@ -236,8 +237,4 @@ class AsynchronousMailMessage implements Serializable {
         attemptInterval(min: 0l)
     }
 
-}
-
-enum MessageStatus {
-    CREATED, ATTEMPTED, SENT, ERROR, EXPIRED, ABORT
 }
