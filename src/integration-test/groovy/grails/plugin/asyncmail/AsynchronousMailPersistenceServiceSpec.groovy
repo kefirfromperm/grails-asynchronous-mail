@@ -23,17 +23,17 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
                 subject: 'Subject',
                 text: 'Text'
         )
-        message.save flush
-//        asynchronousMailPersistenceService.save(message, true)
+        //message.save flush
+        asynchronousMailPersistenceService.save(message, true)
 
         then: 'selectMessagesIdsForSend should return list with 1 messageId'
         1 == AsynchronousMailMessage.count()
 
-       /* when: 'deleted the message'
+        when: 'deleted the message'
         asynchronousMailPersistenceService.delete(message)
 
         then: 'message to be send count should be 0'
-        0 == asynchronousMailPe*/rsistenceService.selectMessagesIdsForSend()?.size()
+        0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
     }
 
     void testSaveSimpleMessage(){
