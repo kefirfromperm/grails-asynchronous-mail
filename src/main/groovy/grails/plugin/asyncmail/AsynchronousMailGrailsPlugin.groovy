@@ -59,17 +59,17 @@ class AsynchronousMailGrailsPlugin extends Plugin {
 
     void doWithApplicationContext() {
         // Configure sendMail methods
-        configureSendMail(grailsApplication, applicationContext)
+        configureSendMail(applicationContext)
 
         // Starts jobs
-        startJobs(grailsApplication, applicationContext)
+        startJobs(applicationContext)
     }
 
     void onChange(Map<String, Object> event) {
         // watching is modified and reloaded. The event contains: event.source,
         // event.application, event.manager, event.ctx, and event.plugin.
         // Configure sendMail methods
-        configureSendMail(grailsApplication, (ApplicationContext) event.ctx)
+        configureSendMail((ApplicationContext) event.ctx)
     }
 
     void onConfigChange(Map<String, Object> event) {
@@ -87,8 +87,8 @@ class AsynchronousMailGrailsPlugin extends Plugin {
      *
      * If the plugin is used in cluster we have to remove old triggers.
      */
-    def startJobs(application, applicationContext) {
-        def asyncMailConfig = application.config.asynchronous.mail
+    def startJobs(applicationContext) {
+        def asyncMailConfig = grailsApplication.config.asynchronous.mail
         if (!asyncMailConfig.disable) {
             JobManagerService jobManagerService = applicationContext.jobManagerService
             Scheduler quartzScheduler = applicationContext.quartzScheduler
@@ -131,8 +131,8 @@ class AsynchronousMailGrailsPlugin extends Plugin {
     /**
      * Configure sendMail methods
      */
-    static configureSendMail(application, ApplicationContext applicationContext){
-        def asyncMailConfig = application.config.asynchronous.mail
+    def configureSendMail(ApplicationContext applicationContext){
+        def asyncMailConfig = grailsApplication.config.asynchronous.mail
 
         // Override the mailService
         if (asyncMailConfig.override) {
