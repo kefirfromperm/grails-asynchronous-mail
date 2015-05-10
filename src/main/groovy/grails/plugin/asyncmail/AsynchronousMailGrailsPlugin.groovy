@@ -15,17 +15,9 @@ class AsynchronousMailGrailsPlugin extends Plugin {
     def version = "2.0.0-SNAPSHOT"
     def grailsVersion = "3.0.1 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
-    def pluginExcludes = [
-            "grails-app/views/error.gsp",
-            "grails-app/views/test/**",
-            "src/webapp/WEB-INF/**",
-            "grails-app/i18n/**",
-            "grails-app/assets/images",
-            "grails-app/assets/javascripts"
-    ]
 
-    def author = "Puneet Behl"
-    def authorEmail = "puneet.behl007@gmail.com"
+    def author = "Vitalii Samolovskikh"
+    def authorEmail = "kefirfromperm@gmail.com"
     def title = "Asynchronous Mail Plugin"
     def description = 'The plugin realises asynchronous mail sending. ' +
             'It stores messages in the DB and sends them asynchronously by the quartz job.'
@@ -33,10 +25,17 @@ class AsynchronousMailGrailsPlugin extends Plugin {
 
     String license = 'APACHE'
 
-    def organization = [ name: "Intelligrape Softwares", url: "http://www.intelligrape.com" ]
-    def developers = [ [ name: "Puneet Behl", email: "puneet.behl007@gmail.com" ],
-                       [name: 'Vitalii Samolovskikh aka Kefir', email: 'kefirfromperm@gmail.com']]
-    def issueManagement = [system: 'JIRA', url: 'http://jira.grails.org/browse/GPASYNCHRONOUSMAIL']
+    def developers = [
+            [name: 'Vitalii Samolovskikh', email: 'kefirfromperm@gmail.com'],
+            [ name: "Puneet Behl", email: "puneet.behl007@gmail.com" ],
+            [name: 'Sergey Ponomarev', email: 'stokito@gmail.com'],
+            [name: 'Danny Casady'],
+            [name: 'Shashank Agrawal'],
+            [name: 'Iván López', email:'lopez.ivan@gmail.com'],
+            [name: 'Alessandro Berbenni'],
+            [name: 'Burt Beckwith', email:'burt@burtbeckwith.com']
+    ]
+    def issueManagement = [system: 'GitHub', url: 'https://github.com/kefirfromperm/grails-asynchronous-mail/issues']
     def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
 
     Closure doWithSpring() { { ->
