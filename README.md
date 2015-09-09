@@ -46,8 +46,9 @@ Unit tests are very very sweet things. They help us find bugs, and modify code w
 see how they work. I like to see how they work. What is the better than unit tests? More unit tests!
 Unit tests are good!
 
-And comments... Comments are good also. They are not better than unit tests, but they are definitely good. If you known
-Chinese or Arabic, that is good. Seriously. It's awesome! But I don't known them. So write comments in English.
+And comments... Comments are good also. They are not better than unit tests, but they are definitely good. If you known Chinese or Arabic, that is good. Seriously. It's awesome! But I don't known them. So write comments in English.
+
+If you want to give me a beer just send some money to <https://www.paypal.me/kefir>
 
 Logging
 -------
