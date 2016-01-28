@@ -1,5 +1,5 @@
 grails {
-    profile = 'plugin'
+    profile = 'web-plugin'
     codegen {
         defaultPackage = 'grails.plugin.asyncmail'
     }
@@ -31,21 +31,18 @@ asynchronous.mail.persistence.provider='hibernate4'      // Possible values are 
 asynchronous.mail.gparsPoolSize=1
 asynchronous.mail.newSessionOnImmediateSend=false
 
-dataSource {
-    pooled = true
-    jmxExport = true
-    driverClassName = 'org.h2.Driver'
-    username = 'sa'
-    password = ''
-}
-
 environments {
     test {
         dataSource {
+            pooled = true
+            jmxExport = true
+            driverClassName = 'org.h2.Driver'
+            username = 'sa'
+            password = ''
             dbCreate = 'update'
             url = 'jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE'
         }
+        quartz.jdbcStore = false
     }
 }
 
-quartz.jdbcStore = false
