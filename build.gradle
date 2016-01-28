@@ -65,8 +65,8 @@ dependencies {
     testCompile "org.grails.plugins:hibernate"
 
     compile "org.codehaus.gpars:gpars:1.2.1"
-    compile "org.grails.plugins:mail:2.0.0.RC1"
-    compile "org.grails.plugins:quartz:2.0.0.M4"
+    compile "org.grails.plugins:mail:2.0.0.RC4"
+    compile "org.grails.plugins:quartz:2.0.5"
 
     console "org.grails:grails-console"
 }
