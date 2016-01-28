@@ -12,8 +12,8 @@ buildscript {
 }
 
 plugins {
-    id "io.spring.dependency-management" version "0.4.0.RELEASE"
-    id "com.jfrog.bintray" version "1.1"
+    id "io.spring.dependency-management" version "0.5.2.RELEASE"
+    id "com.jfrog.bintray" version "1.2"
 }
 
 version "2.0.0-SNAPSHOT"
@@ -62,13 +62,14 @@ dependencies {
     provided 'javax.servlet:javax.servlet-api:3.1.0'
 
     testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails.plugins:hibernate"
+    testCompile "org.grails.plugins:hibernate4"
 
     compile "org.codehaus.gpars:gpars:1.2.1"
     compile "org.grails.plugins:mail:2.0.0.RC4"
     compile "org.grails.plugins:quartz:2.0.5"
 
     console "org.grails:grails-console"
+    profile "org.grails.profiles:web:3.1.0"
 }
 
 task wrapper(type: Wrapper) {

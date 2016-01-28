@@ -27,7 +27,7 @@ asynchronous.mail.override=false
 asynchronous.mail.clear.after.sent=false
 asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
-asynchronous.mail.persistence.provider='hibernate'      // Possible values are 'hibernate', 'hibernate4', 'mongodb'
+asynchronous.mail.persistence.provider='hibernate4'      // Possible values are 'hibernate', 'hibernate4', 'mongodb'
 asynchronous.mail.gparsPoolSize=1
 asynchronous.mail.newSessionOnImmediateSend=false
 
@@ -47,3 +47,5 @@ environments {
         }
     }
 }
+
+quartz.jdbcStore = false
