@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext
 
 @Commons
 class AsynchronousMailGrailsPlugin extends Plugin {
-    def version = "2.0.0-SNAPSHOT"
+    def version = "2.0.0.RC1"
     def grailsVersion = "3.0.1 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
 
@@ -27,7 +27,7 @@ class AsynchronousMailGrailsPlugin extends Plugin {
 
     def developers = [
             [name: 'Vitalii Samolovskikh', email: 'kefirfromperm@gmail.com'],
-            [ name: "Puneet Behl", email: "puneet.behl007@gmail.com" ],
+            [name: "Puneet Behl", email: "puneet.behl007@gmail.com" ],
             [name: 'Sergey Ponomarev', email: 'stokito@gmail.com'],
             [name: 'Danny Casady'],
             [name: 'Shashank Agrawal'],
