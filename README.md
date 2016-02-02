@@ -48,8 +48,6 @@ Unit tests are good!
 
 And comments... Comments are good also. They are not better than unit tests, but they are definitely good. If you known Chinese or Arabic, that is good. Seriously. It's awesome! But I don't known them. So write comments in English.
 
-If you want to give me a beer just send some money to <https://www.paypal.me/kefir>
-
 Logging
 -------
 
@@ -71,9 +69,13 @@ log4j = {
 Issue tracking
 --------------
 
-You can report bugs on [JIRA](http://jira.grails.org/browse/GPASYNCHRONOUSMAIL) or
-[GitHub](https://github.com/kefirfromperm/grails-asynchronous-mail/issues?state=open).
+You can report bugs on [GitHub](https://github.com/kefirfromperm/grails-asynchronous-mail/issues?state=open).
 You also can ask me questions by email [kefirfromperm@gmail.com](mailto:kefirfromperm@gmail.com).
 Please, enable logs and attach them to your issue.
 
 Please, review this project at [OpenHUB](https://www.openhub.net/p/grails-asynchronous-mail).
+
+Donation
+--------
+
+If you want to give me a beer just send some money to <https://www.paypal.me/kefir>
