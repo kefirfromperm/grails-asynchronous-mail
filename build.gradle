@@ -54,7 +54,6 @@ dependencies {
 
     testCompile "org.grails.plugins:hibernate4"
 
-    compile "org.codehaus.gpars:gpars:1.2.1"
     compile "org.grails.plugins:mail:2.0.0.RC4"
     compile "org.grails.plugins:quartz:2.0.5"
 }
