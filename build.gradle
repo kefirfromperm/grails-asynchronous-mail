@@ -73,5 +73,16 @@ grailsPublish {
     vcsUrl = 'https://github.com/kefirfromperm/grails-asynchronous-mail.git'
     title = "Grails Asynchronous Mail plugin"
     desc = "The plugin realises asynchronous mail sending. It stores messages in a DB and sends them asynchronously by a quartz job."
-    developers = [kefirfromperm:"Vitalii Samolovskikh"]
+    developers = [
+            kefirfromperm:"Vitalii Samolovskikh",
+            stokito:"Sergey Ponomarev",
+            ilopmar:"Iván López",
+            burtbeckwith:"Burt Beckwith",
+            puneetbehl:"Puneet Behl",
+            aberbenni:"Alessandro Berbenni",
+            dpcasady:"Danny Casady",
+            SAgrawal14:"Shashank Agrawal",
+            visheshd:"Vishesh",
+            'micke-a':"Mikael Andersson"
+    ]
 }
