@@ -222,10 +222,10 @@ class AsynchronousMailMessage implements Serializable {
         text(blank: false)
 
         // Status fields
-        status()
-        createDate()
+        //status()
+        //createDate()
         sentDate(nullable: true)
-        beginDate()
+        //beginDate()
         endDate(validator: { Date val, AsynchronousMailMessage mess ->
             val && mess.beginDate && val.after(mess.beginDate)
         })
