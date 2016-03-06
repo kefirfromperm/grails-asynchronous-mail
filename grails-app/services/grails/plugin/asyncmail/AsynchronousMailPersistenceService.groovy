@@ -1,9 +1,12 @@
 package grails.plugin.asyncmail
+
+import grails.config.Config
+import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
 
-class AsynchronousMailPersistenceService {
+class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
 
-    def grailsApplication
+    Config configuration
 
     private AsynchronousMailMessage save(AsynchronousMailMessage message, boolean flush = false) {
         return message.save(flush: flush)
@@ -18,7 +21,7 @@ class AsynchronousMailPersistenceService {
     }
 
     List<Long> selectMessagesIdsForSend() {
-        boolean useMongo = (grailsApplication.config.asynchronous.mail.persistence.provider == 'mongodb')
+        boolean useMongo = (configuration.asynchronous.mail.persistence.provider == 'mongodb')
 
         return AsynchronousMailMessage.withCriteria {
             Date now = new Date()
@@ -32,7 +35,7 @@ class AsynchronousMailPersistenceService {
             order('endDate', 'asc')
             order('attemptsCount', 'asc')
             order('beginDate', 'asc')
-            maxResults((int) grailsApplication.config.asynchronous.mail.messages.at.once)
+            maxResults((int) configuration.asynchronous.mail.messages.at.once)
             projections {
                 if (useMongo) {
                     id()
@@ -45,7 +48,7 @@ class AsynchronousMailPersistenceService {
 
     void updateExpiredMessages(){
         int count = 0
-        boolean useMongo = (grailsApplication.config.asynchronous.mail.persistence.provider == 'mongodb')
+        boolean useMongo = (configuration.asynchronous.mail.persistence.provider == 'mongodb')
 
         if (useMongo) {
             AsynchronousMailMessage.withCriteria {

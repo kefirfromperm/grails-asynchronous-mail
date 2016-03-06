@@ -1,9 +1,9 @@
 package grails.plugin.asyncmail
 
+import grails.config.Config
 import grails.plugins.mail.GrailsMailException
 import grails.plugins.mail.MailMessageContentRender
 import grails.plugins.mail.MailMessageContentRenderer
-import org.grails.config.PropertySourcesConfig
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.InputStreamSource
 import org.springframework.mail.MailMessage
@@ -34,21 +34,7 @@ class AsynchronousMailMessageBuilder {
 
     AsynchronousMailMessageBuilder(
             boolean mimeCapable,
-            ConfigObject config,
-            FileTypeMap fileTypeMap,
-            MailMessageContentRenderer mailMessageContentRenderer = null
-    ) {
-        this.mimeCapable = mimeCapable;
-        this.overrideAddress = config.overrideAddress ?: null
-        this.defaultFrom = overrideAddress ?: (config.default.from ?: null)
-        this.defaultTo = overrideAddress ?: (config.default.to ?: null)
-        this.fileTypeMap = fileTypeMap;
-        this.mailMessageContentRenderer = mailMessageContentRenderer;
-    }
-
-    AsynchronousMailMessageBuilder(
-            Boolean mimeCapable,
-            PropertySourcesConfig config,
+            Config config,
             FileTypeMap fileTypeMap,
             MailMessageContentRenderer mailMessageContentRenderer = null
     ) {

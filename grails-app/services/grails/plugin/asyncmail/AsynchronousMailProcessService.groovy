@@ -1,6 +1,7 @@
 package grails.plugin.asyncmail
 
-import grails.persistence.support.PersistenceContextInterceptor
+import grails.config.Config
+import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
 import org.springframework.mail.MailAuthenticationException
 import org.springframework.mail.MailException
@@ -9,11 +10,10 @@ import org.springframework.mail.MailPreparationException
 
 import static grails.async.Promises.task
 
-class AsynchronousMailProcessService {
+class AsynchronousMailProcessService implements GrailsConfigurationAware {
     static transactional = false
 
-    def grailsApplication
-    PersistenceContextInterceptor persistenceInterceptor
+    Config configuration
 
     def asynchronousMailPersistenceService
     def asynchronousMailSendService
@@ -37,7 +37,7 @@ class AsynchronousMailProcessService {
     }
 
     void processEmailMessage(long messageId) {
-        boolean useFlushOnSave = grailsApplication.config.asynchronous.mail.useFlushOnSave
+        boolean useFlushOnSave = configuration.asynchronous.mail.useFlushOnSave
 
         def message = asynchronousMailPersistenceService.getMessage(messageId)
         log.trace("Found a message: " + message.toString())

@@ -20,7 +20,7 @@ class AsynchronousMailMessageBuilderSpec extends Specification {
 
     void setup() {
         asynchronousMailMessageBuilderFactory = new AsynchronousMailMessageBuilderFactory()
-        asynchronousMailMessageBuilderFactory.grailsApplication = grailsApplication
+        asynchronousMailMessageBuilderFactory.configuration = grailsApplication.config
     }
 
     void "testing builder"() {

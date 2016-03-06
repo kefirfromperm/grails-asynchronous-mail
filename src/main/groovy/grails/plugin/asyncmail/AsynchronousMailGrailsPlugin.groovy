@@ -43,7 +43,6 @@ class AsynchronousMailGrailsPlugin extends Plugin {
             // The mail service from Mail plugin
             nonAsynchronousMailService(MailService) {
                 mailMessageBuilderFactory = ref("mailMessageBuilderFactory")
-                grailsApplication = grailsApplication
             }
 
             asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
