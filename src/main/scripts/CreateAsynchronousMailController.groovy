@@ -3,14 +3,12 @@ description("Creates a new Asynchronous Mail Controller for managing asynchronou
     argument name: 'Controller Name', description: "The name of the controller"
 }
 
-model
+def model
 if (args[0]) {
     model = model(args[0])
 } else {
     model = model('asynchronous.mail.AsynchronousMailController')
 }
-
-
 
 render template: "artifacts/AsynchronousMailController.groovy",
         destination: file("grails-app/controllers/$model.packagePath/${model.convention('Controller')}.groovy"),
