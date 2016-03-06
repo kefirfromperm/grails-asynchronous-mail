@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="${resource(dir:'css',file:'asyncmail.css',plugin: 'asynchronous-mail')}" />
+    <asset:stylesheet src="asyncmail.css"/>
     <title>Asynchronous Mail Message List</title>
 </head>
 

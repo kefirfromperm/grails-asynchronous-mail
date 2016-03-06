@@ -1,8 +1,8 @@
-<%@ page import="grails.plugin.asyncmail.enums.MessageStatus; grails.plugin.asyncmail.enums.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.enums.MessageStatus; grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.AsynchronousMailMessage" %>
+<%@ page import="grails.plugin.asyncmail.MessageStatus; grails.plugin.asyncmail.AsynchronousMailMessage" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'asyncmail.css', plugin: 'asynchronous-mail')}"/>
+    <asset:stylesheet src="asyncmail.css"/>
     <title>Edit Asynchronous Mail Message</title>
 </head>
 

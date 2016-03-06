@@ -1,8 +1,8 @@
-@artifact.package@
+${packageName}
 import grails.plugin.asyncmail.AsynchronousMailMessage
 import grails.plugin.asyncmail.enums.MessageStatus
 
-class @artifact.name@ {
+class ${className}Controller {
     static defaultAction = 'index'
 
     static allowedMethods = [update: 'POST']
