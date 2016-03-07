@@ -12,39 +12,10 @@ import org.springframework.context.ApplicationContext
 
 @Commons
 class AsynchronousMailGrailsPlugin extends Plugin {
-    def version = "2.0.0.RC1"
     def grailsVersion = "3.0.1 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
 
-    def author = "Vitalii Samolovskikh"
-    def authorEmail = "kefirfromperm@gmail.com"
-    def title = "Asynchronous Mail Plugin"
-    def description = 'The plugin realises asynchronous mail sending. ' +
-            'It stores messages in the DB and sends them asynchronously by the quartz job.'
-    def documentation = "http://www.grails.org/plugin/asynchronous-mail"
-
-    String license = 'APACHE'
-
-    def developers = [
-            [name: 'Vitalii Samolovskikh', email: 'kefirfromperm@gmail.com'],
-            [name: "Puneet Behl", email: "puneet.behl007@gmail.com" ],
-            [name: 'Sergey Ponomarev', email: 'stokito@gmail.com'],
-            [name: 'Danny Casady'],
-            [name: 'Shashank Agrawal'],
-            [name: 'Iván López', email:'lopez.ivan@gmail.com'],
-            [name: 'Alessandro Berbenni'],
-            [name: 'Burt Beckwith', email:'burt@burtbeckwith.com']
-    ]
-    def issueManagement = [system: 'GitHub', url: 'https://github.com/kefirfromperm/grails-asynchronous-mail/issues']
-    def scm = [url: 'https://github.com/kefirfromperm/grails-asynchronous-mail']
-
     Closure doWithSpring() { { ->
-
-            // The mail service from Mail plugin
-            nonAsynchronousMailService(MailService) {
-                mailMessageBuilderFactory = ref("mailMessageBuilderFactory")
-            }
-
             asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
                 it.autowire = true
             }
@@ -59,9 +30,6 @@ class AsynchronousMailGrailsPlugin extends Plugin {
 
 
     void doWithApplicationContext() {
-        // Configure sendMail methods
-        configureSendMail(applicationContext)
-
         // Starts jobs
         startJobs(applicationContext)
     }
@@ -69,8 +37,6 @@ class AsynchronousMailGrailsPlugin extends Plugin {
     void onChange(Map<String, Object> event) {
         // watching is modified and reloaded. The event contains: event.source,
         // event.application, event.manager, event.ctx, and event.plugin.
-        // Configure sendMail methods
-        configureSendMail((ApplicationContext) event.ctx)
     }
 
     void onConfigChange(Map<String, Object> event) {
@@ -126,24 +92,6 @@ class AsynchronousMailGrailsPlugin extends Plugin {
             log.debug("Scheduling the ExpiredMessagesCollectorJob with repeat interval ${collectInterval}ms")
             ExpiredMessagesCollectorJob.schedule(collectInterval)
             log.debug("Scheduled the ExpiredMessagesCollectorJob with repeat interval ${collectInterval}ms")
-        }
-    }
-
-    /**
-     * Configure sendMail methods
-     */
-    def configureSendMail(ApplicationContext applicationContext){
-        def asyncMailConfig = grailsApplication.config.asynchronous.mail
-
-        // Override the mailService
-        if (asyncMailConfig.override) {
-            applicationContext.mailService.metaClass*.sendMail = { Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
-            }
-        } else {
-            applicationContext.asynchronousMailService.metaClass*.sendMail = { Closure callable ->
-                applicationContext.asynchronousMailService?.sendAsynchronousMail(callable)
-            }
         }
     }
 }
