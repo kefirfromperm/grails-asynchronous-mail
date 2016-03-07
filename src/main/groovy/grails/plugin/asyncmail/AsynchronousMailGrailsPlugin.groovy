@@ -48,6 +48,8 @@ class AsynchronousMailGrailsPlugin extends Plugin {
             asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
                 it.autowire = true
             }
+
+            springConfig.addAlias 'asyncMailService', 'asynchronousMailService'
         }
     }
 
