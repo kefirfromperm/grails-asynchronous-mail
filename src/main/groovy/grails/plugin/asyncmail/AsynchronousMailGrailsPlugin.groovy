@@ -1,14 +1,12 @@
 package grails.plugin.asyncmail
 
 import grails.plugins.Plugin
-import grails.plugins.mail.MailService
 import grails.plugins.quartz.JobDescriptor
 import grails.plugins.quartz.JobManagerService
 import grails.plugins.quartz.TriggerDescriptor
 import groovy.util.logging.Commons
 import org.quartz.Scheduler
 import org.quartz.TriggerKey
-import org.springframework.context.ApplicationContext
 
 @Commons
 class AsynchronousMailGrailsPlugin extends Plugin {
