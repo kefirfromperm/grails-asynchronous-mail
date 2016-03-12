@@ -247,10 +247,15 @@ class AsynchronousMailMessageBuilder {
     }
 
     void text(CharSequence seq) {
-        message.html = false
         def string = seq?.toString()
         Assert.hasText(string, "Body text can't be null or blank.")
-        message.text = string
+
+        if(message.text==null || !message.html) {
+            message.html = false
+            message.text = string
+        } else if(message.html){
+            message.alternative = string
+        }
     }
 
     void text(Map params) {
@@ -258,9 +263,13 @@ class AsynchronousMailMessageBuilder {
     }
 
     void html(CharSequence seq) {
-        message.html = true
         def string = seq?.toString()
         Assert.hasText(string, "Body can't be null or blank.")
+
+        message.html = true
+        if(message.text){
+            message.alternative = message.text
+        }
         message.text = string
     }
 
@@ -279,7 +288,9 @@ class AsynchronousMailMessageBuilder {
             throw new GrailsMailException("No view specified.")
         }
 
-        return mailMessageContentRenderer.render(new StringWriter(), params.view, params.model, locale, params.plugin)
+        return mailMessageContentRenderer.render(
+                new StringWriter(), params.view, params.model, locale, params.plugin
+        )
     }
 
     void locale(String localeStr) {

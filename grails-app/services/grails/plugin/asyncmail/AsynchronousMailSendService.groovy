@@ -22,6 +22,9 @@ class AsynchronousMailSendService {
             }
             if (message.html && isMimeCapable()) {
                 html message.text
+                if(message.alternative){
+                    text message.alternative
+                }
             } else {
                 body message.text
             }
