@@ -1,18 +1,19 @@
 package grails.plugin.asyncmail
 
-import grails.persistence.support.PersistenceContextInterceptor
+import grails.config.Config
+import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
-import groovyx.gpars.GParsPool
 import org.springframework.mail.MailAuthenticationException
 import org.springframework.mail.MailException
 import org.springframework.mail.MailParseException
 import org.springframework.mail.MailPreparationException
 
-class AsynchronousMailProcessService {
+import static grails.async.Promises.task
+
+class AsynchronousMailProcessService implements GrailsConfigurationAware {
     static transactional = false
 
-    def grailsApplication
-    PersistenceContextInterceptor persistenceInterceptor
+    Config configuration
 
     def asynchronousMailPersistenceService
     def asynchronousMailSendService
@@ -22,40 +23,21 @@ class AsynchronousMailProcessService {
         def messagesIds = asynchronousMailPersistenceService.selectMessagesIdsForSend()
 
         // Send each message and save new status
-        Integer gparsPoolSize = grailsApplication.config.asynchronous.mail.gparsPoolSize
-
-        // Send each message and save new status
-        GParsPool.withPool(gparsPoolSize) {
-            messagesIds.eachParallel { Long messageId ->
-                try {
-                    persistenceInterceptor.init()
-                    log.debug('Open a new persistence session.')
+        messagesIds.each { Long messageId ->
+            task {
+                AsynchronousMailMessage.withNewSession {
                     try {
                         processEmailMessage(messageId)
-                        try {
-                            persistenceInterceptor.flush()
-                            persistenceInterceptor.clear()
-                            log.debug('Flush the persistence session.')
-                        } catch (Exception e) {
-                            log.error("Failed to flush the persistence session.", e)
-                        }
-                    } finally {
-                        try {
-                            persistenceInterceptor.destroy();
-                            log.debug('Destroy the persistence session.')
-                        } catch (Exception e) {
-                            log.error("Failed to finalize the persistence session after message sent.", e);
-                        }
+                    } catch (Exception e) {
+                        log.error('Abort mail sent.', e)
                     }
-                } catch (Exception e) {
-                    log.error('Abort mail sent.', e)
                 }
             }
         }
     }
 
     void processEmailMessage(long messageId) {
-        boolean useFlushOnSave = grailsApplication.config.asynchronous.mail.useFlushOnSave
+        boolean useFlushOnSave = configuration.asynchronous.mail.useFlushOnSave
 
         def message = asynchronousMailPersistenceService.getMessage(messageId)
         log.trace("Found a message: " + message.toString())

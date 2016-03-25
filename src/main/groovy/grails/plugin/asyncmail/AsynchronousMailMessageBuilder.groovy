@@ -1,9 +1,9 @@
 package grails.plugin.asyncmail
 
+import grails.config.Config
 import grails.plugins.mail.GrailsMailException
 import grails.plugins.mail.MailMessageContentRender
 import grails.plugins.mail.MailMessageContentRenderer
-import org.grails.config.PropertySourcesConfig
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.InputStreamSource
 import org.springframework.mail.MailMessage
@@ -34,21 +34,7 @@ class AsynchronousMailMessageBuilder {
 
     AsynchronousMailMessageBuilder(
             boolean mimeCapable,
-            ConfigObject config,
-            FileTypeMap fileTypeMap,
-            MailMessageContentRenderer mailMessageContentRenderer = null
-    ) {
-        this.mimeCapable = mimeCapable;
-        this.overrideAddress = config.overrideAddress ?: null
-        this.defaultFrom = overrideAddress ?: (config.default.from ?: null)
-        this.defaultTo = overrideAddress ?: (config.default.to ?: null)
-        this.fileTypeMap = fileTypeMap;
-        this.mailMessageContentRenderer = mailMessageContentRenderer;
-    }
-
-    AsynchronousMailMessageBuilder(
-            Boolean mimeCapable,
-            PropertySourcesConfig config,
+            Config config,
             FileTypeMap fileTypeMap,
             MailMessageContentRenderer mailMessageContentRenderer = null
     ) {
@@ -261,10 +247,15 @@ class AsynchronousMailMessageBuilder {
     }
 
     void text(CharSequence seq) {
-        message.html = false
         def string = seq?.toString()
         Assert.hasText(string, "Body text can't be null or blank.")
-        message.text = string
+
+        if(message.text==null || !message.html) {
+            message.html = false
+            message.text = string
+        } else if(message.html){
+            message.alternative = string
+        }
     }
 
     void text(Map params) {
@@ -272,9 +263,13 @@ class AsynchronousMailMessageBuilder {
     }
 
     void html(CharSequence seq) {
-        message.html = true
         def string = seq?.toString()
         Assert.hasText(string, "Body can't be null or blank.")
+
+        message.html = true
+        if(message.text){
+            message.alternative = message.text
+        }
         message.text = string
     }
 
@@ -293,7 +288,9 @@ class AsynchronousMailMessageBuilder {
             throw new GrailsMailException("No view specified.")
         }
 
-        return mailMessageContentRenderer.render(new StringWriter(), params.view, params.model, locale, params.plugin)
+        return mailMessageContentRenderer.render(
+                new StringWriter(), params.view, params.model, locale, params.plugin
+        )
     }
 
     void locale(String localeStr) {

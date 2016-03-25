@@ -20,7 +20,7 @@ class AsynchronousMailAttachment implements Serializable {
 
     static constraints = {
         attachmentName(blank:false)
-        mimeType()
+        //mimeType()
         content(maxSize:SIZE_30_MB)
     }
 }

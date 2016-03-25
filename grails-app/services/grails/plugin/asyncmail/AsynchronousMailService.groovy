@@ -1,12 +1,13 @@
 package grails.plugin.asyncmail
 
-import grails.core.GrailsApplication
+import grails.config.Config
+import grails.core.support.GrailsConfigurationAware
 import org.springframework.validation.ObjectError
 
-class AsynchronousMailService {
+class AsynchronousMailService implements GrailsConfigurationAware {
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
     AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory
-    GrailsApplication grailsApplication
+    Config configuration
 
     /**
      * Create asynchronous message and save it to the DB.
@@ -28,16 +29,16 @@ class AsynchronousMailService {
         if (messageBuilder.immediatelySetted) {
             immediately = messageBuilder.immediately
         } else {
-            immediately = grailsApplication.config.asynchronous.mail.send.immediately
+            immediately = configuration.asynchronous.mail.send.immediately
         }
         immediately =
             immediately &&
                     message.beginDate.time <= System.currentTimeMillis() &&
-                    !grailsApplication.config.asynchronous.mail.disable
+                    !configuration.asynchronous.mail.disable
 
         // Save message to DB
 		def savedMessage = null
-		if(immediately && grailsApplication.config.asynchronous.mail.newSessionOnImmediateSend) {
+		if(immediately && configuration.asynchronous.mail.newSessionOnImmediateSend) {
             AsynchronousMailMessage.withNewSession {
                 savedMessage = asynchronousMailPersistenceService.save(message, true)
             }

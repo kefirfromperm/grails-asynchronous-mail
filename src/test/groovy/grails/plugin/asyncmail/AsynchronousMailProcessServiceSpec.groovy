@@ -1,8 +1,10 @@
 package grails.plugin.asyncmail
+
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.enums.MessageStatus.SENT
+
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
@@ -14,6 +16,7 @@ class AsynchronousMailProcessServiceSpec extends Specification {
 
     void setup() {
         asynchronousMailSendService = Mock(AsynchronousMailSendService)
+        service.configuration = grailsApplication.config
     }
 
     void testProcessEmail() {
@@ -41,14 +44,14 @@ class AsynchronousMailProcessServiceSpec extends Specification {
 
 }
 
-class AsynchronousMailPersistenceServiceMock{
+class AsynchronousMailPersistenceServiceMock {
     def message
 
-    void save(message, boolean flush = true){
+    void save(message, boolean flush = true) {
         this.message = message
     }
 
-    def getMessage(id){
+    def getMessage(id) {
         return message
     }
 }

@@ -6,10 +6,10 @@ import org.springframework.mail.MailMessage
 class AsynchronousMailSendService {
     static transactional = false
 
-    MailService nonAsynchronousMailService
+    MailService mailService
 
     MailMessage send(AsynchronousMailMessage message) {
-        return nonAsynchronousMailService.sendMail {
+        return mailService.sendMail {
             if (message.attachments) {
                 multipart true
             }
@@ -22,6 +22,9 @@ class AsynchronousMailSendService {
             }
             if (message.html && isMimeCapable()) {
                 html message.text
+                if(message.alternative){
+                    text message.alternative
+                }
             } else {
                 body message.text
             }

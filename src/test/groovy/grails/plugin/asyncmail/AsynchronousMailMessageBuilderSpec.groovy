@@ -20,7 +20,7 @@ class AsynchronousMailMessageBuilderSpec extends Specification {
 
     void setup() {
         asynchronousMailMessageBuilderFactory = new AsynchronousMailMessageBuilderFactory()
-        asynchronousMailMessageBuilderFactory.grailsApplication = grailsApplication
+        asynchronousMailMessageBuilderFactory.configuration = grailsApplication.config
     }
 
     void "testing builder"() {
@@ -179,6 +179,32 @@ class AsynchronousMailMessageBuilderSpec extends Specification {
         message.subject == 'Subject'
         !message.html
         message.text
+    }
+
+    void testMultipartAlternative(){
+        setup:
+            AsynchronousMailMessageBuilder builder
+            AsynchronousMailMessage message
+            def c = {
+                to 'test@example.com'
+                subject 'Subject'
+                html '<html>HTML text</html>'
+                text 'Plain text'
+            }
+
+        when:
+            builder = asynchronousMailMessageBuilderFactory.createBuilder()
+            c.delegate = builder
+            c.call()
+            message = builder.message
+            message.validate()
+
+        then:
+            message.to == ['test@example.com']
+            message.subject == 'Subject'
+            message.html
+            message.text
+            message.alternative
     }
 
     protected void overrideDoRenderMethod(String contentType) {

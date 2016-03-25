@@ -46,6 +46,9 @@ class AsynchronousMailMessage implements Serializable {
     // Subject and text
     String subject
     String text
+
+    // An alternative text for HTML and text messages
+    String alternative
     boolean html = false
 
     /** Attachments */
@@ -220,12 +223,13 @@ class AsynchronousMailMessage implements Serializable {
 
         subject(blank: false, maxSize: 988)
         text(blank: false)
+        alternative(nullable: true)
 
         // Status fields
-        status()
-        createDate()
+        //status()
+        //createDate()
         sentDate(nullable: true)
-        beginDate()
+        //beginDate()
         endDate(validator: { Date val, AsynchronousMailMessage mess ->
             val && mess.beginDate && val.after(mess.beginDate)
         })
