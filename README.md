@@ -118,7 +118,7 @@ The AsynchronousMailController and views
 You can create a controller and views for viewing and editing email messages in the DB.
 
 ```
-create-asynchronous-mail-controller --package=com.example
+create-asynchronous-mail-controller com.example.MyMailController
 ```
 
 Logging
@@ -126,15 +126,15 @@ Logging
 
 To enable full logging for the plugin just add the following lines to `/grails-app/conf/logback.groovy`.
 ```groovy
-    ...
-    // Enable Asynchronous Mail plugin logging
-    logger('grails.app.jobs.grails.plugin.asyncmail', TRACE, ['STDOUT'])
-    logger('grails.app.services.grails.plugin.asyncmail', TRACE, ['STDOUT'])
-    logger('grails.plugin.asyncmail', TRACE, ['STDOUT'])
+...
+// Enable Asynchronous Mail plugin logging
+logger('grails.app.jobs.grails.plugin.asyncmail', TRACE, ['STDOUT'])
+logger('grails.app.services.grails.plugin.asyncmail', TRACE, ['STDOUT'])
+logger('grails.plugin.asyncmail', TRACE, ['STDOUT'])
 
-    // Enable Quartz plugin logging
-    logger('grails.plugins.quartz', DEBUG, ['STDOUT'])
-    ...
+// Enable Quartz plugin logging
+logger('grails.plugins.quartz', DEBUG, ['STDOUT'])
+...
 ```
 
 Indexes
