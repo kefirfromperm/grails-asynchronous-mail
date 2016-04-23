@@ -6,5 +6,6 @@ before_script:
 script: ./travis-build.sh
 env:
   global:
-  - GIT_NAME="Puneet Behl"
-  - GIT_EMAIL="puneetbehl@yahoo.com"
+  - GIT_NAME="Vitalii Samolovskikh"
+  - GIT_EMAIL="kefirfromperm@gmail.com"
+
