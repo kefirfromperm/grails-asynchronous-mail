@@ -1,9 +1,9 @@
 language: groovy
 jdk:
 - openjdk7
-# before_script:
-# - rm -rf target
-# script: ./travis-build.sh
+before_script:
+- rm -rf target
+script: ./travis-build.sh
 env:
   global:
   - GIT_NAME="Vitalii Samolovskikh"
