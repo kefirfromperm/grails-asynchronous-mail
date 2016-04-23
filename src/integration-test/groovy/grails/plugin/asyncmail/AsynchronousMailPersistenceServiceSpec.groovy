@@ -23,7 +23,6 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
                 subject: 'Subject',
                 text: 'Text'
         )
-        //message.save flush
         asynchronousMailPersistenceService.save(message, true)
 
         then: 'selectMessagesIdsForSend should return list with 1 messageId'

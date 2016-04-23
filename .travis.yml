@@ -8,3 +8,4 @@ env:
   global:
   - GIT_NAME="Vitalii Samolovskikh"
   - GIT_EMAIL="kefirfromperm@gmail.com"
+
