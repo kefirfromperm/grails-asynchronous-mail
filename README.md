@@ -1,6 +1,8 @@
 The Grails Asynchronous Mail plugin
 ====================================
 
+[![Build Status](https://travis-ci.org/kefirfromperm/grails-asynchronous-mail.svg?branch=master)](https://travis-ci.org/kefirfromperm/grails-asynchronous-mail)
+
 Description
 -----------
 
