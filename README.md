@@ -1,7 +1,7 @@
 The Grails Asynchronous Mail plugin
 ====================================
 
-[![Build Status](https://travis-ci.org/kefirfromperm/grails-asynchronous-mail.svg?branch=master)](https://travis-ci.org/kefirfromperm/grails-asynchronous-mail)
+[![Build Status](https://travis-ci.org/kefirfromperm/grails-asynchronous-mail.svg?branch=master)](https://travis-ci.org/kefirfromperm/grails-asynchronous-mail) [![Download](https://api.bintray.com/packages/kefirsf/plugins/asynchronous-mail/images/download.svg) ](https://bintray.com/kefirsf/plugins/asynchronous-mail/_latestVersion)
 
 Description
 -----------
