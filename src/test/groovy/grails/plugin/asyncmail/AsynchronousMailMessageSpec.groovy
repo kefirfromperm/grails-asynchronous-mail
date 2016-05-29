@@ -1,4 +1,6 @@
 package grails.plugin.asyncmail
+
+
 import grails.test.mixin.TestFor
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -35,7 +37,7 @@ class AsynchronousMailMessageSpec extends Specification {
         message.maxAttemptsCount == 1
         !message.lastAttemptDate
         message.attemptInterval == 300000l
-        !message.markDelete
+        message.markDelete == false
     }
 
     void "message should pass validation"() {

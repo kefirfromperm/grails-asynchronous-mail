@@ -13,7 +13,22 @@ class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
     }
 
     void delete(AsynchronousMailMessage message) {
-        message.delete()
+        //deleteAttachments(message)
+        message.delete(flush:true)
+    }
+
+    void deleteAttachments(AsynchronousMailMessage message) {
+
+        def attachments = message.attachments
+
+        message.attachments.clear()
+
+        message.save(flush:true)
+
+        attachments.each{
+            it.delete()
+        }
+
     }
 
     AsynchronousMailMessage getMessage(long id){

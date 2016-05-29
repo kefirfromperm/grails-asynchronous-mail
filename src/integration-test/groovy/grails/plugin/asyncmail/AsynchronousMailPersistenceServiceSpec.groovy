@@ -23,6 +23,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
                 subject: 'Subject',
                 text: 'Text'
         )
+        //message.save flush
         asynchronousMailPersistenceService.save(message, true)
 
         then: 'selectMessagesIdsForSend should return list with 1 messageId'
@@ -33,6 +34,36 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
 
         then: 'message to be send count should be 0'
         0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
+    }
+
+    void testDeleteAttachments() {
+        when: 'a message is instantiated and saved'
+        AsynchronousMailMessage message = new AsynchronousMailMessage(
+                from: 'John Smith <john@example.com>',
+                to: ['Mary Smith <mary@example.com>'],
+                subject: 'Subject',
+                text: 'Text',
+                attachments: [
+                        new AsynchronousMailAttachment(
+                                attachmentName:'name',
+                                content:'Grails'.getBytes()
+                        )
+                ]
+        )
+        //message.save flush
+        asynchronousMailPersistenceService.save(message, true)
+
+        then: 'selectMessagesIdsForSend should return list with 1 messageId'
+        1 == AsynchronousMailMessage.count()
+
+        then: 'the message still should have attachments'
+        1 == AsynchronousMailAttachment.list().size()
+
+        when: 'deleted the message'
+        asynchronousMailPersistenceService.deleteAttachments(message)
+
+        then: 'the message should have no attachments'
+        0 == AsynchronousMailAttachment.list().size()
     }
 
     void testSaveSimpleMessage(){

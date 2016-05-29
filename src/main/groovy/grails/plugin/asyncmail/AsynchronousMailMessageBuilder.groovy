@@ -1,6 +1,7 @@
 package grails.plugin.asyncmail
 
 import grails.config.Config
+
 import grails.plugins.mail.GrailsMailException
 import grails.plugins.mail.MailMessageContentRender
 import grails.plugins.mail.MailMessageContentRenderer
@@ -53,6 +54,20 @@ class AsynchronousMailMessageBuilder {
         message.markDelete = config?.asynchronous?.mail?.clear?.after?.sent ?: false
     }
 
+    def getAsynchronousMailDeletingOptionsFromValue(def value)
+    {
+        switch(value){
+            case 'attachments':
+                return [false,true]
+            case true:
+                return [true,false]
+            case false:
+                return [false,false]
+            default:
+                return [false,false]
+
+        }
+    }
     // Specified fields for asynchronous message
     void beginDate(Date begin) {
         Assert.notNull(begin, "Begin date can't be null.")
@@ -87,8 +102,11 @@ class AsynchronousMailMessageBuilder {
     }
 
     // Mark message must be deleted after sent
-    void delete(boolean value) {
-        message.markDelete = value
+    void delete(Object value) {
+        def marks = getAsynchronousMailDeletingOptionsFromValue(value)
+
+        message.markDelete = marks[0]
+        message.markDeleteAttachments = marks[1]
     }
 
     // Multipart field do nothing
