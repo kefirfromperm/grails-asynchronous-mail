@@ -60,7 +60,7 @@ If you want to change this options just add options which you want to change to 
 |`asynchronous.mail.expired.collector.repeat.interval`|`607000l`|The repeat interval in milliseconds between starts of the `ExpiredCollectorJob` which marks messages as `EXPIRED` if time for sent is expired.|
 |`asynchronous.mail.messages.at.once`|`100`|The max count of messages which can be sent per a time.|
 |`asynchronous.mail.send.immediately`|`true`|If `true` then the `SendJob` is started immediately after a message was created. Since version 0.1.2.|
-|`asynchronous.mail.clear.after.sent`|`false`|If `true` then all messages will be deleted after sent.|
+|`asynchronous.mail.clear.after.sent`|`false`|If `true` then all messages will be deleted after sent. If `attachments` then attachments of all messages will be deleted.|
 |`asynchronous.mail.disable`|`false`|If true then jobs aren't started.|
 |`asynchronous.mail.useFlushOnSave`|`true`|By default the plugin flushes all changes to the DB on every step of the sending process for prevent resending but it makes overhead. So you can set this property to `false` and it will have better performance but will not have guarantee of prevention of resending.|
 |`asynchronous.mail.persistence.provider`|`hibernate4`|The persistence provider. Possible values are `hibernate`, `hibernate4`, `mongodb`.|

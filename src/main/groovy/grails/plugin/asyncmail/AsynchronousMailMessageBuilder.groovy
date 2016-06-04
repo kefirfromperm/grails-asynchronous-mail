@@ -51,11 +51,13 @@ class AsynchronousMailMessageBuilder {
         message = new AsynchronousMailMessage()
         message.attemptInterval = config?.asynchronous?.mail?.default?.attempt?.interval ?: 300000l
         message.maxAttemptsCount = config?.asynchronous?.mail?.default?.max?.attempts?.count ?: 1
-        message.markDelete = config?.asynchronous?.mail?.clear?.after?.sent ?: false
+
+        def marks = getAsynchronousMailDeletingOptionsFromValue(config?.asynchronous?.mail?.clear?.after?.sent)
+        message.markDelete = marks[0]
+        message.markDeleteAttachments = marks[1]
     }
 
-    def getAsynchronousMailDeletingOptionsFromValue(def value)
-    {
+    private def getAsynchronousMailDeletingOptionsFromValue(def value) {
         switch(value){
             case 'attachments':
                 return [false,true]
@@ -65,7 +67,6 @@ class AsynchronousMailMessageBuilder {
                 return [false,false]
             default:
                 return [false,false]
-
         }
     }
     // Specified fields for asynchronous message
