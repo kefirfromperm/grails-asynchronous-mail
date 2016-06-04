@@ -55,14 +55,13 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
 
             // Attempt to send
             try {
-                log.trace("Attempt to send the message with id=${message.id}.")
+                log.trace("An attempt to send the message with id=${message.id}.")
                 asynchronousMailSendService.send(message)
                 message.sentDate = now
                 message.status = MessageStatus.SENT
                 log.trace("The message with id=${message.id} was sent successfully.")
             } catch (MailException e) {
-                throw e
-                log.warn("Attempt to send the message with id=${message.id} was failed.", e)
+                log.warn("An attempt to send the message with id=${message.id} was failed.", e)
                 canAttempt = message.attemptsCount < message.maxAttemptsCount
                 boolean fatalException = e instanceof MailParseException || e instanceof MailPreparationException
                 if (canAttempt && !fatalException) {
@@ -77,23 +76,17 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
             }
 
             // Delete message if it is sent successfully and can be deleted
-            if (message.hasSentStatus())
-            {
+            if (message.hasSentStatus()) {
                 if(message.markDelete) {
                     long id = message.id
                     asynchronousMailPersistenceService.delete(message)
                     log.trace("The message with id=${id} was deleted.")
-                }
-                else {
-                    if (message.markDeleteAttachments) {
+                } else if (message.markDeleteAttachments) {
                         long id = message.id
                         asynchronousMailPersistenceService.deleteAttachments(message)
                         log.trace("The message with id=${id} had all its attachments deleted.")
-                    }
                 }
-            }
-            else
-            {
+            } else {
                 log.trace("The message with id=${id} will not be deleted.")
             }
         }
