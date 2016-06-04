@@ -29,7 +29,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
                     try {
                         processEmailMessage(messageId)
                     } catch (Exception e) {
-                        log.error('Abort mail sent.', e)
+                        log.error("An exception was thrown when attempting to send a message with id=${messageId}.", e)
                     }
                 }
             }
@@ -39,7 +39,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
     void processEmailMessage(long messageId) {
         boolean useFlushOnSave = configuration.asynchronous.mail.useFlushOnSave
 
-        def message = asynchronousMailPersistenceService.getMessage(messageId)
+        AsynchronousMailMessage message = asynchronousMailPersistenceService.getMessage(messageId)
         log.trace("Found a message: " + message.toString())
 
         Date now = new Date()
@@ -67,25 +67,18 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
                 if (canAttempt && !fatalException) {
                     message.status = MessageStatus.ATTEMPTED
                 }
-
-                if (e instanceof MailAuthenticationException) {
-                    throw e
-                }
             } finally {
                 asynchronousMailPersistenceService.save(message, useFlushOnSave)
             }
 
             // Delete message if it is sent successfully and can be deleted
-            if (message.hasSentStatus()) {
-                if(message.markDelete) {
-                    long id = message.id
-                    asynchronousMailPersistenceService.delete(message)
-                    log.trace("The message with id=${id} was deleted.")
-                } else if (message.markDeleteAttachments) {
-                        long id = message.id
-                        asynchronousMailPersistenceService.deleteAttachments(message)
-                        log.trace("The message with id=${id} had all its attachments deleted.")
-                }
+            long id = message.id
+            if (message.hasSentStatus() && message.markDelete) {
+                asynchronousMailPersistenceService.delete(message)
+                log.trace("The message with id=${id} was deleted.")
+            } else if (message.hasSentStatus() && message.markDeleteAttachments) {
+                asynchronousMailPersistenceService.deleteAttachments(message)
+                log.trace("The message with id=${id} had all its attachments deleted.")
             } else {
                 log.trace("The message with id=${id} will not be deleted.")
             }
