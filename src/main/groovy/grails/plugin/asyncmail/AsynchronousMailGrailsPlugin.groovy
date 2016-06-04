@@ -11,7 +11,7 @@ import org.quartz.TriggerKey
 @Commons
 class AsynchronousMailGrailsPlugin extends Plugin {
     def grailsVersion = "3.0.1 > *"
-    def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate4', 'mongodb']
+    def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate3', 'hibernate4', 'hibernate5', 'mongodb']
 
     Closure doWithSpring() { { ->
             asynchronousMailMessageBuilderFactory(AsynchronousMailMessageBuilderFactory) {
