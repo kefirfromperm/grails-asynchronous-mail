@@ -48,6 +48,7 @@ class AsynchronousMailPersistenceServiceMock {
     def message
 
     void save(message, boolean flush = true) {
+        message.id = 1l
         this.message = message
     }
 
