@@ -1,5 +1,6 @@
 package grails.plugin.asyncmail
 
+
 import grails.plugin.asyncmail.enums.MessageStatus
 import groovy.transform.ToString
 
@@ -82,6 +83,8 @@ class AsynchronousMailMessage implements Serializable {
     /** Mark this message for deletion after it's sent */
     boolean markDelete = false
 
+    boolean markDeleteAttachments = false
+
     /** Check if message can be aborted */
     boolean isAbortable() {
         return status in [CREATED, ATTEMPTED]
@@ -163,6 +166,8 @@ class AsynchronousMailMessage implements Serializable {
         )
 
         text type: 'text'
+
+        attachments cascade: "all-delete-orphan"
     }
 
     static constraints = {
@@ -173,6 +178,8 @@ class AsynchronousMailMessage implements Serializable {
         // Message fields
         from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
         replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
+
+        markDeleteAttachments(nullable:true)
 
         // The validator for list of email addresses
         def emailList = { List<String> list, reference, errors ->

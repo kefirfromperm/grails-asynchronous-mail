@@ -1,10 +1,12 @@
 package grails.plugin.asyncmail
 
+
 import grails.plugins.mail.MailMessageContentRender
 import grails.test.mixin.Mock
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
+import spock.lang.Unroll
 import spock.util.mop.ConfineMetaClassChanges
 
 import static grails.plugin.asyncmail.enums.MessageStatus.CREATED
@@ -23,6 +25,7 @@ class AsynchronousMailMessageBuilderSpec extends Specification {
         asynchronousMailMessageBuilderFactory.configuration = grailsApplication.config
     }
 
+    @Unroll("testing builder for params immediate = #immediateVal and delete = #deleteVal")
     void "testing builder"() {
         setup:
         def c = {
@@ -31,8 +34,8 @@ class AsynchronousMailMessageBuilderSpec extends Specification {
             envelopeFrom 'mary@example.com'
             subject 'Subject'
             text 'Text'
-            immediate false
-            delete true
+            immediate immediateVal
+            delete deleteVal
             priority 1
         }
         AsynchronousMailMessageBuilder builder
@@ -52,11 +55,19 @@ class AsynchronousMailMessageBuilderSpec extends Specification {
         message.subject == 'Subject'
         message.text == 'Text'
         message.status == CREATED
-        message.markDelete
+        message.markDelete == markDeleteVal
+        message.markDeleteAttachments == markDeleteAttachmentsVal
 
         message.priority == 1
-        builder.immediatelySetted
-        !builder.immediately
+        builder.immediatelySetted == immediatelySettedVal
+        builder.immediately == immediatelyVal
+
+        where:
+
+        immediateVal | deleteVal     | immediatelySettedVal | immediatelyVal | markDeleteVal | markDeleteAttachmentsVal
+        true         | true          |  true                | true           | true          | false
+        false        | 'attachments' |  true                | false          | false         | true
+        true         | false         |  true                | true           | false         | false
     }
 
     void "testing mail with minimum data"() {
