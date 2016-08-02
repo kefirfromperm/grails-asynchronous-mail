@@ -3,6 +3,7 @@ package grails.plugin.asyncmail
 
 import grails.plugin.asyncmail.enums.MessageStatus
 import groovy.transform.ToString
+import org.apache.commons.lang.StringUtils
 
 import static grails.plugin.asyncmail.enums.MessageStatus.*
 
