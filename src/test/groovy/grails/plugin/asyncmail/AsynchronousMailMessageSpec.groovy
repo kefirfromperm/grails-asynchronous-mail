@@ -255,6 +255,17 @@ class AsynchronousMailMessageSpec extends Specification {
 
     }
 
+    void "message with headers should pass validation"() {
+        expect:
+        new AsynchronousMailMessage(
+                from: 'John Smith <john@example.com>',
+                to: ['Mary Smith <mary@example.com>'],
+                subject: 'Subject',
+                text: 'Text',
+                headers: ['Content-Type': 'text/plain', 'Content-Language': 'en']
+        ).validate()
+    }
+
     @Ignore
     void "testing message.toString()"() {
         setup:
