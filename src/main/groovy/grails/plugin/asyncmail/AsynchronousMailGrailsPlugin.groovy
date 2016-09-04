@@ -4,11 +4,11 @@ import grails.plugins.Plugin
 import grails.plugins.quartz.JobDescriptor
 import grails.plugins.quartz.JobManagerService
 import grails.plugins.quartz.TriggerDescriptor
-import groovy.util.logging.Commons
+import groovy.util.logging.Slf4j
 import org.quartz.Scheduler
 import org.quartz.TriggerKey
 
-@Commons
+@Slf4j
 class AsynchronousMailGrailsPlugin extends Plugin {
     def grailsVersion = "3.0.1 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate3', 'hibernate4', 'hibernate5', 'mongodb']

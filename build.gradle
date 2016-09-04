@@ -70,7 +70,7 @@ grailsPublish {
     license {
         name = 'Apache-2.0'
     }
-    websiteUrl = 'https://grails.org/plugin/asynchronous-mail'
+    websiteUrl = 'https://grails.org/plugins.html#plugin/asynchronous-mail'
     issueTrackerUrl = 'https://github.com/kefirfromperm/grails-asynchronous-mail/issues'
     vcsUrl = 'https://github.com/kefirfromperm/grails-asynchronous-mail.git'
     title = "Grails Asynchronous Mail plugin"
