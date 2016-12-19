@@ -15,7 +15,7 @@ class AsynchronousMailService implements GrailsConfigurationAware {
      * If configuration flag asynchronous.mail.send.immediately is true (default)
      * then this method starts the send job after message is created
      */
-    def sendAsynchronousMail(Closure callable) {
+    def sendAsynchronousMail(@DelegatesTo(AsynchronousMailMessageBuilder) Closure callable) {
         def messageBuilder = asynchronousMailMessageBuilderFactory.createBuilder()
         callable.delegate = messageBuilder
         callable.resolveStrategy = Closure.DELEGATE_FIRST
@@ -66,7 +66,7 @@ class AsynchronousMailService implements GrailsConfigurationAware {
     /**
      * @see #sendAsynchronousMail
      */
-    def sendMail(Closure callable) {
+    def sendMail(@DelegatesTo(AsynchronousMailMessageBuilder) Closure callable) {
         return sendAsynchronousMail(callable)
     }
 
