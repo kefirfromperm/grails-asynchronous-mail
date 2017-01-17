@@ -11,7 +11,7 @@ buildscript {
     }
 }
 
-version "2.0.0.RC4"
+version "2.0.0.RC5"
 group "org.grails.plugins"
 
 apply plugin: 'idea'
@@ -86,6 +86,8 @@ grailsPublish {
             SAgrawal14:"Shashank Agrawal",
             visheshd:"Vishesh",
             'micke-a':"Mikael Andersson",
-            pgdoval:"Pablo González Doval"
+            pgdoval:"Pablo González Doval",
+            Uniqen:"Magnus Dalin",
+            demon101:"Demon"
     ]
 }
