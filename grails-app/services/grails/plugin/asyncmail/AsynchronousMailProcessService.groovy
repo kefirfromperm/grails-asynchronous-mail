@@ -24,7 +24,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
 
         // Send each message and save new status
         messagesIds.each { Long messageId ->
-            task {
+            //task {
                 AsynchronousMailMessage.withNewSession {
                     try {
                         processEmailMessage(messageId)
@@ -32,7 +32,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
                         log.error("An exception was thrown when attempting to send a message with id=${messageId}.", e)
                     }
                 }
-            }
+            //}
         }
     }
 
