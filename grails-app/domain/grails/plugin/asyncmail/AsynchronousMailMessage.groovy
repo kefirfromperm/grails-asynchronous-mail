@@ -180,8 +180,6 @@ class AsynchronousMailMessage implements Serializable {
         from(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
         replyTo(nullable: true, maxSize: MAX_EMAIL_ADDR_SIZE, validator: mailboxValidator)
 
-        markDeleteAttachments(nullable:true)
-
         // The validator for list of email addresses
         def emailList = { List<String> list, reference, errors ->
             boolean flag = true
