@@ -1,12 +1,14 @@
 package grails.plugin.asyncmail
 
+import grails.async.Promises
 import grails.config.Config
 import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
-import org.springframework.mail.MailAuthenticationException
 import org.springframework.mail.MailException
 import org.springframework.mail.MailParseException
 import org.springframework.mail.MailPreparationException
+
+import java.util.concurrent.ArrayBlockingQueue
 
 import static grails.async.Promises.task
 
@@ -18,22 +20,37 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
     def asynchronousMailPersistenceService
     def asynchronousMailSendService
 
-    public void findAndSendEmails() {
+    void findAndSendEmails() {
         // Get messages from DB
-        def messagesIds = asynchronousMailPersistenceService.selectMessagesIdsForSend()
+        List<Long> messagesIds = asynchronousMailPersistenceService.selectMessagesIdsForSend()
 
-        // Send each message and save new status
-        messagesIds.each { Long messageId ->
-            //task {
-                AsynchronousMailMessage.withNewSession {
-                    try {
-                        processEmailMessage(messageId)
-                    } catch (Exception e) {
-                        log.error("An exception was thrown when attempting to send a message with id=${messageId}.", e)
+        // Create the queue of ids for processing
+        int messageCount = messagesIds.size()
+        Queue<Long> idsQueue = new ArrayBlockingQueue<Long>(messageCount, false, messagesIds)
+
+        // Create some parallel tasks
+        def promises = []
+        int taskCount = Math.min(configuration.asynchronous.mail.taskPoolSize ?: 1, messageCount)
+        for (int i = 0; i < taskCount; i++) {
+            promises << task {
+                Long messageId
+                while ((messageId = idsQueue.poll()) != null) {
+                    AsynchronousMailMessage.withNewSession {
+                        try {
+                            processEmailMessage(messageId)
+                        } catch (Exception e) {
+                            log.error(
+                                    "An exception was thrown when attempting to send a message with id=${messageId}.",
+                                    e
+                            )
+                        }
                     }
                 }
-            //}
+            }
         }
+
+        // To prevent concurrent job execution we have to wait for all tasks when they will send all messages
+        Promises.waitAll(promises)
     }
 
     void processEmailMessage(long messageId) {

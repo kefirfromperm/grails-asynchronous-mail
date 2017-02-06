@@ -9,3 +9,4 @@ asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
 asynchronous.mail.persistence.provider='hibernate4'      // Possible values are 'hibernate', 'hibernate4', 'mongodb'
 asynchronous.mail.newSessionOnImmediateSend=false
+asynchronous.mail.taskPoolSize=1

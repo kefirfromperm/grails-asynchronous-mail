@@ -41,7 +41,6 @@ class AsynchronousMailProcessServiceSpec extends Specification {
         message.status == SENT
         message.sentDate
     }
-
 }
 
 class AsynchronousMailPersistenceServiceMock {

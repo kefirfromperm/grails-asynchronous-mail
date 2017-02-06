@@ -48,6 +48,7 @@ asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
 asynchronous.mail.persistence.provider='hibernate4'     // Possible values are 'hibernate', 'hibernate4', 'mongodb'
 asynchronous.mail.newSessionOnImmediateSend=false
+asynchronous.mail.taskPoolSize=1
 ```
 
 If you want to change this options just add options which you want to change to your configuration file `/grails-app/conf/application.groovy`.
@@ -65,6 +66,7 @@ If you want to change this options just add options which you want to change to 
 |`asynchronous.mail.useFlushOnSave`|`true`|By default the plugin flushes all changes to the DB on every step of the sending process for prevent resending but it makes overhead. So you can set this property to `false` and it will have better performance but will not have guarantee of prevention of resending.|
 |`asynchronous.mail.persistence.provider`|`hibernate4`|The persistence provider. Possible values are `hibernate`, `hibernate3`, `hibernate4`, `hibernate5`, `mongodb`.|
 |`asynchronous.mail.newSessionOnImmediateSend`|`false`|If `true` the new DB session will be created for storing a message into DB. It's needed if you want to send an email in case of error when all changes in DB are rolled back.|
+|`asynchronous.mail.taskPoolSize`|`1`|Max count of parallel tasks for sending messages concurrently.|
 
 Configure the [mail](https://grails.org/plugins.html#plugin/mail) plugin. The Asynchronous Mail plugin uses the [mail](https://grails.org/plugins.html#plugin/mail) plugin for sending messages to the SMTP server.
 
