@@ -4,8 +4,6 @@ import grails.plugins.mail.MailService
 import org.springframework.mail.MailMessage
 
 class AsynchronousMailSendService {
-    static transactional = false
-
     MailService mailService
 
     MailMessage send(AsynchronousMailMessage message) {

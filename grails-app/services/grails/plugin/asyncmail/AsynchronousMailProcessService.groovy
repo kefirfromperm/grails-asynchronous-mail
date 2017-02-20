@@ -13,8 +13,6 @@ import java.util.concurrent.ArrayBlockingQueue
 import static grails.async.Promises.task
 
 class AsynchronousMailProcessService implements GrailsConfigurationAware {
-    static transactional = false
-
     Config configuration
 
     def asynchronousMailPersistenceService
