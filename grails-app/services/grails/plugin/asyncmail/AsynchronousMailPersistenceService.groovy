@@ -8,20 +8,22 @@ class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
 
     Config configuration
 
-    private AsynchronousMailMessage save(AsynchronousMailMessage message, boolean flush = false) {
-        return message.save(flush: flush)
+    AsynchronousMailMessage save(
+            AsynchronousMailMessage message, boolean flush, boolean validate
+    ) {
+        return message.save(flush: flush, validate: validate)
     }
 
     void delete(AsynchronousMailMessage message) {
-        message.delete(flush:true)
+        message.delete(flush: true)
     }
 
     void deleteAttachments(AsynchronousMailMessage message) {
         message.attachments.clear()
-        message.save(flush:true)
+        message.save(flush: true)
     }
 
-    AsynchronousMailMessage getMessage(long id){
+    AsynchronousMailMessage getMessage(long id) {
         return AsynchronousMailMessage.get(id)
     }
 
@@ -51,7 +53,7 @@ class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
         } as List<Long>
     }
 
-    void updateExpiredMessages(){
+    void updateExpiredMessages() {
         int count = 0
         boolean useMongo = (configuration.asynchronous.mail.persistence.provider == 'mongodb')
 

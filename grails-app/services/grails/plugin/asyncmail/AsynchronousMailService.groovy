@@ -40,10 +40,10 @@ class AsynchronousMailService implements GrailsConfigurationAware {
 		def savedMessage = null
 		if(immediately && configuration.asynchronous.mail.newSessionOnImmediateSend) {
             AsynchronousMailMessage.withNewSession {
-                savedMessage = asynchronousMailPersistenceService.save(message, true)
+                savedMessage = asynchronousMailPersistenceService.save(message, true, true)
             }
         } else {
-            savedMessage = asynchronousMailPersistenceService.save(message, immediately)
+            savedMessage = asynchronousMailPersistenceService.save(message, immediately, true)
         }
 
         if (!savedMessage) {

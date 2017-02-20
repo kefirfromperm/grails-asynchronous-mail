@@ -32,7 +32,7 @@ class AsynchronousMailProcessServiceSpec extends Specification {
         asynchronousMailPersistenceService = new AsynchronousMailPersistenceServiceMock()
 
         when:
-        asynchronousMailPersistenceService.save message
+        asynchronousMailPersistenceService.save message, true, true
         service.asynchronousMailPersistenceService = asynchronousMailPersistenceService
         service.asynchronousMailSendService = asynchronousMailSendService
         service.processEmailMessage(1l)
@@ -46,7 +46,7 @@ class AsynchronousMailProcessServiceSpec extends Specification {
 class AsynchronousMailPersistenceServiceMock {
     def message
 
-    void save(message, boolean flush = true) {
+    void save(message, boolean flush, boolean validate) {
         message.id = 1l
         this.message = message
     }

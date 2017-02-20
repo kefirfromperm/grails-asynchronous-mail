@@ -34,14 +34,14 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
             int taskCount = Math.min(configuration.asynchronous.mail.taskPoolSize ?: 1, messageCount)
             for (int i = 0; i < taskCount; i++) {
                 promises << task {
-                    Long messageId
-                    while ((messageId = idsQueue.poll()) != null) {
-                        AsynchronousMailMessage.withNewSession {
+                    AsynchronousMailMessage.withNewSession {
+                        Long messageId
+                        while ((messageId = idsQueue.poll()) != null) {
                             try {
                                 processEmailMessage(messageId)
                             } catch (Exception e) {
                                 log.error(
-                                        "An exception was thrown when attempting to send a message with id=${messageId}.",
+                                        "An exception was thrown when attempt to send a message with id=${messageId}.",
                                         e
                                 )
                             }
@@ -70,7 +70,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
 
             // Guarantee that e-mail can't be sent more than 1 time
             message.status = MessageStatus.ERROR
-            asynchronousMailPersistenceService.save(message, useFlushOnSave)
+            asynchronousMailPersistenceService.save(message, useFlushOnSave, false)
 
             // Attempt to send
             try {
@@ -87,7 +87,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
                     message.status = MessageStatus.ATTEMPTED
                 }
             } finally {
-                asynchronousMailPersistenceService.save(message, useFlushOnSave)
+                asynchronousMailPersistenceService.save(message, useFlushOnSave, false)
             }
 
             // Delete message if it is sent successfully and can be deleted

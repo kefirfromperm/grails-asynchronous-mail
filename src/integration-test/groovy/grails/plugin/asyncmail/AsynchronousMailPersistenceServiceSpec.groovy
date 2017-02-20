@@ -24,7 +24,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
                 text: 'Text'
         )
         //message.save flush
-        asynchronousMailPersistenceService.save(message, true)
+        asynchronousMailPersistenceService.save(message, true, true)
 
         then: 'selectMessagesIdsForSend should return list with 1 messageId'
         1 == AsynchronousMailMessage.count()
@@ -51,7 +51,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
                 ]
         )
         //message.save flush
-        asynchronousMailPersistenceService.save(message, true)
+        asynchronousMailPersistenceService.save(message, true, true)
 
         then: 'selectMessagesIdsForSend should return list with 1 messageId'
         1 == AsynchronousMailMessage.count()
@@ -75,7 +75,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
         )
 
         expect:
-        asynchronousMailPersistenceService.save(message, true)
+        asynchronousMailPersistenceService.save(message, true, true)
 
         cleanup:
         asynchronousMailPersistenceService.delete(message)
@@ -91,7 +91,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
                 beginDate: new Date(System.currentTimeMillis()-2),
                 endDate: new Date(System.currentTimeMillis()-1)
         )
-        asynchronousMailPersistenceService.save message, true
+        asynchronousMailPersistenceService.save message, true, true
 
         then: 'selectMessagesIdsForSend should return empty list'
         0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
