@@ -28,7 +28,7 @@ Installation
 To install just add the plugin to the plugins block of `build.gradle`:
 
 ```groovy
-compile "org.grails.plugins:asynchronous-mail:2.0.0.RC5"
+compile "org.grails.plugins:asynchronous-mail:2.0.0.RC6"
 ```
 
 Configuration
@@ -161,12 +161,12 @@ Contribution
 If you want to contribute to the plugin just open a pull request to the repository
 <https://github.com/kefirfromperm/grails-asynchronous-mail>.
 
-Unit tests are very very sweet things. They help us find bugs and modify code without adding new bugs. It's very
-interesting to see how they work. I like to see how they work. What is the better than unit tests? More unit tests!
+Unit tests are very very sweet things. They help us to find bugs and to modify code without adding new bugs. It's very
+interesting to see how they work. I like to see how they work. What is better than unit tests? More unit tests!
 Unit tests are good!
 
-And comments... Comments are good also. They are not as god as unit tests but they are definitely good. If you known
-Chinese or Arabic it's good. Seriously. It's awesome! But I don't known them. So write comments in English.
+And comments... Comments are good also. They are not as good as unit tests but they are definitely good. If you known
+Chinese or Arabic it's good. Seriously. It's awesome! But I don't speak them. So write comments in English.
 
 Donation
 --------
