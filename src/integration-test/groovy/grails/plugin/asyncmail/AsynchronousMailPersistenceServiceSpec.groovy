@@ -1,10 +1,12 @@
 package grails.plugin.asyncmail
+
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.enums.MessageStatus.EXPIRED
+
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
@@ -16,91 +18,106 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
 
     void testCycle() {
+        given: "a message"
+            AsynchronousMailMessage message = new AsynchronousMailMessage(
+                    from: 'John Smith <john@example.com>',
+                    to: ['Mary Smith <mary@example.com>'],
+                    subject: 'Subject',
+                    text: 'Text'
+            )
         when: 'a message is instantiated and saved'
-        AsynchronousMailMessage message = new AsynchronousMailMessage(
-                from: 'John Smith <john@example.com>',
-                to: ['Mary Smith <mary@example.com>'],
-                subject: 'Subject',
-                text: 'Text'
-        )
-        //message.save flush
-        asynchronousMailPersistenceService.save(message, true, true)
+            //message.save flush
+            asynchronousMailPersistenceService.save(message, true, true)
+            List<Long> ids = asynchronousMailPersistenceService.selectMessagesIdsForSend()
 
         then: 'selectMessagesIdsForSend should return list with 1 messageId'
-        1 == AsynchronousMailMessage.count()
+            1 == ids.size()
+            ids[0] == message.id
+
+        when: "get message"
+            AsynchronousMailMessage message1 = asynchronousMailPersistenceService.getMessage(ids[0])
+
+        then: "message1 id message"
+            message1.id == message.id
 
         when: 'deleted the message'
-        asynchronousMailPersistenceService.delete(message)
+            asynchronousMailPersistenceService.delete(message1)
 
         then: 'message to be send count should be 0'
-        0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
+            0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
     }
 
     void testDeleteAttachments() {
+        given: "a message"
+            AsynchronousMailMessage message = new AsynchronousMailMessage(
+                    from: 'John Smith <john@example.com>',
+                    to: ['Mary Smith <mary@example.com>'],
+                    subject: 'Subject',
+                    text: 'Text',
+                    attachments: [
+                            new AsynchronousMailAttachment(
+                                    attachmentName: 'name',
+                                    content: 'Grails'.getBytes()
+                            )
+                    ]
+            )
         when: 'a message is instantiated and saved'
-        AsynchronousMailMessage message = new AsynchronousMailMessage(
-                from: 'John Smith <john@example.com>',
-                to: ['Mary Smith <mary@example.com>'],
-                subject: 'Subject',
-                text: 'Text',
-                attachments: [
-                        new AsynchronousMailAttachment(
-                                attachmentName:'name',
-                                content:'Grails'.getBytes()
-                        )
-                ]
-        )
-        //message.save flush
-        asynchronousMailPersistenceService.save(message, true, true)
+
+            asynchronousMailPersistenceService.save(message, true, true)
+            List<Long> ids = asynchronousMailPersistenceService.selectMessagesIdsForSend()
 
         then: 'selectMessagesIdsForSend should return list with 1 messageId'
-        1 == AsynchronousMailMessage.count()
+            1 == ids.size()
 
-        then: 'the message still should have attachments'
-        1 == AsynchronousMailAttachment.list().size()
+        when: "get message"
+            AsynchronousMailMessage message1 = asynchronousMailPersistenceService.getMessage(ids[0])
+
+        then: "it contains attachments"
+            message1.attachments.size() == 1
 
         when: 'deleted the message'
-        asynchronousMailPersistenceService.deleteAttachments(message)
+            asynchronousMailPersistenceService.deleteAttachments(message)
+            message1 = asynchronousMailPersistenceService.getMessage(ids[0])
 
         then: 'the message should have no attachments'
-        0 == AsynchronousMailAttachment.list().size()
+            message1.attachments ? false : true
     }
 
-    void testSaveSimpleMessage(){
+    void testSaveSimpleMessage() {
         setup:
-        AsynchronousMailMessage message = new AsynchronousMailMessage(
-                bcc: ['mary@example.com'],
-                subject: 'Subject',
-                text: 'Text'
-        )
+            AsynchronousMailMessage message = new AsynchronousMailMessage(
+                    bcc: ['mary@example.com'],
+                    subject: 'Subject',
+                    text: 'Text'
+            )
 
         expect:
-        asynchronousMailPersistenceService.save(message, true, true)
+            asynchronousMailPersistenceService.save(message, true, true)
 
         cleanup:
-        asynchronousMailPersistenceService.delete(message)
+            asynchronousMailPersistenceService.delete(message)
     }
 
-    void testUpdateExpiredMessages(){
+    void testUpdateExpiredMessages() {
         when: 'message is saved with expired endDate'
-        AsynchronousMailMessage message = new AsynchronousMailMessage(
-                from: 'John Smith <john@example.com>',
-                to: ['Mary Smith <mary@example.com>'],
-                subject: 'Subject',
-                text: 'Text',
-                beginDate: new Date(System.currentTimeMillis()-2),
-                endDate: new Date(System.currentTimeMillis()-1)
-        )
-        asynchronousMailPersistenceService.save message, true, true
+            AsynchronousMailMessage message = new AsynchronousMailMessage(
+                    from: 'John Smith <john@example.com>',
+                    to: ['Mary Smith <mary@example.com>'],
+                    subject: 'Subject',
+                    text: 'Text',
+                    beginDate: new Date(System.currentTimeMillis() - 2),
+                    endDate: new Date(System.currentTimeMillis() - 1)
+            )
+            asynchronousMailPersistenceService.save message, true, true
 
         then: 'selectMessagesIdsForSend should return empty list'
-        0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
+            0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
 
         when:
-        asynchronousMailPersistenceService.updateExpiredMessages()
-        message.refresh()
+            asynchronousMailPersistenceService.updateExpiredMessages()
+            message.refresh()
 
         then:
-        EXPIRED == message.status
+            EXPIRED == message.status
     }
 }

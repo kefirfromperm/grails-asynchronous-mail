@@ -11,7 +11,7 @@ class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
     AsynchronousMailMessage save(
             AsynchronousMailMessage message, boolean flush, boolean validate
     ) {
-        return message.save(flush: flush, validate: validate)
+        return message.save(flush: flush, failOnError:true, validate: validate)
     }
 
     void delete(AsynchronousMailMessage message) {

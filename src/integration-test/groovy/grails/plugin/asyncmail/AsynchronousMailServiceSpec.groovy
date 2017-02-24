@@ -1,10 +1,12 @@
 package grails.plugin.asyncmail
+
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.enums.MessageStatus.CREATED
+
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
@@ -17,18 +19,18 @@ class AsynchronousMailServiceSpec extends Specification {
     @Autowired
     AsynchronousMailService asynchronousMailService
 
-    void testSendAsynchronousMail(){
+    void testSendAsynchronousMail() {
         when:
-        asynchronousMailService.sendMail {
-            to VALUE_MAIL
-            subject 'Test'
-            text 'Test'
-            immediate false
-        }
-        AsynchronousMailMessage message = AsynchronousMailMessage.findAll()[0]
+            asynchronousMailService.sendMail {
+                to VALUE_MAIL
+                subject 'Test'
+                text 'Test'
+                immediate false
+            }
+            AsynchronousMailMessage message = AsynchronousMailMessage.findAll()[0]
 
         then:
-        VALUE_MAIL == message.to[0]
-        CREATED == message.status
+            VALUE_MAIL == message.to[0]
+            CREATED == message.status
     }
 }

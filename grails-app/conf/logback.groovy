@@ -26,3 +26,11 @@ if(Environment.current == Environment.DEVELOPMENT) {
         logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false )
     }
 }
+
+// Enable Asynchronous Mail plugin logging
+logger('grails.app.jobs.grails.plugin.asyncmail', TRACE, ['STDOUT'], false)
+logger('grails.app.services.grails.plugin.asyncmail', TRACE, ['STDOUT'], false)
+logger('grails.plugin.asyncmail', TRACE, ['STDOUT'], false)
+
+// Enable Quartz plugin logging
+logger('grails.plugins.quartz', DEBUG, ['STDOUT'], false)

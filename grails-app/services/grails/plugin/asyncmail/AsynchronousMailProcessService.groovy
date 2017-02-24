@@ -15,14 +15,16 @@ import static grails.async.Promises.task
 class AsynchronousMailProcessService implements GrailsConfigurationAware {
     Config configuration
 
-    def asynchronousMailPersistenceService
-    def asynchronousMailSendService
+    AsynchronousMailPersistenceService asynchronousMailPersistenceService
+    AsynchronousMailSendService asynchronousMailSendService
 
     void findAndSendEmails() {
         // Get messages from DB
         List<Long> messagesIds = asynchronousMailPersistenceService.selectMessagesIdsForSend()
 
-        if(messagesIds) {
+        if (messagesIds) {
+            log.debug("Found ${messagesIds} messages to send.")
+
             // Create the queue of ids for processing
             int messageCount = messagesIds.size()
             Queue<Long> idsQueue = new ArrayBlockingQueue<Long>(messageCount, false, messagesIds)
@@ -30,6 +32,9 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
             // Create some parallel tasks
             def promises = []
             int taskCount = Math.min(configuration.asynchronous.mail.taskPoolSize ?: 1, messageCount)
+
+            log.debug("Starts $taskCount send tasks.")
+
             for (int i = 0; i < taskCount; i++) {
                 promises << task {
                     AsynchronousMailMessage.withNewSession {
@@ -50,6 +55,9 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
 
             // To prevent concurrent job execution we have to wait for all tasks when they will send all messages
             Promises.waitAll(promises)
+            log.debug("$taskCount tasks are completed.")
+        } else {
+            log.trace("Messages to send have not be found.")
         }
     }
 
@@ -57,7 +65,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
         boolean useFlushOnSave = configuration.asynchronous.mail.useFlushOnSave
 
         AsynchronousMailMessage message = asynchronousMailPersistenceService.getMessage(messageId)
-        log.trace("Found a message: " + message.toString())
+        log.trace("Got a message: " + message.toString())
 
         Date now = new Date()
         Date attemptDate = new Date(now.getTime() - message.attemptInterval)

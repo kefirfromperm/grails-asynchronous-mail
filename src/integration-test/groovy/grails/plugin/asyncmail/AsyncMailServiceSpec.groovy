@@ -17,21 +17,21 @@ import static grails.plugin.asyncmail.enums.MessageStatus.CREATED
 class AsyncMailServiceSpec extends Specification {
     public static final String VALUE_MAIL = 'test@example.com'
 
-    @Resource(name="asyncMailService")
+    @Resource(name = "asyncMailService")
     def asyncMailService
 
-    void testSendAsynchronousMail(){
+    void testSendAsynchronousMail() {
         when:
-        asyncMailService.sendMail {
-            to VALUE_MAIL
-            subject 'Test'
-            text 'Test'
-            immediate false
-        }
-        AsynchronousMailMessage message = AsynchronousMailMessage.findAll()[0]
+            asyncMailService.sendMail {
+                to VALUE_MAIL
+                subject 'Test'
+                text 'Test'
+                immediate false
+            }
+            AsynchronousMailMessage message = AsynchronousMailMessage.findAll()[0]
 
         then:
-        VALUE_MAIL == message.to[0]
-        CREATED == message.status
+            VALUE_MAIL == message.to[0]
+            CREATED == message.status
     }
 }

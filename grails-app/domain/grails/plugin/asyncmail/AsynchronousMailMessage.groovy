@@ -246,5 +246,4 @@ class AsynchronousMailMessage implements Serializable {
         lastAttemptDate(nullable: true)
         attemptInterval(min: 0l)
     }
-
 }
