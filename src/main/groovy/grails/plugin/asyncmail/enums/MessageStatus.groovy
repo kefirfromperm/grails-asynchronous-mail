@@ -1,8 +1,11 @@
 package grails.plugin.asyncmail.enums
 
+import groovy.transform.CompileStatic
+
 /**
  * @author Vitalii Samolovskikh aka Kefir
  */
-public enum MessageStatus {
+@CompileStatic
+enum MessageStatus {
     CREATED, ATTEMPTED, SENT, ERROR, EXPIRED, ABORT
 }

@@ -1,8 +1,10 @@
 package grails.plugin.asyncmail
 
 import grails.plugins.mail.MailService
+import groovy.transform.CompileStatic
 import org.springframework.mail.MailMessage
 
+@CompileStatic
 class AsynchronousMailSendService {
     MailService mailService
 

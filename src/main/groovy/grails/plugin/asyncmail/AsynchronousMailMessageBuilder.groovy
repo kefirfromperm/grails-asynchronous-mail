@@ -1,7 +1,6 @@
 package grails.plugin.asyncmail
 
 import grails.config.Config
-
 import grails.plugins.mail.GrailsMailException
 import grails.plugins.mail.MailMessageContentRender
 import grails.plugins.mail.MailMessageContentRenderer
@@ -39,12 +38,12 @@ class AsynchronousMailMessageBuilder {
             FileTypeMap fileTypeMap,
             MailMessageContentRenderer mailMessageContentRenderer = null
     ) {
-        this.mimeCapable = mimeCapable;
+        this.mimeCapable = mimeCapable
         this.overrideAddress = config.overrideAddress ?: null
         this.defaultFrom = overrideAddress ?: (config.default.from ?: null)
         this.defaultTo = overrideAddress ?: (config.default.to ?: null)
-        this.fileTypeMap = fileTypeMap;
-        this.mailMessageContentRenderer = mailMessageContentRenderer;
+        this.fileTypeMap = fileTypeMap
+        this.mailMessageContentRenderer = mailMessageContentRenderer
     }
 
     void init(config) {
@@ -57,7 +56,7 @@ class AsynchronousMailMessageBuilder {
         message.markDeleteAttachments = marks[1]
     }
 
-    private def getAsynchronousMailDeletingOptionsFromValue(def value) {
+    private static getAsynchronousMailDeletingOptionsFromValue(value) {
         switch(value){
             case 'attachments':
                 return [false,true]
@@ -178,7 +177,7 @@ class AsynchronousMailMessageBuilder {
         return list
     }
 
-    private assertEmail(String addr, String fieldName) {
+    private static assertEmail(String addr, String fieldName) {
         Assert.notNull(addr, "Value of $fieldName can't be null.")
         Assert.hasText(addr, "Value of $fieldName can't be blank.")
         if (!Validator.isMailbox(addr)) {

@@ -2,6 +2,7 @@ package grails.plugin.asyncmail
 
 import grails.config.Config
 import grails.core.support.GrailsConfigurationAware
+import groovy.transform.CompileStatic
 import org.springframework.validation.ObjectError
 
 class AsynchronousMailService implements GrailsConfigurationAware {
