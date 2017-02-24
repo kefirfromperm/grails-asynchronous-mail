@@ -15,6 +15,7 @@ class AsynchronousMailProcessServiceSpec extends Specification {
 
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
     AsynchronousMailSendService asynchronousMailSendService
+    AsynchronousMailConfigService asynchronousMailConfigService
 
     void setup() {
         asynchronousMailSendService = Mock(AsynchronousMailSendService)
@@ -27,15 +28,18 @@ class AsynchronousMailProcessServiceSpec extends Specification {
                 AsynchronousMailMessage.get(id)
             }
         }
+        asynchronousMailConfigService = Stub(AsynchronousMailConfigService) {
+            getTaskPoolSize() >> 1
+            isUseFlushOnSave() >> true
+        }
 
-        service.configuration = grailsApplication.config
+        service.asynchronousMailConfigService = asynchronousMailConfigService
         service.asynchronousMailPersistenceService = asynchronousMailPersistenceService
         service.asynchronousMailSendService = asynchronousMailSendService
     }
 
     void testProcessEmail() {
         setup:
-            grailsApplication.config.asynchronous.mail.useFlushOnSave = true
             AsynchronousMailMessage message = new AsynchronousMailMessage(
                     from: 'John Smith <john@example.com>',
                     to: ['Mary Smith <mary@example.com>'],

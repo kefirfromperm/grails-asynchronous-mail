@@ -1,5 +1,7 @@
 package grails.plugin.asyncmail
 
+import grails.config.Config
+import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
@@ -14,8 +16,9 @@ import static grails.plugin.asyncmail.enums.MessageStatus.SENT
  */
 @Integration
 @Rollback
-class AsynchronousMailProcessServiceIntegrationSpec extends Specification {
+class AsynchronousMailProcessServiceIntegrationSpec extends Specification implements GrailsConfigurationAware {
     AsynchronousMailProcessService asynchronousMailProcessService
+    Config configuration
 
     void setup() {
         asynchronousMailProcessService.asynchronousMailSendService = Mock(AsynchronousMailSendService)
@@ -23,8 +26,8 @@ class AsynchronousMailProcessServiceIntegrationSpec extends Specification {
 
     void cleanup() {
         AsynchronousMailMessage.list()*.delete()
-        asynchronousMailProcessService.configuration.asynchronous.mail.taskPoolSize = 1
-        asynchronousMailProcessService.configuration.asynchronous.mail.useFlushOnSave = true
+        configuration.asynchronous.mail.taskPoolSize = 1
+        configuration.asynchronous.mail.useFlushOnSave = true
     }
 
     @Unroll
@@ -45,8 +48,8 @@ class AsynchronousMailProcessServiceIntegrationSpec extends Specification {
                 }
             }
 
-            asynchronousMailProcessService.configuration.asynchronous.mail.taskPoolSize = taskCount
-            asynchronousMailProcessService.configuration.asynchronous.mail.useFlushOnSave = flush
+            configuration.asynchronous.mail.taskPoolSize = taskCount
+            configuration.asynchronous.mail.useFlushOnSave = flush
         when: "process"
             asynchronousMailProcessService.findAndSendEmails()
         then: "all messages have status SENT"

@@ -1,35 +1,36 @@
 package grails.plugin.asyncmail
 
-import grails.config.Config
-import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
+import groovy.transform.CompileStatic
 
-class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
+class AsynchronousMailPersistenceService {
 
-    Config configuration
+    AsynchronousMailConfigService asynchronousMailConfigService
 
+    @CompileStatic
     AsynchronousMailMessage save(
             AsynchronousMailMessage message, boolean flush, boolean validate
     ) {
         return message.save(flush: flush, failOnError:true, validate: validate)
     }
 
+    @CompileStatic
     void delete(AsynchronousMailMessage message) {
         message.delete(flush: true)
     }
 
+    @CompileStatic
     void deleteAttachments(AsynchronousMailMessage message) {
         message.attachments.clear()
         message.save(flush: true)
     }
 
+    @CompileStatic
     AsynchronousMailMessage getMessage(long id) {
         return AsynchronousMailMessage.get(id)
     }
 
     List<Long> selectMessagesIdsForSend() {
-        boolean useMongo = (configuration.asynchronous.mail.persistence.provider == 'mongodb')
-
         return AsynchronousMailMessage.withCriteria {
             Date now = new Date()
             lt('beginDate', now)
@@ -42,9 +43,9 @@ class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
             order('endDate', 'asc')
             order('attemptsCount', 'asc')
             order('beginDate', 'asc')
-            maxResults((int) configuration.asynchronous.mail.messages.at.once)
+            maxResults(asynchronousMailConfigService.messagesAtOnce)
             projections {
-                if (useMongo) {
+                if (asynchronousMailConfigService.mongo) {
                     id()
                 } else {
                     property('id')
@@ -55,9 +56,7 @@ class AsynchronousMailPersistenceService implements GrailsConfigurationAware {
 
     void updateExpiredMessages() {
         int count = 0
-        boolean useMongo = (configuration.asynchronous.mail.persistence.provider == 'mongodb')
-
-        if (useMongo) {
+        if (asynchronousMailConfigService.mongo) {
             AsynchronousMailMessage.withCriteria {
                 lt "endDate", new Date()
                 or {

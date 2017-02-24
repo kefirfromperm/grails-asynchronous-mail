@@ -1,9 +1,8 @@
 package grails.plugin.asyncmail
 
 import grails.async.Promises
-import grails.config.Config
-import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
+import groovy.transform.CompileStatic
 import org.springframework.mail.MailException
 import org.springframework.mail.MailParseException
 import org.springframework.mail.MailPreparationException
@@ -12,11 +11,12 @@ import java.util.concurrent.ArrayBlockingQueue
 
 import static grails.async.Promises.task
 
-class AsynchronousMailProcessService implements GrailsConfigurationAware {
-    Config configuration
+@CompileStatic
+class AsynchronousMailProcessService {
 
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
     AsynchronousMailSendService asynchronousMailSendService
+    AsynchronousMailConfigService asynchronousMailConfigService
 
     void findAndSendEmails() {
         // Get messages from DB
@@ -31,7 +31,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
 
             // Create some parallel tasks
             def promises = []
-            int taskCount = Math.min(configuration.asynchronous.mail.taskPoolSize ?: 1, messageCount)
+            int taskCount = Math.min(asynchronousMailConfigService.taskPoolSize, messageCount)
 
             log.debug("Starts $taskCount send tasks.")
 
@@ -62,7 +62,7 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
     }
 
     void processEmailMessage(long messageId) {
-        boolean useFlushOnSave = configuration.asynchronous.mail.useFlushOnSave
+        boolean useFlushOnSave = asynchronousMailConfigService.useFlushOnSave
 
         AsynchronousMailMessage message = asynchronousMailPersistenceService.getMessage(messageId)
 
