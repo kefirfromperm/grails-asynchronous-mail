@@ -65,6 +65,12 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
         boolean useFlushOnSave = configuration.asynchronous.mail.useFlushOnSave
 
         AsynchronousMailMessage message = asynchronousMailPersistenceService.getMessage(messageId)
+
+        if (!message) {
+            log.error("Can't find message with id=${messageId}.")
+            return
+        }
+
         log.trace("Got a message: " + message.toString())
 
         Date now = new Date()
@@ -77,6 +83,14 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
             // Guarantee that e-mail can't be sent more than 1 time
             message.status = MessageStatus.ERROR
             asynchronousMailPersistenceService.save(message, useFlushOnSave, false)
+
+            // Validate message
+            if (!message.validate()) {
+                message.errors.allErrors.each {
+                    log.error(it)
+                }
+                return
+            }
 
             // Attempt to send
             try {
@@ -97,15 +111,14 @@ class AsynchronousMailProcessService implements GrailsConfigurationAware {
             }
 
             // Delete message if it is sent successfully and can be deleted
-            long id = message.id
             if (message.hasSentStatus() && message.markDelete) {
                 asynchronousMailPersistenceService.delete(message)
-                log.trace("The message with id=${id} was deleted.")
+                log.trace("The message with id=${messageId} was deleted.")
             } else if (message.hasSentStatus() && message.markDeleteAttachments) {
                 asynchronousMailPersistenceService.deleteAttachments(message)
-                log.trace("The message with id=${id} had all its attachments deleted.")
+                log.trace("The message with id=${messageId} had all its attachments deleted.")
             } else {
-                log.trace("The message with id=${id} will not be deleted.")
+                log.trace("The message with id=${messageId} will not be deleted.")
             }
         }
     }

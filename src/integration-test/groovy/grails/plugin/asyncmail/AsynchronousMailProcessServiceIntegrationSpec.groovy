@@ -1,5 +1,6 @@
 package grails.plugin.asyncmail
 
+import grails.plugin.asyncmail.enums.MessageStatus
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.springframework.transaction.TransactionDefinition
@@ -22,6 +23,8 @@ class AsynchronousMailProcessServiceIntegrationSpec extends Specification {
 
     void cleanup() {
         AsynchronousMailMessage.list()*.delete()
+        asynchronousMailProcessService.configuration.asynchronous.mail.taskPoolSize = 1
+        asynchronousMailProcessService.configuration.asynchronous.mail.useFlushOnSave = true
     }
 
     @Unroll
@@ -38,7 +41,7 @@ class AsynchronousMailProcessServiceIntegrationSpec extends Specification {
                             to: ['jane.smith@example.con'],
                             subject: 'Subject',
                             text: 'Body'
-                    ).save(flush:true, failonError:true)
+                    ).save(flush: true, failonError: true)
                 }
             }
 
@@ -47,6 +50,7 @@ class AsynchronousMailProcessServiceIntegrationSpec extends Specification {
         when: "process"
             asynchronousMailProcessService.findAndSendEmails()
         then: "all messages have status SENT"
+            messageCount * asynchronousMailProcessService.asynchronousMailSendService.send(_ as AsynchronousMailMessage)
             AsynchronousMailMessage.countByStatus(SENT) == messageCount
             AsynchronousMailMessage.countByStatusNotEqual(SENT) == 0
         where:
@@ -63,5 +67,73 @@ class AsynchronousMailProcessServiceIntegrationSpec extends Specification {
             9            | 10        | true
             10           | 10        | true
             11           | 10        | true
+    }
+
+    void "test delete messages after sent"() {
+        given: "some meeesage with mark delete true"
+            AsynchronousMailMessage.withTransaction(
+                    propagationBehavior: TransactionDefinition.PROPAGATION_REQUIRES_NEW
+            ) {
+                for (int i = 0; i < 5; i++) {
+                    new AsynchronousMailMessage(
+                            from: 'john.smith@example.com',
+                            to: ['jane.smith@example.con'],
+                            subject: 'Subject',
+                            text: 'Body',
+                            markDelete: true
+                    ).save(flush: true, failonError: true)
+                }
+            }
+        when: "process them"
+            asynchronousMailProcessService.findAndSendEmails()
+        then: "all have been deleted"
+            5 * asynchronousMailProcessService.asynchronousMailSendService.send(_ as AsynchronousMailMessage)
+            AsynchronousMailMessage.count() == 0
+    }
+
+    void "test delet attachments"() {
+        given: "some meeesage with mark delete true"
+            AsynchronousMailMessage.withTransaction(
+                    propagationBehavior: TransactionDefinition.PROPAGATION_REQUIRES_NEW
+            ) {
+                for (int i = 0; i < 5; i++) {
+                    new AsynchronousMailMessage(
+                            from: 'john.smith@example.com',
+                            to: ['jane.smith@example.con'],
+                            subject: 'Subject',
+                            text: 'Body',
+                            markDeleteAttachments: true,
+                            attachments: [
+                                    new AsynchronousMailAttachment(
+                                            attachmentName: "Attachment $i",
+                                            content: '' as byte[]
+                                    )
+                            ]
+                    ).save(flush: true, failonError: true)
+                }
+            }
+        when: "process them"
+            asynchronousMailProcessService.findAndSendEmails()
+        then: "all have been deleted"
+            5 * asynchronousMailProcessService.asynchronousMailSendService.send(_ as AsynchronousMailMessage)
+            AsynchronousMailMessage.count() == 5
+            AsynchronousMailAttachment.count() == 0
+    }
+
+    void "test process error message"() {
+        given: "A message with an error in DB"
+            AsynchronousMailMessage.withTransaction(
+                    propagationBehavior: TransactionDefinition.PROPAGATION_REQUIRES_NEW
+            ) {
+                new AsynchronousMailMessage(
+                        from: 'john.smith@example.com',
+                        subject: 'Subject',
+                        text: 'Body'
+                ).save(flush: true, failonError: true, validate: false)
+            }
+        when: "process"
+            asynchronousMailProcessService.findAndSendEmails()
+        then: "it's status is error"
+            AsynchronousMailMessage.list()[0].status == MessageStatus.ERROR
     }
 }
