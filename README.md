@@ -141,6 +141,29 @@ logger('grails.plugins.quartz', DEBUG, ['STDOUT'])
 ...
 ```
 
+Mapping
+-------
+
+The default mappings can be overriden with the following options: 
+```groovy
+ asynchronous.mapping.datasource='mailDs'
+ asynchronous.mapping.message.table='emails' 
+ asynchronous.mapping.attachment.table='email_attachments'
+ asynchronous.constraints.attachment.size=30*1024*1024
+```
+
+or you can add a custom closure like this: 
+```groovy
+ asynchronous.mapping.message= {
+    
+ }
+ asynchronous.constraints.attachment={
+    content(maxSize:25*1024*1024) // 25 Mb attachment
+ }
+
+```
+This closure runs after the default mappings/constraints closure. 
+
 Indexes
 -------
 

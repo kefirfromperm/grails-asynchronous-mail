@@ -1,14 +1,20 @@
 package grails.plugin.asyncmail
 
+import static grails.plugin.asyncmail.enums.MessageStatus.*
+import static grails.util.Holders.config as HC
 
 import grails.plugin.asyncmail.enums.MessageStatus
 import groovy.transform.ToString
 import org.apache.commons.lang.StringUtils
 
-import static grails.plugin.asyncmail.enums.MessageStatus.*
-
 @ToString(includeNames = true, includeFields = true,  includes = 'id,subject,to,status')
 class AsynchronousMailMessage implements Serializable {
+    static final CONF_DS = 'asynchronous.mapping.datasource'
+    static final CONF_MAPPING = 'asynchronous.mapping.message'
+    static final CONF_MAPPING_TABLE = 'asynchronous.mapping.message.table'
+    static final CONF_CONSTRAINTS = 'asynchronous.constraints.message'
+
+
     /**
      * This date is accepted as the max date because different DBMSs store dates in
      * different formats. We can't use a date which is the maximum in Java.
@@ -119,7 +125,11 @@ class AsynchronousMailMessage implements Serializable {
 
     static hasMany = [to: String, cc: String, bcc: String, attachments: AsynchronousMailAttachment]
     static mapping = {
-        table 'async_mail_mess'
+        if(HC.getProperty(CONF_DS)){
+            datasource HC.getProperty(CONF_DS)
+        }
+        
+        table HC.getProperty(CONF_MAPPING_TABLE,'async_mail_mess')
 
         from column: 'from_column'
 
@@ -169,6 +179,13 @@ class AsynchronousMailMessage implements Serializable {
         text type: 'text'
 
         attachments cascade: "all-delete-orphan"
+
+        def customMapping = HC.getProperty(CONF_MAPPING,Closure)
+        if(customMapping){
+            def mappingCode = customMapping.rehydrate(delegate,this,this)
+            mappingCode.resolveStrategy = Closure.DELEGATE_FIRST
+            mappingCode()
+        }
     }
 
     static constraints = {
@@ -245,5 +262,12 @@ class AsynchronousMailMessage implements Serializable {
         maxAttemptsCount(min: 1)
         lastAttemptDate(nullable: true)
         attemptInterval(min: 0l)
+
+        def customConstraints = HC.getProperty(CONF_CONSTRAINTS,Closure)
+        if(customConstraints){
+            def constraintCode = customConstraints.rehydrate(delegate,this,this)
+            constraintCode.resolveStrategy = Closure.DELEGATE_FIRST
+            constraintCode()
+        }
     }
 }
