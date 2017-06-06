@@ -8,7 +8,9 @@ class AsynchronousMailService {
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
     AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory
     AsynchronousMailConfigService asynchronousMailConfigService
-
+    
+     
+    
     /**
      * Create asynchronous message and save it to the DB.
      *
@@ -52,7 +54,9 @@ class AsynchronousMailService {
                 savedMessage = asynchronousMailPersistenceService.save(message, flushOnSave, true)
             }
         } else {
-            savedMessage = asynchronousMailPersistenceService.save(message, flushOnSave, true)
+            AsynchronousMailMessage.withTransaction {
+                savedMessage = asynchronousMailPersistenceService.save(message, flushOnSave, true)
+            }
         }
 
         if (!savedMessage) {
