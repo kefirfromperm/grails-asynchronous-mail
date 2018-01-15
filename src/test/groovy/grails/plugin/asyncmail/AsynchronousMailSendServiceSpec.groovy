@@ -1,14 +1,13 @@
 package grails.plugin.asyncmail
 
 import grails.plugins.mail.MailService
-import grails.test.mixin.TestFor
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
 /**
  * Test for synchornous send service
  */
-@TestFor(AsynchronousMailSendService)
-class AsynchronousMailSendServiceTest extends Specification {
+class AsynchronousMailSendServiceSpec extends Specification implements ServiceUnitTest<AsynchronousMailSendService> {
     void setup() {
         service.mailService = Mock(MailService)
     }

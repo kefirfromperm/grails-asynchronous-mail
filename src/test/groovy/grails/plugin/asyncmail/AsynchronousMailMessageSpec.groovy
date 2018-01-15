@@ -1,16 +1,15 @@
 package grails.plugin.asyncmail
 
-
-import grails.test.mixin.TestFor
+import grails.testing.gorm.DomainUnitTest
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.enums.MessageStatus.*
+
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
-@TestFor(AsynchronousMailMessage)
-class AsynchronousMailMessageSpec extends Specification {
+class AsynchronousMailMessageSpec extends Specification implements DomainUnitTest<AsynchronousMailMessage> {
 
     void "testing default constructor"() {
         setup:
@@ -37,7 +36,7 @@ class AsynchronousMailMessageSpec extends Specification {
         message.maxAttemptsCount == 1
         !message.lastAttemptDate
         message.attemptInterval == 300000l
-        message.markDelete == false
+            !message.markDelete
     }
 
     void "message should pass validation"() {

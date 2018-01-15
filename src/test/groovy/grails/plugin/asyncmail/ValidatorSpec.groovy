@@ -1,7 +1,9 @@
 package grails.plugin.asyncmail
+
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.Validator.isMailbox
+
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */

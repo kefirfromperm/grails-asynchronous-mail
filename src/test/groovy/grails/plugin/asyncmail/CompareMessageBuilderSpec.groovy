@@ -1,6 +1,8 @@
 package grails.plugin.asyncmail
+
 import grails.plugins.mail.MailMessageBuilder
 import spock.lang.Specification
+
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */

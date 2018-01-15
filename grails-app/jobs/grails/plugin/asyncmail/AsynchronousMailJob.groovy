@@ -1,8 +1,11 @@
 package grails.plugin.asyncmail
 
+import groovy.util.logging.Slf4j
+
 /**
  * Send asynchronous messages
  */
+@Slf4j
 class AsynchronousMailJob {
     static triggers = {}
 
@@ -19,6 +22,6 @@ class AsynchronousMailJob {
         asynchronousMailProcessService.findAndSendEmails()
 
         def endDate = System.currentTimeMillis()
-        log.trace("Exiting execute method. Execution time = ${endDate - startDate}ms");
+        log.trace("Exiting execute method. Execution time = ${endDate - startDate}ms")
     }
 }

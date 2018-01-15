@@ -1,6 +1,6 @@
 package grails.plugin.asyncmail
 
-import grails.test.mixin.integration.Integration
+import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
@@ -41,7 +41,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
             message1.id == message.id
 
         when: 'deleted the message'
-            asynchronousMailPersistenceService.delete(message1)
+            asynchronousMailPersistenceService.delete(message1, true)
 
         then: 'message to be send count should be 0'
             0 == asynchronousMailPersistenceService.selectMessagesIdsForSend()?.size()
@@ -76,7 +76,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
             message1.attachments.size() == 1
 
         when: 'deleted the message'
-            asynchronousMailPersistenceService.deleteAttachments(message)
+            asynchronousMailPersistenceService.deleteAttachments(message, true)
             message1 = asynchronousMailPersistenceService.getMessage(ids[0])
 
         then: 'the message should have no attachments'
@@ -95,7 +95,7 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
             asynchronousMailPersistenceService.save(message, true, true)
 
         cleanup:
-            asynchronousMailPersistenceService.delete(message)
+            asynchronousMailPersistenceService.delete(message, true)
     }
 
     void testUpdateExpiredMessages() {

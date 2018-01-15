@@ -1,8 +1,10 @@
 package grails.plugin.asyncmail
 
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 import org.springframework.validation.ObjectError
 
+@Slf4j
 @CompileStatic
 class AsynchronousMailService {
     AsynchronousMailPersistenceService asynchronousMailPersistenceService

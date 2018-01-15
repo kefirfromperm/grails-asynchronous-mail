@@ -2,7 +2,9 @@ package grails.plugin.asyncmail
 
 import grails.plugin.asyncmail.enums.MessageStatus
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 
+@Slf4j
 class AsynchronousMailPersistenceService {
 
     AsynchronousMailConfigService asynchronousMailConfigService
@@ -11,18 +13,18 @@ class AsynchronousMailPersistenceService {
     AsynchronousMailMessage save(
             AsynchronousMailMessage message, boolean flush, boolean validate
     ) {
-        return message.save(flush: flush, failOnError:true, validate: validate)
+        return message.save(flush: flush, failOnError: true, validate: validate)
     }
 
     @CompileStatic
-    void delete(AsynchronousMailMessage message) {
-        message.delete(flush: true)
+    void delete(AsynchronousMailMessage message, boolean flush) {
+        message.delete(flush: flush)
     }
 
     @CompileStatic
-    void deleteAttachments(AsynchronousMailMessage message) {
+    void deleteAttachments(AsynchronousMailMessage message, boolean flush) {
         message.attachments.clear()
-        message.save(flush: true)
+        message.save(flush: flush)
     }
 
     @CompileStatic
@@ -78,5 +80,11 @@ class AsynchronousMailPersistenceService {
             }
         }
         log.trace("${count} expired messages were updated.")
+    }
+
+    void flush() {
+        AsynchronousMailMessage.withSession { session ->
+            session.flush()
+        }
     }
 }

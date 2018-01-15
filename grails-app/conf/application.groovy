@@ -19,14 +19,16 @@ spring {
 
 environments {
     test {
+        hibernate.dialect = 'org.hibernate.dialect.H2Dialect'
         dataSource {
             pooled = true
+            lazy = false
             jmxExport = true
             driverClassName = 'org.h2.Driver'
             username = 'sa'
             password = ''
-            dbCreate = 'update'
-            url = 'jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE'
+            dbCreate = 'create-drop'
+            url = 'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1'
         }
         quartz.jdbcStore = false
     }

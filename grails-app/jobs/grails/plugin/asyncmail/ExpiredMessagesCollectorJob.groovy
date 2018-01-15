@@ -1,5 +1,8 @@
 package grails.plugin.asyncmail
 
+import groovy.util.logging.Slf4j
+
+@Slf4j
 class ExpiredMessagesCollectorJob {
     static triggers = {}
 

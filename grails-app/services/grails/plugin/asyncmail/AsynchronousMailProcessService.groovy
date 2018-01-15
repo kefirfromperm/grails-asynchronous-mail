@@ -3,6 +3,7 @@ package grails.plugin.asyncmail
 import grails.async.Promises
 import grails.plugin.asyncmail.enums.MessageStatus
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 import org.springframework.mail.MailException
 import org.springframework.mail.MailParseException
 import org.springframework.mail.MailPreparationException
@@ -11,6 +12,7 @@ import java.util.concurrent.ArrayBlockingQueue
 
 import static grails.async.Promises.task
 
+@Slf4j
 @CompileStatic
 class AsynchronousMailProcessService {
 
@@ -48,6 +50,10 @@ class AsynchronousMailProcessService {
                                         e
                                 )
                             }
+                        }
+
+                        if (!asynchronousMailConfigService.useFlushOnSave) {
+                            asynchronousMailPersistenceService.flush()
                         }
                     }
                 }
@@ -87,7 +93,7 @@ class AsynchronousMailProcessService {
             // Validate message
             if (!message.validate()) {
                 message.errors.allErrors.each {
-                    log.error(it)
+                    log.error(it as String)
                 }
                 return
             }
@@ -112,10 +118,10 @@ class AsynchronousMailProcessService {
 
             // Delete message if it is sent successfully and can be deleted
             if (message.hasSentStatus() && message.markDelete) {
-                asynchronousMailPersistenceService.delete(message)
+                asynchronousMailPersistenceService.delete(message, useFlushOnSave)
                 log.trace("The message with id=${messageId} was deleted.")
             } else if (message.hasSentStatus() && message.markDeleteAttachments) {
-                asynchronousMailPersistenceService.deleteAttachments(message)
+                asynchronousMailPersistenceService.deleteAttachments(message, useFlushOnSave)
                 log.trace("The message with id=${messageId} had all its attachments deleted.")
             } else {
                 log.trace("The message with id=${messageId} will not be deleted.")

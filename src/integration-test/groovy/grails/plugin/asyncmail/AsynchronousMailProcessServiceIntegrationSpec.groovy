@@ -3,7 +3,7 @@ package grails.plugin.asyncmail
 import grails.config.Config
 import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
-import grails.test.mixin.integration.Integration
+import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
 import org.springframework.transaction.TransactionDefinition
 import spock.lang.Specification

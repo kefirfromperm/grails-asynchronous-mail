@@ -1,24 +1,24 @@
 package grails.plugin.asyncmail
 
-
 import grails.plugins.mail.MailMessageContentRender
-import grails.test.mixin.Mock
-import grails.test.mixin.TestMixin
-import grails.test.mixin.support.GrailsUnitTestMixin
+import grails.testing.gorm.DataTest
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.util.mop.ConfineMetaClassChanges
 
 import static grails.plugin.asyncmail.enums.MessageStatus.CREATED
+
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
-@TestMixin(GrailsUnitTestMixin)
-@Mock(AsynchronousMailMessage)
 @ConfineMetaClassChanges(AsynchronousMailMessageBuilder)
-class AsynchronousMailMessageBuilderSpec extends Specification {
+class AsynchronousMailMessageBuilderSpec extends Specification implements DataTest {
 
     AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory
+
+    void setupSpec() {
+        mockDomain AsynchronousMailMessage
+    }
 
     void setup() {
         asynchronousMailMessageBuilderFactory = new AsynchronousMailMessageBuilderFactory()

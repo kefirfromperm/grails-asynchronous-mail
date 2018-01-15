@@ -1,6 +1,6 @@
 package grails.plugin.asyncmail
 
-import grails.test.mixin.TestFor
+import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.AsynchronousMailAttachment.DEFAULT_MIME_TYPE
@@ -8,8 +8,7 @@ import static grails.plugin.asyncmail.AsynchronousMailAttachment.DEFAULT_MIME_TY
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
-@TestFor(AsynchronousMailAttachment)
-class AsynchronousMailAttachmentSpec extends Specification {
+class AsynchronousMailAttachmentSpec extends Specification implements DomainUnitTest<AsynchronousMailAttachment> {
 
 
     void "testing default constructor"() {
