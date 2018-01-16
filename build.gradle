@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.2"
     }
 }
 
@@ -15,6 +16,7 @@ apply plugin: 'idea'
 apply plugin:"org.grails.grails-plugin"
 apply plugin:"org.grails.grails-plugin-publish"
 apply plugin:"org.grails.grails-gsp"
+apply plugin:"asset-pipeline"
 
 ext {
     grailsVersion = project.grailsVersion
@@ -48,6 +50,10 @@ dependencies {
 
     compile "org.grails.plugins:mail:2.0.0"
     compile "org.grails.plugins:quartz:2.0.12"
+}
+
+assets {
+    packagePlugin = true
 }
 
 task wrapper(type: Wrapper) {
