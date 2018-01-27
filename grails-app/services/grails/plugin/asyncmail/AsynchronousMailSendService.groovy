@@ -10,7 +10,7 @@ class AsynchronousMailSendService {
 
     MailMessage send(AsynchronousMailMessage message) {
         return mailService.sendMail {
-            if (message.attachments) {
+            if (isMimeCapable() && (message.attachments || (message.html && message.alternative))) {
                 multipart true
             }
             if(message.to && !message.to.isEmpty()){
@@ -44,7 +44,7 @@ class AsynchronousMailSendService {
                 envelopeFrom message.envelopeFrom
             }
             if (isMimeCapable()) {
-                message.attachments.each {AsynchronousMailAttachment attachment ->
+                message.attachments?.each {AsynchronousMailAttachment attachment ->
                     if (!attachment.inline) {
                         attachBytes attachment.attachmentName, attachment.mimeType, attachment.content
                     } else {
