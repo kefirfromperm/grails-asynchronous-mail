@@ -1,5 +1,7 @@
 package grails.plugin.asyncmail;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -17,6 +19,6 @@ public class Validator {
         } catch (AddressException ex) {
             result = false;
         }
-        return result;
+        return result || EmailValidator.getInstance(true, true).isValid(value);
     }
 }
