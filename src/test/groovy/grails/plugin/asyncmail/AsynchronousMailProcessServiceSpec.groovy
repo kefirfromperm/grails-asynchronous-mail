@@ -1,7 +1,7 @@
 package grails.plugin.asyncmail
 
-import grails.testing.gorm.DataTest
-import grails.testing.services.ServiceUnitTest
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 import static grails.plugin.asyncmail.enums.MessageStatus.SENT
@@ -9,15 +9,13 @@ import static grails.plugin.asyncmail.enums.MessageStatus.SENT
 /**
  * @author Vitalii Samolovskikh aka Kefir, Puneet Behl
  */
-class AsynchronousMailProcessServiceSpec extends Specification implements ServiceUnitTest<AsynchronousMailProcessService>, DataTest {
+@TestFor(AsynchronousMailProcessService)
+@Mock(AsynchronousMailMessage)
+class AsynchronousMailProcessServiceSpec extends Specification {
 
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
     AsynchronousMailSendService asynchronousMailSendService
     AsynchronousMailConfigService asynchronousMailConfigService
-
-    void setupSpec(){
-        mockDomain AsynchronousMailMessage
-    }
 
     void setup() {
         asynchronousMailSendService = Mock(AsynchronousMailSendService)
