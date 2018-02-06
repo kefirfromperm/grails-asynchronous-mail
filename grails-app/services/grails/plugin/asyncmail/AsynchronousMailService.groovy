@@ -10,7 +10,9 @@ class AsynchronousMailService {
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
     AsynchronousMailMessageBuilderFactory asynchronousMailMessageBuilderFactory
     AsynchronousMailConfigService asynchronousMailConfigService
-
+    
+     
+    
     /**
      * Create asynchronous message and save it to the DB.
      *
@@ -38,14 +40,25 @@ class AsynchronousMailService {
                     message.beginDate.time <= System.currentTimeMillis() &&
                     !asynchronousMailConfigService.disable
 
+        
+        boolean flushOnSave
+        if(messageBuilder.useFlushOnSaveSetted){
+            flushOnSave = messageBuilder.useFlushOnSave
+        }
+        else{
+            flushOnSave = asynchronousMailConfigService.useFlushOnSave
+        }
+        
         // Save message to DB
 		def savedMessage = null
 		if(immediately && asynchronousMailConfigService.newSessionOnImmediateSend) {
             AsynchronousMailMessage.withNewSession {
-                savedMessage = asynchronousMailPersistenceService.save(message, true, true)
+                savedMessage = asynchronousMailPersistenceService.save(message, flushOnSave, true)
             }
         } else {
-            savedMessage = asynchronousMailPersistenceService.save(message, immediately, true)
+            AsynchronousMailMessage.withTransaction {
+                savedMessage = asynchronousMailPersistenceService.save(message, flushOnSave, true)
+            }
         }
 
         if (!savedMessage) {

@@ -20,7 +20,10 @@ class AsynchronousMailMessageBuilder {
     private AsynchronousMailMessage message
     private boolean immediately = false
     private boolean immediatelySetted = false
-
+    
+    private boolean useFlushOnSaveSetted = false
+    private boolean useFlushOnSave = false
+    
     private Locale locale
 
     final boolean mimeCapable
@@ -99,6 +102,11 @@ class AsynchronousMailMessageBuilder {
     void immediate(boolean value) {
         immediately = value
         immediatelySetted = true
+    }
+    
+    void flush(boolean value){
+        useFlushOnSave = value
+        useFlushOnSaveSetted = true
     }
 
     // Mark message must be deleted after sent
@@ -436,5 +444,12 @@ class AsynchronousMailMessageBuilder {
 
     boolean getImmediatelySetted() {
         return immediatelySetted
+    }
+    boolean getUseFlushOnSave() {
+        return useFlushOnSave
+    }
+
+    boolean getUseFlushOnSaveSetted() {
+        return useFlushOnSaveSetted
     }
 }
