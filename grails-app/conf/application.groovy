@@ -28,7 +28,7 @@ environments {
             username = 'sa'
             password = ''
             dbCreate = 'create-drop'
-            url = 'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1'
+            url = 'jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE'
         }
         quartz.jdbcStore = false
     }
