@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version "2.0.1"
+version "2.0.2"
 group "org.grails.plugins"
 
 apply plugin: 'idea'
@@ -49,7 +49,7 @@ dependencies {
     testCompile "com.h2database:h2:1.4.196"
 
     compile "org.grails.plugins:mail:2.0.0"
-    compile "org.grails.plugins:quartz:2.0.12"
+    compile "org.grails.plugins:quartz:2.0.13"
 }
 
 assets {
