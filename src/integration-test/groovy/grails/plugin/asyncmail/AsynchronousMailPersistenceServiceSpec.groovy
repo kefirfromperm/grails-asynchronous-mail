@@ -39,6 +39,10 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
 
         then: "message1 id message"
             message1.id == message.id
+            message1.from == 'John Smith <john@example.com>'
+            message1.to == ['Mary Smith <mary@example.com>']
+            message1.subject == 'Subject'
+            message1.text == 'Text'
 
         when: 'deleted the message'
             asynchronousMailPersistenceService.delete(message1, true)
@@ -91,8 +95,11 @@ class AsynchronousMailPersistenceServiceSpec extends Specification {
                     text: 'Text'
             )
 
-        expect:
+        when:
             asynchronousMailPersistenceService.save(message, true, true)
+        then:
+            AsynchronousMailMessage dbMessage = asynchronousMailPersistenceService.getMessage(message.id)
+            dbMessage.bcc == ['mary@example.com']
 
         cleanup:
             asynchronousMailPersistenceService.delete(message, true)
