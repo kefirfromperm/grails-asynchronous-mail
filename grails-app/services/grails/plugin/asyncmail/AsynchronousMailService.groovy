@@ -45,7 +45,9 @@ class AsynchronousMailService {
                 savedMessage = asynchronousMailPersistenceService.save(message, true, true)
             }
         } else {
-            savedMessage = asynchronousMailPersistenceService.save(message, true, true)
+            savedMessage = asynchronousMailPersistenceService.save(message
+                    , asynchronousMailConfigService.useFlushOnSave
+                    , true)
         }
 
         if (!savedMessage) {
