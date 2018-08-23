@@ -9,8 +9,8 @@ import groovy.util.logging.Slf4j
 class AsynchronousMailJob {
     static triggers = {}
 
-    def concurrent = false
-    def group = "AsynchronousMail"
+    static concurrent = false
+    static group = "AsynchronousMail"
 
     // Dependency injection
     AsynchronousMailProcessService asynchronousMailProcessService
