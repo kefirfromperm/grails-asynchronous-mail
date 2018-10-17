@@ -11,26 +11,26 @@ class ValidatorSpec extends Specification {
 
     void "test@example.com is valid mailbox"() {
         expect:
-        isMailbox "test@example.com"
+            isMailbox "test@example.com"
     }
 
     void "John Smith <test@example.com> is valid mailbox"() {
         expect:
-        isMailbox "John Smith <test@example.com>"
+            isMailbox "John Smith <test@example.com>"
     }
 
     void "abc is not valid mailbox"() {
         expect:
-        !isMailbox("abc")
+            !isMailbox("abc")
     }
 
     void "empty string is not valid mailbox"() {
         expect:
-        !isMailbox("")
+            !isMailbox("")
     }
 
     void "blank string is not a valid mailbox"() {
         expect:
-        !isMailbox(" ")
+            !isMailbox(" ")
     }
 }

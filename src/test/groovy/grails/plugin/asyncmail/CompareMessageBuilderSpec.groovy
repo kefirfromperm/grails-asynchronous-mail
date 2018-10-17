@@ -10,12 +10,14 @@ class CompareMessageBuilderSpec extends Specification {
 
     void "testing builder methods"() {
         setup:
-        def ammbMethods  = AsynchronousMailMessageBuilder.metaClass.methods
-        def mbMethods = MailMessageBuilder.metaClass.methods
+            def ammbMethods = AsynchronousMailMessageBuilder.metaClass.methods
+            def mbMethods = MailMessageBuilder.metaClass.methods
 
         expect:
-        mbMethods.every {MetaMethod mbm->
-            mbm.isPublic() && ammbMethods.find {it.isPublic() && it.name == mbm.name && it.returnType == mbm.returnType && it.signature == mbm.signature}
-        }
+            mbMethods.every { MetaMethod mbm ->
+                mbm.isPublic() && ammbMethods.find {
+                    it.isPublic() && it.name == mbm.name && it.returnType == mbm.returnType && it.signature == mbm.signature
+                }
+            }
     }
 }

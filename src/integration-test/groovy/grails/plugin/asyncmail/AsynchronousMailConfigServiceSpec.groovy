@@ -1,6 +1,6 @@
 package grails.plugin.asyncmail
 
-import grails.testing.mixin.integration.Integration
+import grails.test.mixin.integration.Integration
 import spock.lang.Specification
 
 /**
