@@ -6,8 +6,8 @@ import groovy.util.logging.Slf4j
 class ExpiredMessagesCollectorJob {
     static triggers = {}
 
-    def concurrent = false
-    def group = "AsynchronousMail"
+    static concurrent = false
+    static group = "AsynchronousMail"
 
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
 
