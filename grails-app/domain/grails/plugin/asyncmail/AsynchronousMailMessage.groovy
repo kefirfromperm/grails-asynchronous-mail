@@ -167,6 +167,8 @@ class AsynchronousMailMessage implements Serializable {
         )
 
         text type: 'text'
+        
+        alternative type: 'text'
 
         attachments cascade: "all-delete-orphan"
     }
