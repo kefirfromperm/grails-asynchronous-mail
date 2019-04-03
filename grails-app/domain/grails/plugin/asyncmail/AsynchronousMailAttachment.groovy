@@ -15,6 +15,7 @@ class AsynchronousMailAttachment implements Serializable {
 
     static mapping = {
         table 'async_mail_attachment'
+        content(sqlType: 'LONGBLOB')
         version false
     }
 
