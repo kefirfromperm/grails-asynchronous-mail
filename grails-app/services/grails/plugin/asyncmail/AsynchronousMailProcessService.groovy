@@ -5,6 +5,11 @@ import org.springframework.mail.*
 import groovyx.gpars.GParsPool
 
 class AsynchronousMailProcessService {
+
+    {
+        log.trace("TRACE MODE FOR AsynchronousMailProcessService is [ON]")
+    }
+
     static transactional = false
 
     def grailsApplication
@@ -21,18 +26,22 @@ class AsynchronousMailProcessService {
         Integer gparsPoolSize = grailsApplication.config.asynchronous.mail.gparsPoolSize
 
         // Send each message and save new status
+        log.trace("Before scheduling emails in paralel. Thread count ${Thread.activeCount()}")
         GParsPool.withPool(gparsPoolSize) {
             messagesIds.eachParallel { Long messageId ->
                 try {
+                    log.trace("Start. Thread count ${Thread.activeCount()}")
                     persistenceInterceptor.init()
-                    log.debug('Open a new persistence session.')
+                    log.trace('Open a new persistence session.')
                     try {
+                        log.trace("processing message with id ${messageId}")
                         processEmailMessage(messageId)
                         try {
                             persistenceInterceptor.flush()
                             persistenceInterceptor.clear()
-                            log.debug('Flush the persistence session.')
+                            log.trace('Flush the persistence session.')
                         } catch (Exception e) {
+                            log.trace("Failed to flush message with id ${messageId}")
                             log.error("Failed to flush the persistence session.", e)
                         }
                     } finally {
