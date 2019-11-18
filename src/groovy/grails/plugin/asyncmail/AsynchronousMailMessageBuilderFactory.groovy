@@ -7,7 +7,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.mail.javamail.JavaMailSender
 
 /**
- * Create an message builder.
+ * Create a message builder.
  *
  * @author Vitalii Samolovskikh aka Kefir
  */

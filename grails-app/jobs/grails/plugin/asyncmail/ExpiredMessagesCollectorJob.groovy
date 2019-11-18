@@ -9,8 +9,8 @@ class ExpiredMessagesCollectorJob {
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
 
     def execute() {
-        log.trace('Enter to execute method.')
+        log.trace('Entering execute method.')
         asynchronousMailPersistenceService.updateExpiredMessages()
-        log.trace('Exit from execute method.')
+        log.trace('Exiting execute method.')
     }
 }

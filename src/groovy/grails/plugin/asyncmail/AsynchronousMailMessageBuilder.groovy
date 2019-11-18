@@ -10,6 +10,7 @@ import org.springframework.mail.MailSender
 import org.springframework.util.Assert
 
 import javax.activation.FileTypeMap
+import java.util.concurrent.ExecutorService
 
 /**
  * Build new synchronous message
@@ -78,7 +79,7 @@ class AsynchronousMailMessageBuilder {
         message.attemptInterval = interval
     }
 
-    // Mark that the message must be sent immediately
+    // Mark message must be sent immediately
     void immediate(boolean value) {
         immediately = value
         immediatelySetted = true
@@ -91,12 +92,18 @@ class AsynchronousMailMessageBuilder {
 
     // Multipart field do nothing
     void multipart(boolean multipart) {
-        // nothing
+        // Nothing
         // Added analogous to mail plugin
     }
 
     void multipart(int multipartMode) {
-        // nothing
+        // Nothing
+        // Added analogous to mail plugin
+    }
+
+    // Added for compatibility with the Mail plugin
+    void async(boolean async) {
+        // Nothing
         // Added analogous to mail plugin
     }
 
@@ -203,6 +210,13 @@ class AsynchronousMailMessageBuilder {
         message.from = addr
     }
 
+    // Field "envelope from"
+    void envelopeFrom(CharSequence envFrom) {
+        def addr = envFrom?.toString()
+        assertEmail(addr, 'envelopeFrom')
+        message.envelopeFrom = envFrom
+    }
+
     // Field "subject"
     void title(CharSequence subject1) {
         subject(subject1)
@@ -220,7 +234,7 @@ class AsynchronousMailMessageBuilder {
     }
 
     void body(Map params) {
-        Assert.notEmpty(params, "body cannot be null or empty")
+        Assert.notEmpty(params, "Body can't be null or empty.")
 
         def render = doRender(params)
 
@@ -256,25 +270,25 @@ class AsynchronousMailMessageBuilder {
     protected MailMessageContentRender doRender(Map params) {
         if (mailMessageContentRenderer == null) {
             throw new GrailsMailException(
-                    "mail message builder was constructed without a message content render so cannot render views"
+                    "Mail message builder was constructed without a message content renderer so views can't be rendered"
             )
         }
 
         if (!params.view) {
-            throw new GrailsMailException("no view specified")
+            throw new GrailsMailException("No view specified.")
         }
 
         return mailMessageContentRenderer.render(new StringWriter(), params.view, params.model, locale, params.plugin)
     }
 
     void locale(String localeStr) {
-        Assert.hasText(localeStr, "locale cannot be null or empty")
+        Assert.hasText(localeStr, "Locale can't be null or empty.")
 
         locale(new Locale(localeStr.split('_', 3).toArrayString()))
     }
 
     void locale(Locale locale) {
-        Assert.notNull(locale, "locale cannot be null")
+        Assert.notNull(locale, "Locale can't be null.")
 
         this.locale = locale
     }
@@ -309,7 +323,7 @@ class AsynchronousMailMessageBuilder {
 
     void attach(String fileName, String contentType, File file) {
         if (!file.exists()) {
-            throw new FileNotFoundException("cannot use $file as an attachment as it does not exist")
+            throw new FileNotFoundException("Can't use $file as an attachment as it does not exist.")
         }
 
         attach(fileName, contentType, new FileSystemResource(file))
@@ -349,7 +363,7 @@ class AsynchronousMailMessageBuilder {
 
     void inline(String contentId, String contentType, File file) {
         if (!file.exists()) {
-            throw new FileNotFoundException("cannot use $file as an attachment as it does not exist")
+            throw new FileNotFoundException("Can't use $file as an attachment as it does not exist.")
         }
 
         inline(contentId, contentType, new FileSystemResource(file))
@@ -366,19 +380,19 @@ class AsynchronousMailMessageBuilder {
 
     MailMessage finishMessage() {
         throw new UnsupportedOperationException(
-                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using the Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
-    MailMessage sendMessage() {
+    MailMessage sendMessage(ExecutorService executorService) {
         throw new UnsupportedOperationException(
-                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using the Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 
     MailSender getMailSender(){
         throw new UnsupportedOperationException(
-                "You use Grails Asynchronous Mail plug-in which doesn't support some methods."
+                "You are using the Grails Asynchronous Mail plug-in which doesn't support some methods."
         );
     }
 

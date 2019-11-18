@@ -23,21 +23,20 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        compile "org.codehaus.gpars:gpars:1.0.0"
-        compile "org.codehaus.jsr166-mirror:jsr166y:1.7.0"
+        compile "org.codehaus.gpars:gpars:1.2.1"
     }
 
     plugins {
-        runtime(":hibernate:2.0.0") {
+        test(":hibernate:3.6.10.16") {
             export = false
         }
 
-        compile(':mail:1.0.1'){
+        compile(':mail:1.0.7'){
             excludes 'spring-test'
         }
-        compile ':quartz:1.0.1'
+        compile ':quartz:1.0.2'
 
-        build(':release:2.1.0', ':rest-client-builder:1.0.3') {
+        build(':release:3.0.1', ':rest-client-builder:2.0.3') {
             export = false
         }
     }

@@ -37,6 +37,9 @@ class AsynchronousMailSendService {
             if (message.from) {
                 from message.from
             }
+            if(message.envelopeFrom){
+                envelopeFrom message.envelopeFrom
+            }
             if (isMimeCapable()) {
                 message.attachments.each {AsynchronousMailAttachment attachment ->
                     if (!attachment.inline) {

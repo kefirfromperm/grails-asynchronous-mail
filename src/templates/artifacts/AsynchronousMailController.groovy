@@ -1,19 +1,20 @@
+@artifact.package@
 import grails.plugin.asyncmail.AsynchronousMailMessage
 import grails.plugin.asyncmail.MessageStatus
 
-class AsynchronousMailController {
+class @artifact.name@ {
     static defaultAction = 'list'
 
     static allowedMethods = [update: 'POST']
 
     /**
-     * Show all message in table.
+     * List messages.
      */
     def list() {
         params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
         params.sort = params.sort ?: 'createDate'
         params.order = params.order ?: 'desc'
-        [list: AsynchronousMailMessage.list(params), total: AsynchronousMailMessage.count()]
+        [resultList: AsynchronousMailMessage.list(params)]
     }
 
     private withMessage(Closure cl) {
@@ -22,7 +23,7 @@ class AsynchronousMailController {
             return cl(message)
         }
 
-        flash.message = "Message with id ${params.id} not found."
+        flash.message = "The message ${params.id} was not found."
         flash.error = true
         redirect(action: 'list')
     }
@@ -37,7 +38,7 @@ class AsynchronousMailController {
     }
 
     /**
-     * Show form for editing.
+     * Edit message data.
      */
     def edit() {
         withMessage {AsynchronousMailMessage message ->
@@ -46,7 +47,7 @@ class AsynchronousMailController {
     }
 
     /**
-     * Update message
+     * Update message.
      */
     def update() {
         withMessage {AsynchronousMailMessage message ->
@@ -65,8 +66,8 @@ class AsynchronousMailController {
                     ]
             )
             message.attemptsCount = 0
-            if (!message.hasErrors() && message.save()) {
-                flash.message = "Message ${params.id} was updated."
+            if (!message.hasErrors() && message.save(flush: true)) {
+                flash.message = "The message ${params.id} was updated."
                 redirect(action: 'show', id: message.id)
             } else {
                 render(view: 'edit', model: [message: message])
@@ -75,20 +76,20 @@ class AsynchronousMailController {
     }
 
     /**
-     * Abort message sent
+     * Abort message sending.
      */
     def abort() {
         withMessage {AsynchronousMailMessage message ->
             if (message.abortable) {
                 message.status = MessageStatus.ABORT
-                if (message.save()) {
-                    flash.message = "Message ${message.id} was aborted."
+                if (message.save(flush: true)) {
+                    flash.message = "The message ${message.id} was aborted."
                 } else {
-                    flash.message = "Can't abort message with id ${message.id}."
+                    flash.message = "Can't abort the message ${message.id}."
                     flash.error = true
                 }
             } else {
-                flash.message = "Can't abort message with id ${message.id} and status ${message.status}."
+                flash.message = "Can't abort the message ${message.id} with the status ${message.status}."
                 flash.error = true
             }
             redirect(action: 'list')
@@ -96,16 +97,18 @@ class AsynchronousMailController {
     }
 
     /**
-     * Delete message
+     * Delete message.
      */
     def delete() {
         withMessage {AsynchronousMailMessage message ->
             try {
-                message.delete()
-                flash.message = "Message with id ${message.id} was deleted."
+                message.delete(flush: true)
+                flash.message = "The message ${message.id} was deleted."
                 redirect(action: 'list')
             } catch (Exception e) {
-                flash.message = "Can't delete message with id ${message.id}."
+                def errorMessage = "Can't delete the message with the id ${message.id}.";
+                log.error(errorMessage, e)
+                flash.message = errorMessage
                 flash.error = true
                 redirect(action: 'show', id: message.id)
             }

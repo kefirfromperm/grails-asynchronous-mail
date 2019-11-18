@@ -13,12 +13,12 @@ class AsynchronousMailJob {
     AsynchronousMailProcessService asynchronousMailProcessService
 
     def execute() {
-        log.trace('Enter to execute method.')
+        log.trace('Entering execute method.')
         def startDate = System.currentTimeMillis()
 
         asynchronousMailProcessService.findAndSendEmails()
 
         def endDate = System.currentTimeMillis()
-        log.trace("Exit from execute method. Execution time = ${endDate - startDate}");
+        log.trace("Exiting execute method. Execution time = ${endDate - startDate}ms");
     }
 }

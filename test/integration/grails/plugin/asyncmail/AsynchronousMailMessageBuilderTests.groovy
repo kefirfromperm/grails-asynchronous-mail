@@ -26,6 +26,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
         def c = {
             from 'John Smith <john@example.com>'
             to 'test1@example.com'
+            envelopeFrom 'mary@example.com'
             subject 'Subject'
             text 'Text'
             immediate false
@@ -45,6 +46,7 @@ class AsynchronousMailMessageBuilderTests extends GrailsUnitTestCase {
 
         assertEquals('John Smith <john@example.com>', message.from)
         assertEquals(['test1@example.com'], message.to)
+        assertEquals('mary@example.com', message.envelopeFrom)
         assertEquals('Subject', message.subject)
         assertEquals('Text', message.text)
         assertEquals(MessageStatus.CREATED, message.status)

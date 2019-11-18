@@ -1,34 +1,44 @@
-target(createAsynchronousMailController: "Create controller for manage asynchronous messages") {
-    ant.copy(
-            file: "${asynchronousMailPluginDir}/src/templates/controllers/AsynchronousMailController.groovy",
-            tofile: "$basedir/grails-app/controllers/AsynchronousMailController.groovy",
+import groovy.text.SimpleTemplateEngine
+
+includeTargets << grailsScript("_GrailsInit")
+includeTargets << grailsScript("_GrailsCreateArtifacts")
+
+/**
+ * Create a new controller and views for managing asynchronous messages.
+ */
+target('default': "Creates a new controller and views for managing asynchronous messages.") {
+
+    depends(checkVersion, parseArguments)
+
+    def type = "AsynchronousMailController"
+    def name = argsMap["params"][0]
+
+    if (name) {
+        name = purgeRedundantArtifactSuffix(name, type)
+    } else {
+        name = "AsynchronousMail"
+    }
+
+    createArtifact(name: name, suffix: "Controller", type: type, path: "grails-app/controllers")
+    createUnitTest(name: name, suffix: "Controller", superClass: "ControllerUnitTestCase")
+
+    def views = ["list", "show", "edit", "_listAddr", "_flashMessage"]
+
+    views.each() {
+        def toFile = "${basedir}/grails-app/views/${propertyName}/${it}.gsp"
+        ant.copy(
+            file: "${asynchronousMailPluginDir}/src/templates/scaffolding/${it}.gsp",
+            tofile: toFile,
             overwrite: false
-    )
-    ant.copy(
-            file: "${asynchronousMailPluginDir}/src/templates/views/asynchronousMail/list.gsp",
-            tofile: "$basedir/grails-app/views/asynchronousMail/list.gsp",
-            overwrite: false
-    )
-    ant.copy(
-            file: "${asynchronousMailPluginDir}/src/templates/views/asynchronousMail/show.gsp",
-            tofile: "$basedir/grails-app/views/asynchronousMail/show.gsp",
-            overwrite: false
-    )
-    ant.copy(
-            file: "${asynchronousMailPluginDir}/src/templates/views/asynchronousMail/edit.gsp",
-            tofile: "$basedir/grails-app/views/asynchronousMail/edit.gsp",
-            overwrite: false
-    )
-    ant.copy(
-            file: "${asynchronousMailPluginDir}/src/templates/views/asynchronousMail/_listAddr.gsp",
-            tofile: "$basedir/grails-app/views/asynchronousMail/_listAddr.gsp",
-            overwrite: false
-    )
-    ant.copy(
-            file: "${asynchronousMailPluginDir}/src/templates/views/asynchronousMail/_flashMessage.gsp",
-            tofile: "$basedir/grails-app/views/asynchronousMail/_flashMessage.gsp",
-            overwrite: false
-    )
+        )
+        event("CreatedFile", [toFile])
+    }
+
 }
 
-setDefaultTarget 'createAsynchronousMailController'
+USAGE = """
+    create-asynchronous-mail-controller [NAME]
+where
+    NAME       = The name of the controller. If not provided, a
+                 default of 'AsynchronousMail' will be used.
+"""

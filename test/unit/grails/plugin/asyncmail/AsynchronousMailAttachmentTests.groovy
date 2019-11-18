@@ -31,7 +31,7 @@ class AsynchronousMailAttachmentTests {
                 mimeType:null
         )
         assertFalse attachment.validate()
-        assertEquals "blank", attachment.errors['attachmentName']
+        assertEquals "nullable", attachment.errors['attachmentName']
         assertEquals "nullable", attachment.errors['mimeType']
         assertEquals "nullable", attachment.errors['content']
         assertEquals "nullable", attachment.errors['message']
