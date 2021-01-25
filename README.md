@@ -11,12 +11,12 @@ database with Grails domain classes and sends them by a scheduled Quartz job. Ma
 the `sendAsynchronousMail` (or `sendMail`) method returning instantly, is not waiting for the mail to be actually sent. If
 the SMTP server isn't available, or other errors occur, the plugin can be set to retry later.
 
-The plugin depends on the [quartz](https://grails.org/plugins.html#plugin/quartz) and the [mail](https://grails.org/plugins.html#plugin/mail) plugins. You also need a persistence provider plugin, [hibernate4](https://grails.org/plugins.html#plugin/hibernate4) and [mongodb](https://grails.org/plugins.html#plugin/mongodb) are supported.
+The plugin depends on the [quartz](https://grails.org/plugins.html#plugin/quartz) and the [mail](https://grails.org/plugins.html#plugin/mail) plugins. You also need a persistence provider plugin, [hibernate5](https://plugins.grails.org/plugin/grails/hibernate5) and [mongodb](https://plugins.grails.org/plugin/grails/mongodb) are supported.
 
 Links
 -----
 
-* The plugin page: <https://grails.org/plugins.html#plugin/asynchronous-mail>
+* The plugin page: <https://plugins.grails.org/plugin/kefirsf/asynchronous-mail>
 * The VCS repository (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail>
 * The issue tracker (GitHub): <https://github.com/kefirfromperm/grails-asynchronous-mail/issues>
 * The repository package (BinTray): <https://bintray.com/kefirsf/plugins/asynchronous-mail/>
@@ -25,14 +25,17 @@ Links
 Installation
 ------------
 
-To install just add the plugin to the plugins block of `build.gradle`. For Grails 3.3.x
+To install just add the plugin to the plugins block of `build.gradle`. For Grails 4.0.x
+```groovy
+compile "org.grails.plugins:asynchronous-mail:3.0.0"
+```
 
+For Grails 3.3.x
 ```groovy
 compile "org.grails.plugins:asynchronous-mail:2.0.2"
 ```
 
 For Grails 3.2.11 and earlier
-
 ```groovy
 compile "org.grails.plugins:asynchronous-mail:2.0.2-3.2.x"
 ```
@@ -52,7 +55,7 @@ asynchronous.mail.send.immediately=true
 asynchronous.mail.clear.after.sent=false
 asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
-asynchronous.mail.persistence.provider='hibernate4'     // Possible values are 'hibernate', 'hibernate4', 'mongodb'
+asynchronous.mail.persistence.provider='hibernate5'     // Possible values are 'hibernate', 'hibernate4', 'hibernate5', 'mongodb'
 asynchronous.mail.newSessionOnImmediateSend=false
 asynchronous.mail.taskPoolSize=1
 ```
@@ -70,16 +73,16 @@ If you want to change this options just add options which you want to change to 
 |`asynchronous.mail.clear.after.sent`|`false`|If `true` then all messages will be deleted after sent. If `attachments` then attachments of all messages will be deleted.|
 |`asynchronous.mail.disable`|`false`|If true then jobs aren't started.|
 |`asynchronous.mail.useFlushOnSave`|`true`|By default the plugin flushes all changes to the DB on every step of the sending process for prevent resending but it makes overhead. So you can set this property to `false` and it will have better performance but will not have guarantee of prevention of resending.|
-|`asynchronous.mail.persistence.provider`|`hibernate4`|The persistence provider. Possible values are `hibernate`, `hibernate3`, `hibernate4`, `hibernate5`, `mongodb`.|
+|`asynchronous.mail.persistence.provider`|`hibernate5`|The persistence provider. Possible values are `hibernate`, `hibernate3`, `hibernate4`, `hibernate5`, `mongodb`.|
 |`asynchronous.mail.newSessionOnImmediateSend`|`false`|If `true` the new DB session will be created for storing a message into DB. It's needed if you want to send an email in case of error when all changes in DB are rolled back.|
 |`asynchronous.mail.taskPoolSize`|`1`|Max count of parallel tasks for sending messages concurrently.|
 
-Configure the [mail](https://grails.org/plugins.html#plugin/mail) plugin. The Asynchronous Mail plugin uses the [mail](https://grails.org/plugins.html#plugin/mail) plugin for sending messages to the SMTP server.
+Configure the [mail](https://plugins.grails.org/plugin/grails/mail) plugin. The Asynchronous Mail plugin uses the [mail](https://plugins.grails.org/plugin/grails/mail) plugin for sending messages to the SMTP server.
 
 Usage
 -----
 
-If you already used the [mail](https://grails.org/plugins.html#plugin/mail) plugin, you have to import class `AsynchronousMailService` to your class.
+If you already used the [mail](https://plugins.grails.org/plugin/grails/mail) plugin, you have to import class `AsynchronousMailService` to your class.
 
 ```groovy
 import grails.plugin.asyncmail.AsynchronousMailService
