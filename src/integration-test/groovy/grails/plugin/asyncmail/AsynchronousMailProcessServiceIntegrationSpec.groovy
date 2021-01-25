@@ -4,7 +4,7 @@ import grails.config.Config
 import grails.core.support.GrailsConfigurationAware
 import grails.plugin.asyncmail.enums.MessageStatus
 import grails.testing.mixin.integration.Integration
-import grails.transaction.Rollback
+import grails.gorm.transactions.Rollback
 import org.springframework.transaction.TransactionDefinition
 import spock.lang.Specification
 import spock.lang.Unroll

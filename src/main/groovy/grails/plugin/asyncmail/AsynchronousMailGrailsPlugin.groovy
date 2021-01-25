@@ -10,7 +10,7 @@ import org.quartz.TriggerKey
 
 @Slf4j
 class AsynchronousMailGrailsPlugin extends Plugin {
-    def grailsVersion = "3.3.0 > *"
+    def grailsVersion = "4.0.0 > *"
     def loadAfter = ['mail', 'quartz', 'hibernate', 'hibernate3', 'hibernate4', 'hibernate5', 'mongodb']
 
     Closure doWithSpring() { { ->

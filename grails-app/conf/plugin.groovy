@@ -7,6 +7,6 @@ asynchronous.mail.send.immediately=true
 asynchronous.mail.clear.after.sent=false    // true, false, 'attachments'
 asynchronous.mail.disable=false
 asynchronous.mail.useFlushOnSave=true
-asynchronous.mail.persistence.provider='hibernate4'      // Possible values are 'hibernate', 'hibernate4', 'mongodb'
+asynchronous.mail.persistence.provider='hibernate5'      // Possible values are 'hibernate', 'hibernate4', 'hibernate5', 'mongodb'
 asynchronous.mail.newSessionOnImmediateSend=false
 asynchronous.mail.taskPoolSize=1
