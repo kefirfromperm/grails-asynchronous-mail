@@ -1,6 +1,7 @@
 package grails.plugin.asyncmail
 
 import grails.async.Promises
+import grails.gorm.transactions.Transactional
 import grails.plugin.asyncmail.enums.MessageStatus
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -14,6 +15,7 @@ import static grails.async.Promises.task
 
 @Slf4j
 @CompileStatic
+@Transactional
 class AsynchronousMailProcessService {
 
     AsynchronousMailPersistenceService asynchronousMailPersistenceService
